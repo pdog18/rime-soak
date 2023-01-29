@@ -1,0 +1,49 @@
+ <!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" type="text/css" href="/css/ruyi.css">
+    </head>
+    <body>
+
+        <form>
+            <ul>
+                <li>
+                    候选词方向 垂直 <input type="checkbox" name="t" id="cb">
+                    水平 <input type="checkbox" name="t" id="cb">
+                    input
+                </li>
+
+                <li>
+                    候选词数量 <div>
+                        <input type="range" name="number" list="tickmarks"
+                            step="1" value="5" min="5" max="9">
+                        <datalist id="tickmarks">
+                            <option value="5" label="5"></option>
+                            <option value="6" label="6"></option>
+                            <option value="7" label="7"></option>
+                            <option value="8" label="8"></option>
+                            <option value="9" label="9"></option>
+                        </datalist>
+                    </div>
+
+
+                </li>
+
+
+                <li>3</li>
+                <li>4</li>
+                <li>5</li>
+                <li>6</li>
+                <li>
+                    候选词数量 <input type="number" name="number" id="number" min="5"
+                        max="9" value="5">
+                </li>
+            </ul>
+            <button type="submit"> 提交 </button>
+        </form>
+    </body>
+</html>

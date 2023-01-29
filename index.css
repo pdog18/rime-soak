@@ -1,0 +1,32 @@
+datalist {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    writing-mode: vertical-lr;
+    width: 29vh;
+    padding-left: 1vh;
+}
+
+input[type="range"] {
+    width: 30vh;
+}
+
+option {
+    padding: 0;
+    writing-mode: horizontal-tb;
+}
+
+input[type="radio"] {
+    zoom: 150%;
+}
+
+.description {
+    flex-grow: 1;
+}
+
+.setting_item {
+    min-height: 60px;
+    display: flex;
+    padding-right: 60px;
+    align-items: center;
+}
