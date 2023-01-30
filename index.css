@@ -3,12 +3,12 @@ datalist {
     flex-direction: column;
     justify-content: space-between;
     writing-mode: vertical-lr;
-    width: 29vh;
-    padding-left: 1vh;
+    width: 29vw;
+    padding-left: 1vw;
 }
 
 input[type="range"] {
-    width: 30vh;
+    width: 30vw;
 }
 
 option {
