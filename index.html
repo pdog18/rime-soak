@@ -9,125 +9,122 @@
     <link href="index.css" type="text/css" rel="stylesheet" />
   </head>
   <body>
-    <form>
-      <ul>
-        <li class="setting_item">
-          <fieldset class="description">
-            <legend> 输入模式 </legend>
-            <div>
-              <input type="radio" name="schema" id="pinyin" value="1" checked>
-              <label for="pinyin">拼音</label>
-            </div>
+    <ul>
+      <li class="setting_item">
+        <fieldset class="description">
+          <legend> 输入模式 </legend>
+          <div>
+            <input type="radio" name="schema" id="pinyin" value="1" checked>
+            <label for="pinyin">拼音</label>
+          </div>
 
-            <div>
-              <input type="radio" name="schema" id="double_pinyin" value="2">
-              <label for="double_pinyin">双拼</label>
-            </div>
+          <div>
+            <input type="radio" name="schema" id="double_pinyin" value="2">
+            <label for="double_pinyin">双拼</label>
+          </div>
 
-            <div>
-              <input type="radio" name="schema" id="wubi" value="3">
-              <label for="wubi">五笔</label>
-            </div>
-          </fieldset>
-        </li>
-
-
-        <li class="setting_item">
-          <fieldset class="description">
-            <legend>简体/繁体</legend>
-            <div>
-              <input type="radio" name="traditional_or_simplified"
-                id="simplified" value="simplified"
-                checked>
-              <label for="simplified">简体</label>
-            </div>
-
-            <div>
-              <input type="radio" name="traditional_or_simplified"
-                id="traditional" value="traditional">
-              <label for="traditional">繁体</label>
-            </div>
-          </fieldset>
-        </li>
+          <div>
+            <input type="radio" name="schema" id="wubi" value="3">
+            <label for="wubi">五笔</label>
+          </div>
+        </fieldset>
+      </li>
 
 
-        <li class="setting_item">
-          <fieldset class="description">
-            <legend>键入字符显示在</legend>
-            <div>
-              <input type="radio" name="inline_preedit" id="preedit_in_edit"
-                value="true"
-                checked>
-              <label for="preedit_in_edit">文字编辑框内</label>
-            </div>
+      <li class="setting_item">
+        <fieldset class="description">
+          <legend>简体/繁体</legend>
+          <div>
+            <input type="radio" name="traditional_or_simplified"
+              id="simplified" value="simplified"
+              checked>
+            <label for="simplified">简体</label>
+          </div>
 
-            <div>
-              <input type="radio" name="inline_preedit"
-                id="preedit_in_candidate" value="false">
-              <label for="preedit_in_candidate">候选词面板内</label>
-            </div>
-          </fieldset>
-        </li>
-
-
-        <li class="setting_item">
-          <fieldset class="description">
-            <legend>候选栏设置</legend>
-            <div>
-              <input type="radio" name="candidate_orientation"
-                id="candidate_horizontal" value="true"
-                checked>
-              <label for="candidate_horizontal">水平排列</label>
-            </div>
-
-            <div>
-              <input type="radio" name="candidate_orientation"
-                id="candidate_vertical" value="false">
-              <label for="candidate_vertical">垂直排列</label>
-            </div>
-          </fieldset>
-        </li>
+          <div>
+            <input type="radio" name="traditional_or_simplified"
+              id="traditional" value="traditional">
+            <label for="traditional">繁体</label>
+          </div>
+        </fieldset>
+      </li>
 
 
-        <li class="setting_item">
-          <fieldset class="description">
-            <legend>候选词数量</legend>
-            <input type="range"
-              name="page_size" min="4"
-              max="9" id="page_size" list="page_sizes"
-              value="9"/>
-            <datalist id="page_sizes">
-              <option value="4" label="4"></option>
-              <option value="5" label="5"></option>
-              <option value="6" label="6"></option>
-              <option value="7" label="7"></option>
-              <option value="8" label="8"></option>
-              <option value="9" label="9"></option>
-            </datalist>
-          </fieldset>
-        </li>
+      <li class="setting_item">
+        <fieldset class="description">
+          <legend>键入字符显示在</legend>
+          <div>
+            <input type="radio" name="inline_preedit" id="preedit_in_edit"
+              value="true"
+              checked>
+            <label for="preedit_in_edit">文字编辑框内</label>
+          </div>
 
-        <!-- 输入法默认模式 中文、英文 -->
+          <div>
+            <input type="radio" name="inline_preedit"
+              id="preedit_in_candidate" value="false">
+            <label for="preedit_in_candidate">候选词面板内</label>
+          </div>
+        </fieldset>
+      </li>
 
-        <!-- 全角/半角 -->
 
-        <!-- 候选翻页 减号等号、句号逗号，左右方括号 -->
+      <li class="setting_item">
+        <fieldset class="description">
+          <legend>候选栏设置</legend>
+          <div>
+            <input type="radio" name="candidate_orientation"
+              id="candidate_horizontal" value="true"
+              checked>
+            <label for="candidate_horizontal">水平排列</label>
+          </div>
 
-        <!-- 超级简拼（首字母简拼） -->
-        <!-- 适合用 Toggle Switch https://www.w3schools.com/howto/howto_css_switch.asp-->
+          <div>
+            <input type="radio" name="candidate_orientation"
+              id="candidate_vertical" value="false">
+            <label for="candidate_vertical">垂直排列</label>
+          </div>
+        </fieldset>
+      </li>
 
-        <!-- 模糊音 -->
-        <!-- 拼音纠错 -->
-        <!-- 应该在开启拼音模式时才可进行选择 -->
 
-        
-        <!-- 中英文切换 (Shift or Ctrl) -->
+      <li class="setting_item">
+        <fieldset class="description">
+          <legend>候选词数量</legend>
+          <input type="range"
+            name="page_size" min="4"
+            max="9" id="page_size" list="page_sizes"
+            value="9"/>
+          <datalist id="page_sizes">
+            <option value="4" label="4"></option>
+            <option value="5" label="5"></option>
+            <option value="6" label="6"></option>
+            <option value="7" label="7"></option>
+            <option value="8" label="8"></option>
+            <option value="9" label="9"></option>
+          </datalist>
+        </fieldset>
+      </li>
 
-        <!-- 翻页方式 -->
+      <!-- 输入法默认模式 中文、英文 -->
 
-        <!-- 二三候选 -->
+      <!-- 全角/半角 -->
 
-      </ul>
-    </form>
+      <!-- 候选翻页 减号等号、句号逗号，左右方括号 -->
+
+      <!-- 超级简拼（首字母简拼） -->
+      <!-- 适合用 Toggle Switch https://www.w3schools.com/howto/howto_css_switch.asp-->
+      <!-- 模糊音 -->
+      <!-- 拼音纠错 -->
+      <!-- 应该在开启拼音模式时才可进行选择 -->
+
+
+      <!-- 中英文切换 (Shift or Ctrl) -->
+
+      <!-- 翻页方式 -->
+
+      <!-- 二三候选 -->
+
+    </ul>
   </body>
 </html>
