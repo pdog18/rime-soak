@@ -1,0 +1,28 @@
+input.tab,
+.content {
+    display: none;
+}
+
+.tab {
+    cursor: pointer;
+    background: #00a8d8;
+    height: 25px;
+    padding: 5px 10px;
+    display: inline-block;
+    text-align: center;
+    color: #fff;
+    font: normal 1em/150% Sans-Serif;
+    transition: background .25s linear;
+}
+
+.tab:hover,
+.tab:checked+.tab {
+    background: #0084aa;
+}
+
+#tab-basic:checked~.tab-basic,
+#tab-skin:checked~.tab-skin,
+#tab-symbol:checked~.tab-symbol,
+#tab-keybindings:checked~.tab-keybindings {
+    display: block;
+}

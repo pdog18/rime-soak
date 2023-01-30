@@ -5,13 +5,28 @@
     <!-- https://developer.mozilla.org/zh-CN/docs/Web/HTTP/CSP -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self';
       script-src 'self'">
-    <title>Rime 小助手</title>
+    <title>润笔</title>
     <link href="index.css" type="text/css" rel="stylesheet" />
+    <link href="tab.css" type="text/css" rel="stylesheet" />
+
   </head>
   <body>
-    <ul>
-      <li class="setting_item">
-        <fieldset class="description">
+    <input class="tab" type="radio" name="nav" id="tab-basic"
+      checked="checked"/>
+    <label class="tab" for="tab-basic">基本设置</label>
+
+    <input class="tab" type="radio" name="nav" id="tab-skin"/>
+    <label class="tab" for="tab-skin">皮肤设置</label>
+
+    <input class="tab" type="radio" name="nav" id="tab-symbol"/>
+    <label class="tab" for="tab-symbol">符号设置</label>
+
+    <input class="tab" type="radio" name="nav" id="tab-keybindings"/>
+    <label class="tab" for="tab-keybindings">按键设置</label>
+
+    <ul class="content tab-basic">
+      <li>
+        <fieldset class="item">
           <legend> 输入模式 </legend>
           <div>
             <input type="radio" name="schema" id="pinyin" value="1" checked>
@@ -31,8 +46,8 @@
       </li>
 
 
-      <li class="setting_item">
-        <fieldset class="description">
+      <li>
+        <fieldset class="item">
           <legend>简体/繁体</legend>
           <div>
             <input type="radio" name="traditional_or_simplified"
@@ -50,8 +65,59 @@
       </li>
 
 
-      <li class="setting_item">
-        <fieldset class="description">
+      <li>
+        <fieldset class="item">
+          <legend>候选栏设置</legend>
+          <div>
+            <input type="radio" name="candidate_orientation"
+              id="candidate_horizontal" value="true"
+              checked>
+            <label for="candidate_horizontal">水平</label>
+          </div>
+
+          <div>
+            <input type="radio" name="candidate_orientation"
+              id="candidate_vertical" value="false">
+            <label for="candidate_vertical">垂直</label>
+          </div>
+        </fieldset>
+      </li>
+
+
+      <li>
+        <fieldset class="item">
+          <legend>候选词数量</legend>
+          <input type="range"
+            id="page_size"
+            name="page_size" min="4"
+            max="9" id="page_size" list="page_size_list"
+            value="9"/>
+          <datalist id="page_size_list">
+            <option value="4" label="4"></option>
+            <option value="5" label="5"></option>
+            <option value="6" label="6"></option>
+            <option value="7" label="7"></option>
+            <option value="8" label="8"></option>
+            <option value="9" label="9"></option>
+          </datalist>
+        </fieldset>
+      </li>
+
+      <!-- 输入法默认模式 中文、英文 -->
+
+      <!-- 全角/半角 -->
+
+      <!-- 超级简拼（首字母简拼） -->
+      <!-- 适合用 Toggle Switch https://www.w3schools.com/howto/howto_css_switch.asp-->
+      <!-- 模糊音 -->
+      <!-- 拼音纠错 -->
+      <!-- 应该在开启拼音模式时才可进行选择 -->
+
+    </ul>
+
+    <article class="content tab-skin">
+      <li>
+        <fieldset class="item">
           <legend>键入字符显示在</legend>
           <div>
             <input type="radio" name="inline_preedit" id="preedit_in_edit"
@@ -67,64 +133,30 @@
           </div>
         </fieldset>
       </li>
+    </article>
+
+    <article class="content tab-symbol">
+      <h1>todo</h1>
+      <p>符号设置</p>
+    </article>
 
 
-      <li class="setting_item">
-        <fieldset class="description">
-          <legend>候选栏设置</legend>
-          <div>
-            <input type="radio" name="candidate_orientation"
-              id="candidate_horizontal" value="true"
-              checked>
-            <label for="candidate_horizontal">水平排列</label>
-          </div>
-
-          <div>
-            <input type="radio" name="candidate_orientation"
-              id="candidate_vertical" value="false">
-            <label for="candidate_vertical">垂直排列</label>
-          </div>
-        </fieldset>
-      </li>
+    <article class="content tab-keybindings">
+      <h1>todo</h1>
+      <p>中英文切换 (Shift or Ctrl)</p>
+      <p>翻页方式</p>
+      <p>二三候选</p>
+      <p>候选翻页 减号等号、句号逗号，左右方括号 </p>
+    </article>
 
 
-      <li class="setting_item">
-        <fieldset class="description">
-          <legend>候选词数量</legend>
-          <input type="range"
-            name="page_size" min="4"
-            max="9" id="page_size" list="page_sizes"
-            value="9"/>
-          <datalist id="page_sizes">
-            <option value="4" label="4"></option>
-            <option value="5" label="5"></option>
-            <option value="6" label="6"></option>
-            <option value="7" label="7"></option>
-            <option value="8" label="8"></option>
-            <option value="9" label="9"></option>
-          </datalist>
-        </fieldset>
-      </li>
+    <footer>
+      <button class="footer-button" id="reset">恢复默认</button>
+      <button class="footer-button" id="cancel">取消</button>
+      <button class="footer-button" id="confirm">确定</button>
+    </footer>
 
-      <!-- 输入法默认模式 中文、英文 -->
-
-      <!-- 全角/半角 -->
-
-      <!-- 候选翻页 减号等号、句号逗号，左右方括号 -->
-
-      <!-- 超级简拼（首字母简拼） -->
-      <!-- 适合用 Toggle Switch https://www.w3schools.com/howto/howto_css_switch.asp-->
-      <!-- 模糊音 -->
-      <!-- 拼音纠错 -->
-      <!-- 应该在开启拼音模式时才可进行选择 -->
-
-
-      <!-- 中英文切换 (Shift or Ctrl) -->
-
-      <!-- 翻页方式 -->
-
-      <!-- 二三候选 -->
-
-    </ul>
   </body>
+
+  <script src="index.js"></script>
 </html>

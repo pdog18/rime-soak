@@ -7,8 +7,12 @@ datalist {
     padding-left: 1vw;
 }
 
-input[type="range"] {
+input#page_size {
     width: 30vw;
+}
+
+input[type="radio"] {
+    zoom: 150%;
 }
 
 option {
@@ -16,17 +20,29 @@ option {
     writing-mode: horizontal-tb;
 }
 
-input[type="radio"] {
-    zoom: 150%;
-}
-
-.description {
+.item {
     flex-grow: 1;
 }
 
-.setting_item {
+ul,li {
+    all: initial;
+    list-style: none;
+}
+
+footer {
+    display: flex;
+    justify-content: right;
+}
+
+/* .setting_item {
     min-height: 60px;
     display: flex;
     padding-right: 60px;
     align-items: center;
+} */
+
+.footer-button {
+
+    flex-basis: 10vw;
+    margin: 2vw;
 }

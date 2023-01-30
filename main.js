@@ -4,6 +4,8 @@ const path = require('path')
 
 const createWindow = () => {
     const win = new BrowserWindow({
+        minWidth: 400,
+        minHeight: 400,
         width: 800,
         height: 800,
         webPreferences: {
@@ -11,10 +13,10 @@ const createWindow = () => {
         }
     })
 
-    win.loadFile('index.html')
+    win.loadFile('index/index.html')
 
     // 打开开发工具
-    // win.webContents.openDevTools()
+    win.webContents.openDevTools()
 }
 
 app.whenReady().then(() => {
