@@ -8,7 +8,10 @@ const createWindow = () => {
         minHeight: 400,
         width: 800,
         height: 800,
+        icon: path.join(__dirname, 'pdog.png'),
         webPreferences: {
+            nodeIntegration:true,
+            contextIsolation:false,
             preload: path.join(__dirname, 'preload.js')
         }
     })

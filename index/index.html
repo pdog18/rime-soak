@@ -8,6 +8,7 @@
     <title>润笔</title>
     <link href="index.css" type="text/css" rel="stylesheet" />
     <link href="tab.css" type="text/css" rel="stylesheet" />
+    <script src="index.js"></script>
 
   </head>
   <body>
@@ -29,17 +30,17 @@
         <fieldset class="item">
           <legend> 输入模式 </legend>
           <div>
-            <input type="radio" name="schema" id="pinyin" value="1" checked>
+            <input type="radio" name="schema" id="pinyin" value="pinyin" checked>
             <label for="pinyin">拼音</label>
           </div>
 
           <div>
-            <input type="radio" name="schema" id="double_pinyin" value="2">
+            <input type="radio" name="schema" id="double_pinyin" value="double_pinyin">
             <label for="double_pinyin">双拼</label>
           </div>
 
           <div>
-            <input type="radio" name="schema" id="wubi" value="3">
+            <input type="radio" name="schema" id="wubi" value="wubi">
             <label for="wubi">五笔</label>
           </div>
         </fieldset>
@@ -70,14 +71,14 @@
           <legend>候选栏设置</legend>
           <div>
             <input type="radio" name="candidate_orientation"
-              id="candidate_horizontal" value="true"
+              id="candidate_horizontal" 
               checked>
             <label for="candidate_horizontal">水平</label>
           </div>
 
           <div>
             <input type="radio" name="candidate_orientation"
-              id="candidate_vertical" value="false">
+              id="candidate_vertical">
             <label for="candidate_vertical">垂直</label>
           </div>
         </fieldset>
@@ -158,5 +159,4 @@
 
   </body>
 
-  <script src="index.js"></script>
 </html>
