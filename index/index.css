@@ -14,7 +14,7 @@ body {
 }
 
 place-holder {
-  height: 50vh;
+  height: 40vh;
   width: 160px;
   flex-grow: 1;
   flex-shrink: 0;
@@ -25,6 +25,7 @@ place-holder {
 .content {
   flex-grow: 1;
   width: 60%;
+  margin-left: 32px;
 }
 
 footer {
