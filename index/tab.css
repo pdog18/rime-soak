@@ -5,19 +5,21 @@ input.tab,
 
 .tab {
     cursor: pointer;
-    background: #00a8d8;
-    height: 25px;
-    padding: 5px 10px;
-    display: inline-block;
-    text-align: center;
-    color: #fff;
+    height: 60px;
+    width: 180px;
+    padding: 0px;
+    line-height: 60px;
+    color: #747474;
     font: normal 1em/150% Sans-Serif;
+    background: #f5f5f5;
     transition: background .25s linear;
 }
 
-.tab:hover,
+/* .tab:hover, */
 .tab:checked+.tab {
-    background: #0084aa;
+    background: #ffffff;
+    color: #000000;
+    font-weight: bold;
 }
 
 #tab-basic:checked~.tab-basic,

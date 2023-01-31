@@ -9,9 +9,10 @@
     <link href="index.css" type="text/css" rel="stylesheet" />
     <link href="tab.css" type="text/css" rel="stylesheet" />
     <script src="index.js"></script>
-
+    <script src="tab.js"></script>
   </head>
   <body>
+
     <input class="tab" type="radio" name="nav" id="tab-basic"
       checked="checked"/>
     <label class="tab" for="tab-basic">基本设置</label>
@@ -25,7 +26,10 @@
     <input class="tab" type="radio" name="nav" id="tab-keybindings"/>
     <label class="tab" for="tab-keybindings">按键设置</label>
 
-    <ul class="content tab-basic">
+    <place-holder></place-holder>
+
+
+    <div class="content tab-basic">
       <li>
         <fieldset class="item">
           <legend> 输入模式 </legend>
@@ -116,7 +120,7 @@
       <!-- 拼音纠错 -->
       <!-- 应该在开启拼音模式时才可进行选择 -->
 
-    </ul>
+    </div>
 
     <article class="content tab-skin">
       <li>
@@ -130,7 +134,7 @@
 
           <div>
             <input type="radio" name="inline_preedit"
-              id="preedit_in_candidate" >
+              id="preedit_in_candidate">
             <label for="preedit_in_candidate">候选词面板内</label>
           </div>
         </fieldset>

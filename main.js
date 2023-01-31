@@ -5,8 +5,8 @@ const createWindow = () => {
     const win = new BrowserWindow({
         minWidth: 400,
         minHeight: 400,
-        width: 800,
-        height: 800,
+        width: 836,
+        height: 600,
         icon: path.join(__dirname, 'pdog.png'),
         webPreferences: {
             nodeIntegration: true,
@@ -20,6 +20,7 @@ const createWindow = () => {
 
     // 打开开发工具
     // win.webContents.openDevTools()
+    win.webContents.openDevTools({mode:'detach'})
 }
 
 
