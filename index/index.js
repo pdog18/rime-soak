@@ -8,11 +8,8 @@ window.onload = () => {
 
   document.getElementById('confirm').addEventListener('click', () => confirm())
 
-  document.getElementById('reset').addEventListener('click', function () {
-    reset()
-  })
+  document.getElementById('reset').addEventListener('click', () => reset())
 }
-
 
 function confirm() {
   console.log('confirm')
@@ -57,7 +54,7 @@ function change_user_setting() {
   const schema_checked = Array.from(document.getElementsByName('schema')).filter(it => it.checked)[0].value
   const schema = index_schema(simplified, schema_checked)
 
-  const horizontal = document.getElementById('candidate_horizontal').checked
+  const horizontal = document.getElementById('horizontal').checked
   const inline_preedit = document.getElementById('inline_preedit').checked
 
 

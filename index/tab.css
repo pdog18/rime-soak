@@ -4,6 +4,9 @@ input.tab,
 }
 
 .tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   height: 60px;
   width: 180px;
@@ -26,6 +29,7 @@ input.tab,
 #tab-skin:checked~.tab-skin,
 #tab-symbol:checked~.tab-symbol,
 #tab-keybindings:checked~.tab-keybindings,
-#tab-other:checked~.tab-other{
-display: block;
+#tab-other:checked~.tab-other {
+  display: block;
 }
+

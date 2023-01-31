@@ -8,8 +8,9 @@
     <title>润笔</title>
     <link href="index.css" type="text/css" rel="stylesheet" />
     <link href="tab.css" type="text/css" rel="stylesheet" />
+    <link href="item.css" type="text/css" rel="stylesheet" />
     <script src="index.js"></script>
-    <script src="tab.js"></script>
+
   </head>
   <body>
 
@@ -29,117 +30,81 @@
     <input class="tab" type="radio" name="nav" id="tab-other"/>
     <label class="tab" for="tab-other">其他设置</label>
 
-
     <place-holder></place-holder>
 
-
     <div class="content tab-basic">
-      <li>
-        <fieldset class="item">
-          <legend> 输入模式 </legend>
-          <div>
-            <input type="radio" name="schema" id="pinyin" value="pinyin"
-              checked>
-            <label for="pinyin">拼音</label>
-          </div>
+      <div class="item">
+        <legend> 输入模式 </legend>
 
-          <div>
-            <input type="radio" name="schema" id="double_pinyin"
-              value="double_pinyin">
-            <label for="double_pinyin">双拼</label>
-          </div>
+        <input type="radio" name="schema" id="pinyin" value="pinyin" checked>
+        <label for="pinyin">拼音</label>
 
-          <div>
-            <input type="radio" name="schema" id="wubi" value="wubi">
-            <label for="wubi">五笔</label>
-          </div>
-        </fieldset>
-      </li>
+        <input type="radio" name="schema" id="double_pinyin"
+          value="double_pinyin">
+        <label for="double_pinyin">双拼</label>
 
+        <input type="radio" name="schema" id="wubi" value="wubi">
+        <label for="wubi">五笔</label>
+      </div>
 
-      <li>
-        <fieldset class="item">
-          <legend>简体/繁体</legend>
-          <div>
-            <input type="radio" name="traditional_or_simplified"
-              id="simplified" value="simplified"
-              checked>
-            <label for="simplified">简体</label>
-          </div>
+      <div class="item">
+        <legend>简体/繁体</legend>
 
-          <div>
-            <input type="radio" name="traditional_or_simplified"
-              id="traditional" value="traditional">
-            <label for="traditional">繁体</label>
-          </div>
-        </fieldset>
-      </li>
+        <input type="radio" name="traditional_or_simplified"
+          id="simplified" value="simplified"
+          checked>
+        <label for="simplified">简体</label>
 
+        <input type="radio" name="traditional_or_simplified"
+          id="traditional" value="traditional">
+        <label for="traditional">繁体</label>
+      </div>
 
-      <li>
-        <fieldset class="item">
-          <legend>候选栏设置</legend>
-          <div>
-            <input type="radio" name="candidate_orientation"
-              id="candidate_horizontal"
-              checked>
-            <label for="candidate_horizontal">水平</label>
-          </div>
+      <div class="item">
+        <legend>候选栏设置</legend>
 
-          <div>
-            <input type="radio" name="candidate_orientation"
-              id="candidate_vertical">
-            <label for="candidate_vertical">垂直</label>
-          </div>
-        </fieldset>
-      </li>
+        <input type="radio" name="orientation" id="horizontal" checked>
+        <label for="horizontal">水平</label>
 
+        <input type="radio" name="orientation" id="vertical">
+        <label for="vertical">垂直</label>
+      </div>
 
-      <li>
-        <fieldset class="item">
-          <legend>候选词数量</legend>
-          <input type="range"
-            id="page_size"
-            name="page_size" min="4"
-            max="9" id="page_size" list="page_size_list"
-            value="9"/>
+      <div class="item">
+        <legend>候选词数量</legend>
+        <div>
+          <input type="range" id="page_size" list="page_size_list"
+            min="4" max="9" value="9" />
           <datalist id="page_size_list">
-            <option value="4" label="4"></option>
-            <option value="5" label="5"></option>
-            <option value="6" label="6"></option>
-            <option value="7" label="7"></option>
-            <option value="8" label="8"></option>
-            <option value="9" label="9"></option>
+            <option label="4"></option>
+            <option label="5"></option>
+            <option label="6"></option>
+            <option label="7"></option>
+            <option label="8"></option>
+            <option label="9"></option>
           </datalist>
-        </fieldset>
-      </li>
-
+        </div>
+      </div>
     </div>
 
     <div class="content tab-skin">
-      <li>
-        <fieldset class="item">
-          <legend>键入字符显示在</legend>
-          <div>
-            <input type="radio" name="inline_preedit" id="inline_preedit"
-              checked>
-            <label for="inline_preedit">文字编辑框内</label>
-          </div>
+      <div class="item">
+        <legend>输入字符</legend>
 
-          <div>
-            <input type="radio" name="inline_preedit"
-              id="preedit_in_candidate">
-            <label for="preedit_in_candidate">候选词面板内</label>
-          </div>
-        </fieldset>
-      </li>
+        <input type="radio" name="inline_preedit" id="inline_preedit"
+          checked>
+        <label for="inline_preedit">跟随光标</label>
+
+        <input type="radio" name="inline_preedit"
+          id="preedit_in_candidate">
+        <label for="preedit_in_candidate">候选面板</label>
+      </div>
     </div>
 
     <div class="content tab-symbol">
       <h1>todo</h1>
       <p>符号设置</p>
     </div>
-
 
 
     <div class="content tab-keybindings">
@@ -171,5 +136,4 @@
     </footer>
 
   </body>
-
 </html>

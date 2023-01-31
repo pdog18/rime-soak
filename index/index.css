@@ -7,14 +7,8 @@ body {
   align-content: flex-start;
 }
 
-.tab {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 place-holder {
-  height: 40vh;
+  height: 45vh;
   width: 160px;
   flex-grow: 1;
   flex-shrink: 0;
@@ -25,7 +19,7 @@ place-holder {
 .content {
   flex-grow: 1;
   width: 60%;
-  margin-left: 32px;
+  margin: 0px 16px;
 }
 
 footer {
@@ -39,7 +33,6 @@ footer {
 li {
   all: initial;
   list-style: none;
-
 }
 
 .footer-button {
@@ -53,15 +46,17 @@ datalist {
   flex-direction: column;
   justify-content: space-between;
   writing-mode: vertical-lr;
-  width: 29vw;
-  padding-left: 1vw;
+  width: 20vw;
 }
 
 option {
   padding: 0;
   writing-mode: horizontal-tb;
+  font-size: smaller;
 }
 
 #page_size {
-  width: 30vw;
+  width: 20vw;
+  margin: 0;
+  height: 6px;
 }

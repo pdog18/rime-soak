@@ -1,0 +1,16 @@
+.item {
+  display: flex;
+  align-items: center;
+  height: 35px;
+  /* background-color: #f1f1f1; */
+  border-radius: 2px;
+  padding: 0px 16px;
+}
+
+.item:hover {
+  background-color: #cbcbcb;
+}
+
+legend {
+  flex-grow: 1;
+}
