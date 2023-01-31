@@ -1,7 +1,5 @@
-const { app, BrowserWindow } = require('electron')
+const { app, Menu, BrowserWindow } = require('electron')
 const path = require('path')
-const ffi = require('ffi-napi');
- 
 
 const createWindow = () => {
     const win = new BrowserWindow({
@@ -13,6 +11,7 @@ const createWindow = () => {
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
+            enableRemoteModule: true,
             preload: path.join(__dirname, 'preload.js')
         }
     })
@@ -23,11 +22,12 @@ const createWindow = () => {
     win.webContents.openDevTools()
 }
 
+
+
 app.whenReady().then(() => {
     createWindow()
 
     // 隐藏菜单栏
-    const { Menu } = require('electron');
     Menu.setApplicationMenu(null);
     // hide menu for Mac 
     if (process.platform !== 'darwin') {
@@ -37,8 +37,12 @@ app.whenReady().then(() => {
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) createWindow()
     })
+
+    const { dialog } = require('electron')
+    console.log(dialog.showErrorBox('Title', 'Prompt text'))
 })
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit()
 })
+

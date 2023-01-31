@@ -21,6 +21,7 @@
     "electron-rebuild": "^3.2.9"
   },
   "dependencies": {
+    "@electron/remote": "^2.0.9",
     "electron-squirrel-startup": "^1.0.0",
     "ffi-napi": "^4.0.3",
     "win32-api": "^20.2.0"
