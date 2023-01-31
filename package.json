@@ -17,9 +17,12 @@
     "@electron-forge/maker-rpm": "^6.0.4",
     "@electron-forge/maker-squirrel": "^6.0.4",
     "@electron-forge/maker-zip": "^6.0.4",
-    "electron": "^22.1.0"
+    "electron": "20.0.0",
+    "electron-rebuild": "^3.2.9"
   },
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.0"
+    "electron-squirrel-startup": "^1.0.0",
+    "ffi-napi": "^4.0.3",
+    "win32-api": "^20.2.0"
   }
 }

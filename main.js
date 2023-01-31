@@ -1,6 +1,7 @@
 const { app, BrowserWindow } = require('electron')
 const path = require('path')
-
+const ffi = require('ffi-napi');
+ 
 
 const createWindow = () => {
     const win = new BrowserWindow({
@@ -10,8 +11,8 @@ const createWindow = () => {
         height: 800,
         icon: path.join(__dirname, 'pdog.png'),
         webPreferences: {
-            nodeIntegration:true,
-            contextIsolation:false,
+            nodeIntegration: true,
+            contextIsolation: false,
             preload: path.join(__dirname, 'preload.js')
         }
     })
