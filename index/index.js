@@ -9,7 +9,7 @@ window.onload = () => {
   document.getElementById('confirm').addEventListener('click', () => confirm())
 
   document.getElementById('reset').addEventListener('click', function () {
-    alert('todo...')
+    reset()
   })
 }
 
@@ -141,6 +141,29 @@ function index_schema(simplified, schema_checked) {
     }
   };
   return schema_array[simplified][schema_checked];
+}
+
+function reset() {
+  // 把 Rime/backup_user_yaml 中的文件复制到 Rime 中
+  const homedir = os.userInfo().homedir
+  const rimedir = path.join(homedir, 'AppData/Roaming/Rime')
+
+  const backup_dir = path.join(rimedir, `backup_user_yaml`)
+  if (!fs.existsSync(backup_dir)) {
+    alert(`无备份文件，无法进行恢复操作. `)
+    return
+  }
+
+  const files = fs.readdirSync(backup_dir)
+  for (const file of files) {
+    if (file.endsWith('.yaml')) {
+      console.log(file);
+      const yaml = path.join(backup_dir, file)
+      fs.copyFileSync(yaml, path.join(rimedir, file))
+    }
+  }
+
+  deploy_weasel()
 }
 
 function queryWeaselServer() {
