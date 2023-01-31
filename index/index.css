@@ -33,15 +33,35 @@ footer {
   height: 10vh;
   display: flex;
   align-items: center;
-  gap: 6vw
+  gap: 6vw;
 }
 
 li {
-  list-style: none
+  all: initial;
+  list-style: none;
+
 }
 
 .footer-button {
   width: 10vw;
   height: 6vh;
   margin-bottom: 2vh;
+}
+
+datalist {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  writing-mode: vertical-lr;
+  width: 29vw;
+  padding-left: 1vw;
+}
+
+option {
+  padding: 0;
+  writing-mode: horizontal-tb;
+}
+
+#page_size {
+  width: 30vw;
 }
