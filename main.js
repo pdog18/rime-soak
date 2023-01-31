@@ -19,7 +19,7 @@ const createWindow = () => {
     win.loadFile('index/index.html')
 
     // 打开开发工具
-    win.webContents.openDevTools()
+    // win.webContents.openDevTools()
 }
 
 

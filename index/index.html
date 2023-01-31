@@ -30,12 +30,14 @@
         <fieldset class="item">
           <legend> 输入模式 </legend>
           <div>
-            <input type="radio" name="schema" id="pinyin" value="pinyin" checked>
+            <input type="radio" name="schema" id="pinyin" value="pinyin"
+              checked>
             <label for="pinyin">拼音</label>
           </div>
 
           <div>
-            <input type="radio" name="schema" id="double_pinyin" value="double_pinyin">
+            <input type="radio" name="schema" id="double_pinyin"
+              value="double_pinyin">
             <label for="double_pinyin">双拼</label>
           </div>
 
@@ -71,7 +73,7 @@
           <legend>候选栏设置</legend>
           <div>
             <input type="radio" name="candidate_orientation"
-              id="candidate_horizontal" 
+              id="candidate_horizontal"
               checked>
             <label for="candidate_horizontal">水平</label>
           </div>
@@ -121,15 +123,14 @@
         <fieldset class="item">
           <legend>键入字符显示在</legend>
           <div>
-            <input type="radio" name="inline_preedit" id="preedit_in_edit"
-              value="true"
+            <input type="radio" name="inline_preedit" id="inline_preedit"
               checked>
-            <label for="preedit_in_edit">文字编辑框内</label>
+            <label for="inline_preedit">文字编辑框内</label>
           </div>
 
           <div>
             <input type="radio" name="inline_preedit"
-              id="preedit_in_candidate" value="false">
+              id="preedit_in_candidate" >
             <label for="preedit_in_candidate">候选词面板内</label>
           </div>
         </fieldset>
@@ -153,7 +154,6 @@
 
     <footer>
       <button class="footer-button" id="reset">恢复默认</button>
-      <button class="footer-button" id="cancel">取消</button>
       <button class="footer-button" id="confirm">确定</button>
     </footer>
 
