@@ -17,7 +17,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   alert: (callback) => ipcRenderer.on('alert', callback),
 
   queryWeaselServer: () => ipcRenderer.send('queryWeaselServer'),
-  confirm: () => ipcRenderer.send('confirm'),
+  confirm: (default_custom, weasel_custom) => ipcRenderer.send('confirm', default_custom, weasel_custom),
   reset: () => ipcRenderer.send('reset'),
   openDevTools: () => ipcRenderer.send('openDevTools'),
 })
