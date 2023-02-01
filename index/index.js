@@ -1,3 +1,17 @@
+window.electronAPI.alert((_event, value) => {
+  alert(value)
+})
+
+window.addEventListener(
+  'keydown', (e) => {
+    const { altKey, ctrlKey, key } = e;
+    //  alt + ctrl + l
+    if (altKey && ctrlKey && key === 'l') {
+      window.electronAPI.openDevTools()
+      e.preventDefault();
+    }
+  }, false
+);
 
 window.onload = () => {
   window.electronAPI.queryWeaselServer()
@@ -18,7 +32,6 @@ function confirm() {
   const horizontal = document.getElementById('horizontal').checked
   const inline_preedit = document.getElementById('inline_preedit').checked
 
-
   console.log(`
     page_size : ${page_size}
     simplified : ${simplified}
@@ -30,7 +43,6 @@ function confirm() {
 
 
   // todo 需要防止 js 格式化将字符串模板的格式破坏
-
   const default_custom =
     `
 # default.custom.yaml
@@ -64,23 +76,6 @@ patch:
 
   window.electronAPI.confirm(default_custom, weasel_custom)
 }
-window.addEventListener(
-  'keydown',
-  (e) => {
-    const { altKey, ctrlKey, key } = e;
-    //  alt + ctrl + (Command | Windows) + l
-    if (altKey && ctrlKey && key === 'l') {
-      window.electronAPI.openDevTools()
-      e.preventDefault();
-    }
-  },
-  false
-);
-
-
-window.electronAPI.alert((_event, value) => {
-  alert(value)
-})
 
 
 
