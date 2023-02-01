@@ -4,7 +4,7 @@ body {
   margin: 0;
   flex-wrap: wrap;
   height: 100vh;
-  align-content: flex-start;
+  /* align-content: flex-start; */
 }
 
 place-holder {
@@ -22,23 +22,21 @@ place-holder {
   margin: 0px 16px;
 }
 
-footer {
-  align-self: flex-end;
-  height: 10vh;
-  display: flex;
-  align-items: center;
-  gap: 6vw;
-}
+
 
 li {
   all: initial;
   list-style: none;
 }
 
-.footer-button {
-  width: 10vw;
-  height: 6vh;
-  margin-bottom: 2vh;
+#footer{
+  width: 60%;
+  display: flex;
+  place-content: flex-end;
+  gap: 16px;
+  height: 32px;
+  justify-items: center;
+  align-items: flex-start;
 }
 
 datalist {
