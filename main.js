@@ -3,7 +3,9 @@ const path = require('path');
 const fs = require('fs');
 const os = require('os');
 const exec = require('child_process').exec;
-
+try {
+  require('electron-reloader')(module, {});
+} catch (_) { }
 
 const createWindow = () => {
   const win = new BrowserWindow({

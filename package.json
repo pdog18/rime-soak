@@ -18,7 +18,8 @@
     "@electron-forge/maker-squirrel": "^6.0.4",
     "@electron-forge/maker-zip": "^6.0.4",
     "electron": "20.0.0",
-    "electron-rebuild": "^3.2.9"
+    "electron-rebuild": "^3.2.9",
+    "electron-reloader": "^1.2.3"
   },
   "dependencies": {
     "@electron/remote": "^2.0.9",

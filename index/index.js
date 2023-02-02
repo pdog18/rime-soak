@@ -21,6 +21,9 @@ window.onload = () => {
   document.getElementById('reset').addEventListener('click', () => window.electronAPI.reset())
 }
 
+/**
+ * todo 在这里应该不仅仅获取一个页面上的数据，而是全部的数据，然后提交给 main.js 
+ */
 function confirm() {
   console.log('>>> function : change_user_setting');
   const date = new Date().toString();
