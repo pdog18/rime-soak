@@ -29,7 +29,7 @@ li {
   list-style: none;
 }
 
-#footer{
+#footer {
   width: 60%;
   display: flex;
   place-content: flex-end;
@@ -58,3 +58,37 @@ option {
   margin: 0;
   height: 6px;
 }
+
+
+/**
+*  ------symbols------->>>>>>>
+*/
+#symbols {
+  height: 300px;
+  overflow: auto;
+  display: grid;
+  row-gap: 4px;
+}
+
+.symbols-item {
+  display: grid;
+  grid-template-columns: 40px 100px 150px 100px;
+  grid-template-rows: 32px;
+  column-gap: 6px;
+}
+
+.symbols-name {
+  text-align: center;
+  line-height: 32px;
+  border: 2px solid black;
+  border-radius: 4px;
+}
+
+.symbols-title {
+  text-align: center;
+  line-height: 32px;
+}
+
+/**
+*  <<<<<<< ------symbols-------
+*/

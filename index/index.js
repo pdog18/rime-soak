@@ -19,6 +19,7 @@ window.onload = () => {
   document.getElementById('confirm').addEventListener('click', confirm)
 
   document.getElementById('reset').addEventListener('click', () => window.electronAPI.reset())
+
 }
 
 /**

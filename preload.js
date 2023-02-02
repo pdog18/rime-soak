@@ -19,4 +19,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
   confirm: (default_custom, weasel_custom) => ipcRenderer.send('confirm', default_custom, weasel_custom),
   reset: () => ipcRenderer.send('reset'),
   openDevTools: () => ipcRenderer.send('openDevTools'),
+  readFileSync: (path, encode) => ipcRenderer.sendSync('read-file-sync', path, encode),
+  yamlParseSync: (file) => ipcRenderer.sendSync('yaml-parse-sync', file),
 })

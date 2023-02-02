@@ -3,9 +3,12 @@ const path = require('path');
 const fs = require('fs');
 const os = require('os');
 const exec = require('child_process').exec;
+const YAML = require('yaml');
+
 try {
   require('electron-reloader')(module, {});
 } catch (_) { }
+
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -29,6 +32,14 @@ const createWindow = () => {
 
 
 app.whenReady().then(() => {
+  ipcMain.on('read-file-sync', (event, file_path, encode, callback) => {
+    event.returnValue = fs.readFileSync(path.join(__dirname, file_path), encode)
+  })
+
+  ipcMain.on('yaml-parse-sync', (event, file) => {
+    event.returnValue = YAML.parse(file)
+  })
+
   ipcMain.on('confirm', (_event, default_custom, weasel_custom) => {
     backup_user_yaml_files()
     change_user_setting(default_custom, weasel_custom)
@@ -52,10 +63,6 @@ app.whenReady().then(() => {
 
   // 隐藏菜单栏
   Menu.setApplicationMenu(null);
-  // hide menu for Mac 
-  if (process.platform !== 'darwin') {
-    app.dock.hide();
-  }
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
@@ -148,7 +155,7 @@ function queryWeaselServer(webContents) {
       console.error('error: ' + error);
       return;
     }
-    console.log('stdout: ' + stdout);
+    // console.log('stdout: ' + stdout); 输出所有进程名字
     const process_list = stdout.split('\n')
     for (const process of process_list) {
       if (process.startsWith('WeaselServer.exe')) {
