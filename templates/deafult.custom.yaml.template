@@ -1,0 +1,13 @@
+
+# default.custom.yaml
+# template of Soak
+customization:
+  distribution_code_name: Weasel
+  distribution_version: 0.14.3_dev_0.8
+  generator: "Rime::SwitcherSettings"
+  modified_time: "Thu Feb 02 2023 17:08:12 GMT+0800 (中国标准时间)"
+  rime_version: 1.7.3
+patch:
+  menu/page_size: 9
+  schema_list:
+    - {schema: pinyin_simp}

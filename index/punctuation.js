@@ -1,5 +1,5 @@
 window.addEventListener("load", () => {
-  const file = window.electronAPI.readFileSync('yaml-templates/punctuation.yaml', 'utf8')
+  const file = window.electronAPI.readFileSync('yaml-templates/punctuation.yaml.template', 'utf8')
   const yaml = window.electronAPI.yamlParseSync(file)
   render_punct_page(yaml)
 
