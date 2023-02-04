@@ -25,8 +25,12 @@ window.addEventListener('load', () => {
 
     console.log('click');
     const t = window.electronAPI.require_templates()
-    t.default.customization.changename = 'changed...2023.2.4'
-    window.electronAPI.update_templates(t)
+
+    // window.electronAPI.update_templates(t)
+    console.log(t);
+    console.log(t.weasel.patch);
+    console.log(t.weasel.patch['style/horizontal']);
+    console.log(t.weasel.patch['style/inline_preedit']);
   })
 
 })
@@ -42,7 +46,7 @@ function confirm() {
   const page_size = document.getElementById('page_size').value
   const simplified = document.getElementById('simplified').checked
   const schema_checked = Array.from(document.getElementsByName('schema')).filter(it => it.checked)[0].value
-  const schema = index_schema(simplified, schema_checked)
+  const schema_value = index_schema(simplified, schema_checked)
 
   const horizontal = document.getElementById('horizontal').checked
   const inline_preedit = document.getElementById('inline_preedit').checked
@@ -50,46 +54,25 @@ function confirm() {
   console.log(`
     page_size : ${page_size}
     simplified : ${simplified}
-    schema : ${schema}
+    schema : ${schema_value}
 
     horizontal : ${horizontal}
     inline_preedit : ${inline_preedit}
   `);
 
 
-  // todo 需要防止 js 格式化将字符串模板的格式破坏
-  const default_custom =
-    `
-# default.custom.yaml
-# generate by Soak
-customization:
-  distribution_code_name: Weasel
-  distribution_version: 0.14.3_dev_0.8
-  generator: "Rime::SwitcherSettings"
-  modified_time: "${date}"
-  rime_version: 1.7.3
-patch:
-  menu/page_size: ${page_size}
-  schema_list:
-    - {schema: ${schema}}
-`
+  const t = window.electronAPI.require_templates()
 
-  const weasel_custom =
-    `
-# weasel.custom.yaml
-# generate by Soak
-customization:
-  distribution_code_name: Weasel
-  distribution_version: 0.14.3_dev_0.8
-  generator: "Rime::SwitcherSettings"
-  modified_time: "${date}"
-  rime_version: 1.7.3
-patch:
-  style/horizontal: ${horizontal}
-  style/inline_preedit: ${inline_preedit}
-`
+  t.default.customization.modified_time = date
+  t.default.patch['menu/page_size'] = page_size
+  t.default.patch.schema_list = [{schema: schema_value}]
 
-  window.electronAPI.confirm(default_custom, weasel_custom)
+  t.weasel.customization.modified_time = date
+  t.weasel.patch['style/horizontal'] = horizontal
+  t.weasel.patch['style/inline_preedit'] = inline_preedit
+
+  window.electronAPI.update_templates(t)
+  window.electronAPI.save_settings()
 }
 
 

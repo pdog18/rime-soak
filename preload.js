@@ -27,4 +27,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
   require_templates: () => ipcRenderer.sendSync('require-templates'),
   update_templates: (templates) => ipcRenderer.send('update-templates', templates),
+  save_settings: () => ipcRenderer.send('save-settings'),
 })
