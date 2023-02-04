@@ -21,4 +21,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
   openDevTools: () => ipcRenderer.send('openDevTools'),
   readFileSync: (path, encode) => ipcRenderer.sendSync('read-file-sync', path, encode),
   yamlParseSync: (file) => ipcRenderer.sendSync('yaml-parse-sync', file),
+
+  // requireParseDataByName: (name) => ipcRenderer.sendSync('require-parse-data', name),
+  // updateParseDataByName: (name, data) => ipcRenderer.sendSync('update-parse-data', name, data),
+
+  require_templates: () => ipcRenderer.sendSync('require-templates'),
+  update_templates: (templates) => ipcRenderer.send('update-templates', templates),
 })

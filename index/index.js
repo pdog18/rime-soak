@@ -2,6 +2,7 @@ window.electronAPI.alert((_event, value) => {
   alert(value)
 })
 
+
 window.addEventListener(
   'keydown', (e) => {
     const { altKey, ctrlKey, key } = e;
@@ -13,14 +14,24 @@ window.addEventListener(
   }, false
 );
 
-window.onload = () => {
+window.addEventListener('load', () => {
   window.electronAPI.queryWeaselServer()
 
   document.getElementById('confirm').addEventListener('click', confirm)
 
   document.getElementById('reset').addEventListener('click', () => window.electronAPI.reset())
 
-}
+  document.getElementById('test').addEventListener('click', () => {
+
+    console.log('click');
+    const t = window.electronAPI.require_templates()
+    t.default.customization.changename = 'changed...2023.2.4'
+    window.electronAPI.update_templates(t)
+  })
+
+})
+
+// window.onload =
 
 /**
  * todo 在这里应该不仅仅获取一个页面上的数据，而是全部的数据，然后提交给 main.js 

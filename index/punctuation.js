@@ -1,11 +1,7 @@
 window.addEventListener("load", () => {
-  const file = window.electronAPI.readFileSync('yaml-templates/punctuation.yaml.template', 'utf8')
+  const file = window.electronAPI.readFileSync('templates/punctuation.yaml.template', 'utf8')
   const yaml = window.electronAPI.yamlParseSync(file)
   render_punct_page(yaml)
-
-  document.getElementById('test').addEventListener('click', () => {
-    console.log('test');
-  })
 })
 
 function render_punct_page(yaml) {
