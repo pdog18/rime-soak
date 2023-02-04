@@ -6,20 +6,13 @@ const exec = require('child_process').exec;
 const os = require('os');
 
 
-const PageGeneral = require('./script/page-general.js')
+// const PageGeneral = require('./script/page-general.js')
 
 try {
   require('electron-reloader')(module, {});
 } catch (_) { }
 
 
-let templates = {
-  default: {},
-  weasel: {},
-  punctuation: {},
-  symbols: {},
-  schema: {}
-}
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -62,11 +55,14 @@ app.whenReady().then(() => {
     templates = value
   })
 
-  ipcMain.on('confirm', (_event, default_custom, weasel_custom) => {
+
+  ipcMain.on('save-settings', (event) => {
+
     save_settings()
-    change_user_setting(default_custom, weasel_custom)
     deploy_weasel()
   })
+
+
   ipcMain.on('reset', (event, _value) => {
     console.log('reset');
     reset(event.sender)
@@ -97,26 +93,49 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit()
 })
 
-function init_templates() {
 
-  templates.default = YAML.parse(fs.readFileSync(path.join(__dirname, './templates/default.custom.yaml.template'), 'utf-8'))
-
-  templates.punctuation = YAML.parse(fs.readFileSync(path.join(__dirname, './templates/punctuation.yaml.template'), 'utf-8'))
-
-  templates.schema = YAML.parse(fs.readFileSync(path.join(__dirname, './templates/schema.custom.yaml.template'), 'utf-8'))
-
-  templates.symbols = YAML.parse(fs.readFileSync(path.join(__dirname, './templates/symbols.yaml.template'), 'utf-8'))
-
-  templates.weasel = YAML.parse(fs.readFileSync(path.join(__dirname, './templates/weasel.custom.yaml.template'), 'utf-8'))
+let templates = {
+  default: {},
+  weasel: {},
+  punctuation: {},
+  symbols: {},
+  schema: {}
 }
 
-// TODO
+function init_templates() {
+  templates.default = YAML.parse(fs.readFileSync(path.join(__dirname, './templates/default.custom.yaml.template'), 'utf-8'))
+  templates.schema = YAML.parse(fs.readFileSync(path.join(__dirname, './templates/schema.custom.yaml.template'), 'utf-8'))
+  templates.weasel = YAML.parse(fs.readFileSync(path.join(__dirname, './templates/weasel.custom.yaml.template'), 'utf-8'))
+
+  templates.punctuation = YAML.parse(fs.readFileSync(path.join(__dirname, './templates/punctuation.yaml.template'), 'utf-8'))
+  templates.symbols = YAML.parse(fs.readFileSync(path.join(__dirname, './templates/symbols.yaml.template'), 'utf-8'))
+}
+
 function save_settings() {
+  // 修改用户文件夹的 .yaml 文件
+  const rimedir = path.join(os.userInfo().homedir, 'AppData/Roaming/Rime')
+
   // templates.default  -> default.custom.yaml
+  const file_deault_yaml = path.join(rimedir, 'default.custom.yaml')
+  const default_custom = YAML.stringify(templates.default)
+  fs.writeFileSync(file_deault_yaml, default_custom);
+
+  console.log(`default_custom`);
+  console.log(default_custom);
 
   // templates.weasel  -> weasel.custom.yaml
+  const weasel_custom = YAML.stringify(templates.weasel)
+  const file_weasel_yaml = path.join(rimedir, 'weasel.custom.yaml')
+  fs.writeFileSync(file_weasel_yaml, weasel_custom);
+
 
   // templates.schema  -> `schema`.custom.yaml
+  const schema_name = templates.default.patch.schema_list[0].schema
+  const schema_custom = YAML.stringify(templates.schema)
+  const file_schema_yaml = path.join(rimedir, `${schema_name}.custom.yaml`)
+  fs.writeFileSync(file_schema_yaml, schema_custom);
+
+  console.log('File is created successfully.');
 }
 
 function reset(webContents) {
@@ -180,7 +199,7 @@ function backup_user_yaml_files() {
 }
 
 
-function  queryWeaselServer(webContents) {
+function queryWeaselServer(webContents) {
   exec('tasklist', function (error, stdout, stderr) {
     if (error) {
       console.error('error: ' + error);
@@ -198,19 +217,4 @@ function  queryWeaselServer(webContents) {
 
     webContents.send('alert', "未找到小狼毫算法服务，请检查是否安装小狼毫")
   });
-}
-
-
-function change_user_setting(default_custom, weasel_custom) {
-  // 2. 修改用户文件夹的 .yaml 文件
-  const rimedir = path.join(os.userInfo().homedir, 'AppData/Roaming/Rime')
-
-  const file_deault_yaml = path.join(rimedir, 'default.custom.yaml')
-
-  fs.writeFileSync(file_deault_yaml, default_custom);
-
-  const file_weasel_yaml = path.join(rimedir, 'weasel.custom.yaml')
-  fs.writeFileSync(file_weasel_yaml, weasel_custom);
-
-  console.log('File is created successfully.');
 }
