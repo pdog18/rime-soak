@@ -1,8 +1,8 @@
 import { CheckboxOptionType } from 'antd';
 
 export class Options implements CheckboxOptionType {
-  value: string = '';
-  label: string = '';
+  value: string
+  label: string;
   constructor(
     label: string,
     value: string
