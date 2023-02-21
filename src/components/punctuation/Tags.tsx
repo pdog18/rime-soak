@@ -3,8 +3,6 @@ import { PlusCircleFilled as PlusIcon, CloseCircleFilled as CloseIcon } from '@a
 import type { InputRef } from 'antd';
 import { Space, Input, Tag, theme } from 'antd';
 
-
-
 const AddTag: React.FC = (prop) => {
   const { token } = theme.useToken();
   const [tags, setTags] = useState(['Unremovable', 'Tag 2', 'Tag 3']);
@@ -75,6 +73,7 @@ const AddTag: React.FC = (prop) => {
 const AtuoShowClosebleIconTag = (prop: any) => {
   const [closable, changeClosable] = useState(false)
   const item = prop.item
+
   return (
     <Tag
       onMouseEnter={() => changeClosable(true)}

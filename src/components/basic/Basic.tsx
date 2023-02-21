@@ -6,7 +6,8 @@ import { InputNumber, Row, Radio, Slider, Card, RadioChangeEvent } from 'antd';
 import { PicRightOutlined as InputTypeIcon, DragOutlined, OrderedListOutlined as MenuSizeIcon } from '@ant-design/icons';
 
 
-import { WrapType, changePreedit, changeOrientation, changePageSize } from '../../store/BasicSlice'
+import { changePreedit, changeOrientation, changePageSize } from '../../store/BasicSlice'
+import type { RootState } from '../../store/store'
 
 const IntegerStep = (props: any) => {
   const page_size = props.size
@@ -37,7 +38,7 @@ const IntegerStep = (props: any) => {
 
 
 const Basic: React.FC = () => {
-  const state = useSelector((state: WrapType) => state.basic)
+  const state = useSelector((state: RootState) => state.basic)
   const dispatch = useDispatch()
 
   const onOrientationChange = ({ target: { value } }: RadioChangeEvent) => {
