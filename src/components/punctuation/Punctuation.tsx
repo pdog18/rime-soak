@@ -1,7 +1,7 @@
-import React, {  useState } from 'react';
+import React from 'react';
 import { Table, Tag } from 'antd'
 import Tags from './Tags';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import type { PunctuType } from '../../store/PunctuSlice';
 
@@ -14,7 +14,9 @@ const Punctuation: React.FC = () => {
       dataIndex: 'name',
       align: 'center' as const,
       width: 100,
-      render: (item: any, record: PunctuType) => (<Tag style={{ width: '24px', textAlign: 'center' }}  >{record.name}</Tag>)
+      render: (item: any, record: PunctuType) => (<Tag
+        style={{ width: '24px', textAlign: 'center' }}>{record.name}
+      </Tag>)
     },
     {
       title: '英文模式',
@@ -22,9 +24,7 @@ const Punctuation: React.FC = () => {
       align: 'center' as const,
       dataIndex: 'ascii_style',
       render: (item: any, record: PunctuType) => (
-        <Tag
-          style={{ width: '24px', textAlign: 'center' }}
-        >
+        <Tag style={{ width: '24px', textAlign: 'center' }}>
           {record.ascii_style['commit'] ? record.ascii_style['commit'] : record.name}
         </Tag>)
     },
