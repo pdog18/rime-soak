@@ -79,7 +79,7 @@ const AtuoShowClosebleIconTag = (prop: any) => {
     <Tag
       onMouseEnter={() => changeClosable(true)}
       onMouseLeave={() => changeClosable(false)}
-      style={{ fontSize: "14px", height: '24px' }}
+      style={{ fontSize: "14px", height: '24px', width: '40px', textAlign: 'center' }}
       color={prop.color}
       closable={closable}
       closeIcon={<CloseIcon style={{ fontSize: "14px" }} />}
