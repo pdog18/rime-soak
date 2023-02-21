@@ -1,21 +1,22 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const schema = {
-
+  simplified: false,
+  inputMode: 'pinyin'
 }
 
 const schemaSlice = createSlice({
   name: 'schema',
   initialState: schema,
   reducers: {
-    xxx: (state, actions) => {
-
+    changeSimplified: (state, actions) => {
+      state.simplified = actions.payload
     },
-    xxxd: (state, actions) => {
-
+    changeInputMode: (state, actions) => {
+      state.inputMode = actions.payload
     },
   }
 })
 
-export const { xxx, xxxd } = schemaSlice.actions;
+export const { changeSimplified, changeInputMode } = schemaSlice.actions;
 export default schemaSlice;

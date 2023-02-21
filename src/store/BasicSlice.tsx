@@ -1,23 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-type BasicType = {
-  horizontal: boolean
-  inline_preedit: boolean
-  menu: {
-    page_size: number
-  }
-}
-
-const basic: BasicType = {
+const basic = {
   horizontal: false,
   inline_preedit: false,
   menu: {
     page_size: 5
   }
-}
-
-type WrapType = {
-  basic: BasicType
 }
 
 const basicSlice = createSlice({
@@ -31,15 +19,10 @@ const basicSlice = createSlice({
       state.inline_preedit = actions.payload
     },
     changePageSize: (state, actions) => {
-      state.menu.page_size = actions.payload
-
-      console.log('menu size ',  state.menu.page_size);
-      
+      state.menu.page_size = actions.payload      
     },
-
   }
 })
 
-export type { BasicType, WrapType }
 export const { changeOrientation, changePreedit, changePageSize } = basicSlice.actions;
 export default basicSlice;

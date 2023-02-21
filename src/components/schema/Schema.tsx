@@ -1,14 +1,19 @@
 import React from 'react';
 import { Card, RadioChangeEvent, Row, Radio } from 'antd';
 import { ClusterOutlined as InputTypeIcon, RetweetOutlined as SimpIcon } from '@ant-design/icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { changeInputMode, changeSimplified } from '../../store/SchemaSlice';
+import { RootState } from '../../store/store';
 
 const Schema: React.FC = () => {
+  const schema = useSelector((state: RootState) => state.schema)
+  const dispatch = useDispatch()
   const onSimplifiedChanged = ({ target: { value } }: RadioChangeEvent) => {
-    console.log('radio2 checked onSimplifiedChanged', value);
+    dispatch(changeSimplified(value))
   };
 
   const onInputModeChanged = ({ target: { value } }: RadioChangeEvent) => {
-    console.log('radio3 checked onInputMode', value);
+    dispatch(changeInputMode(value))
   };
 
   return (<div style={{
@@ -24,9 +29,9 @@ const Schema: React.FC = () => {
       <Row style={{ width: '60vw' }} justify='space-between'>
         <div><SimpIcon style={{ fontSize: '24px', margin: '0px 16px' }} />简体/繁体</div>
 
-        <Radio.Group defaultValue={'繁体'} buttonStyle="solid" onChange={onSimplifiedChanged}  >
-          <Radio.Button value={'简体'}>简体</Radio.Button>
-          <Radio.Button value={'繁体'}>繁体</Radio.Button>
+        <Radio.Group defaultValue={schema.simplified} buttonStyle="solid" onChange={onSimplifiedChanged}  >
+          <Radio.Button value={true}>简体</Radio.Button>
+          <Radio.Button value={false}>繁体</Radio.Button>
         </Radio.Group>
       </Row>
     </Card>
@@ -36,10 +41,10 @@ const Schema: React.FC = () => {
       <Row align='middle' style={{ width: '60vw' }} justify='space-between'>
         <div><InputTypeIcon style={{ fontSize: '24px', margin: '0px 16px' }} />输入模式</div>
 
-        <Radio.Group defaultValue={'拼音'} buttonStyle="solid" onChange={onInputModeChanged}  >
-          <Radio.Button value={'拼音'}>拼音</Radio.Button>
-          <Radio.Button value={'双拼'}>双拼</Radio.Button>
-          <Radio.Button value={'五笔'}>五笔</Radio.Button>
+        <Radio.Group defaultValue={schema.inputMode} buttonStyle="solid" onChange={onInputModeChanged}  >
+          <Radio.Button value={'pinyin'}>拼音</Radio.Button>
+          <Radio.Button value={'double_pinyin'}>双拼</Radio.Button>
+          <Radio.Button value={'wubi'}>五笔</Radio.Button>
         </Radio.Group>
       </Row>
     </Card>
