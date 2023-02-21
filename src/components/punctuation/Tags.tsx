@@ -92,12 +92,9 @@ const AtuoShowClosebleIconTag = (prop: any) => {
 
 
 const Tags = (prop: any) => {
-  const { item, record } = prop
+  const { item, record, type } = prop
 
-  if (record.ascii_style === undefined) {
-    return <Tag>space</Tag>
-  }
-
+  console.log(prop);
   if (typeof item == 'string') {
     return <>
       <AtuoShowClosebleIconTag item={item} />
@@ -118,21 +115,23 @@ const Tags = (prop: any) => {
     </>
   }
 
-
   if (Array.isArray(item)) {
+    console.log('key,,,,,,,,,,,,,', `${type}${record.name}`);
+
     return (<>
       {item.map((char, index) => {
         return <AtuoShowClosebleIconTag
+          key={`${type}${char}`}
           item={char}
           index={index}
           array={item}
         />
       })}
       <AddTag />
-    </>)
+    </ >)
   }
 
-  return <Tag>error</Tag>
+  return <Tag>Error</Tag>
 };
 
 export default Tags;
