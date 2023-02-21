@@ -1,11 +1,9 @@
-
-
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { PlusCircleFilled as PlusIcon, CloseCircleFilled as CloseIcon } from '@ant-design/icons';
 import type { InputRef } from 'antd';
 import { Space, Input, Tag, theme } from 'antd';
-import { AllConfigContext } from '../../App';
-import internal from 'stream';
+
+
 
 const AddTag: React.FC = (prop) => {
   const { token } = theme.useToken();
@@ -74,87 +72,65 @@ const AddTag: React.FC = (prop) => {
   </Space>)
 }
 
+const AtuoShowClosebleIconTag = (prop: any) => {
+  const [closable, changeClosable] = useState(false)
+  const item = prop.item
+  return (
+    <Tag
+      onMouseEnter={() => changeClosable(true)}
+      onMouseLeave={() => changeClosable(false)}
+      style={{ fontSize: "14px", height: '24px' }}
+      color={prop.color}
+      closable={closable}
+      closeIcon={<CloseIcon style={{ fontSize: "14px" }} />}
+      onClose={(e) => {
+        e.preventDefault()
+        console.log('onClose');
+      }}>
+      {item}
+    </Tag>)
+}
+
 
 const Tags = (prop: any) => {
-  const { setPunctuation } = useContext(AllConfigContext)
-  const item = prop.item
+  const { item, record } = prop
 
-  // console.log(prop.item, prop.record.key, prop.type);
-
-
-  if (item == undefined || item == " ") {
+  if (record.ascii_style === undefined) {
     return <Tag>space</Tag>
   }
 
   if (typeof item == 'string') {
-    return <><Tag
-      closable
-      closeIcon={<CloseIcon style={{ fontSize: "12px" }} />}
-      onClose={() => { console.log('onClose'); }}>
-      {item}
-    </Tag>
+    return <>
+      <AtuoShowClosebleIconTag item={item} />
       <AddTag />
     </>
   }
 
-  if (Array.isArray(item)) {
-    return (<>
-      {item.map((char, index) => {
-        return <Tag
-          closable
-          closeIcon={<CloseIcon style={{ fontSize: "12px" }} />}
-          onClose={(e) => {
-            e.preventDefault()
-
-            if (Array.isArray(prop.item)) {
-              prop.item.map((v: string, index: internal) => {
-                if (v == char) {
-                  prop.item.splice(index, 1)
-                }
-              })
-
-              let newValue = prop.item
-              if (newValue.length == 1) {
-                newValue = newValue[0]
-              }
-
-              setPunctuation({
-                key: prop.record.key,
-                type: prop.type,
-                newValue: newValue
-              })
-            }
-
-          }} key={index}>{char}</Tag>
-      })}
-      <AddTag />
-    </>)
-  }
-
   if (item['commit'] !== undefined) {
-    if (item['commit'] === "　") return <Tag>space</Tag>
-
     return <>
-      <Tag
-        closable
-        closeIcon={<CloseIcon style={{ fontSize: "12px" }} />}
-        onClose={() => { console.log('onClose'); }}
-        color='processing'>
-        {item['commit']}
-      </Tag>
+      <AtuoShowClosebleIconTag color='processing' item={item['commit']} />
       <AddTag />
     </>
   }
   if (item['pair'] !== undefined) {
-    return <><Tag
-      closable
-      closeIcon={<CloseIcon style={{ fontSize: "12px" }} />}
-      onClose={() => { console.log('onClose'); }}
-      color="success">
-      {item['pair']}
-    </Tag>
+    return <>
+      <AtuoShowClosebleIconTag color="success" item={item['pair']} />
       <AddTag />
     </>
+  }
+
+
+  if (Array.isArray(item)) {
+    return (<>
+      {item.map((char, index) => {
+        return <AtuoShowClosebleIconTag
+          item={char}
+          index={index}
+          array={item}
+        />
+      })}
+      <AddTag />
+    </>)
   }
 
   return <Tag>error</Tag>

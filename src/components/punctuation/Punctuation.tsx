@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Card, Table, TableColumnsType, Tag } from 'antd'
+import { Table, TableColumnsType, Tag } from 'antd'
 import { AllConfigContext } from '../../App';
 import Tags from './Tags';
 
@@ -38,8 +38,8 @@ const Punctuation: React.FC = () => {
       align: 'center' as const,
       dataIndex: 'ascii_style',
       key: 'ascii_style',
-      render: (item: any) => {
-        if (item === undefined) {
+      render: (item: any, record: any) => {
+        if (record.ascii_style === undefined) {
           return (<Tag>{'space'}</Tag>)
         }
         if (typeof item == 'string') {
