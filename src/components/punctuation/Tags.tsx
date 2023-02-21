@@ -5,7 +5,12 @@ import { Space, Input, Tag, theme } from 'antd';
 import { useDispatch } from 'react-redux';
 import { changeFullShapePunctuation, changeHalfShapePunctuation } from '../../store/PunctuSlice';
 
-const AddTag: React.FC = () => {
+// todo 拆分 AddTag
+const AddTag = (prop: any) => {
+  const { item, record, type } = prop
+
+  // todo input 中有值时，应该展示一个提交的按钮，在提交的按钮中，调用 punctu 的 reducer 
+
   const { token } = theme.useToken();
   const [tags, setTags] = useState(['Unremovable', 'Tag 2', 'Tag 3']);
   const [inputVisible, setInputVisible] = useState(false);
@@ -123,7 +128,7 @@ const Tags = (prop: any) => {
   if (typeof item == 'string') {
     return <>
       <AtuoShowClosebleIconTag item={item} record={record} type={type} />
-      <AddTag   />
+      <AddTag item={item} record={record} type={type} />
     </>
   }
 
