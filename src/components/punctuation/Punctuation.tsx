@@ -1,6 +1,6 @@
 import React from 'react';
 import { Table, Tag } from 'antd'
-import Tags from './Tags';
+import Tags, { AddTag } from './Tags';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import type { PunctuType } from '../../store/PunctuSlice';
@@ -23,22 +23,27 @@ const Punctuation: React.FC = () => {
       width: 100,
       align: 'center' as const,
       dataIndex: 'ascii_style',
-      render: (item: any, record: PunctuType) => (
-        <Tag style={{ width: '24px', textAlign: 'center' }}>
-          {record.ascii_style['commit'] ? record.ascii_style['commit'] : record.name}
-        </Tag>)
+      render: (item: any, record: PunctuType) => (<Tag style={{ width: '24px', textAlign: 'center' }}>
+        {record.ascii_style['commit'] ? record.ascii_style['commit'] : record.name}
+      </Tag>)
     },
     {
       title: '中文半角',
       align: 'center' as const,
       dataIndex: 'half_shape',
-      render: (item: any, record: PunctuType) => (<Tags item={item} record={record} type='half_shape' />)
+      render: (item: any, record: PunctuType) => (<>
+        <Tags item={item} record={record} type='half_shape' />
+        <AddTag item={item} record={record} type='half_shape' />
+      </>)
     },
     {
       title: '中文全角',
       align: 'center' as const,
       dataIndex: 'full_shape',
-      render: (item: any, record: PunctuType) => (<Tags item={item} record={record} type='full_shape' />)
+      render: (item: any, record: PunctuType) => (<>
+        <Tags item={item} record={record} type='full_shape' />
+        <AddTag item={item} record={record} type='full_shape' />
+      </>)
     },
   ];
 
