@@ -1,7 +1,7 @@
 import { Card, Radio, RadioChangeEvent, Row, Space } from "antd";
 import { ReactNode } from "react";
 
-const Item = <T,>(props: {
+const RimeSettingItem = <T,>(props: {
   children: ReactNode,
   title: string,
   values: T[],
@@ -34,4 +34,4 @@ const Item = <T,>(props: {
   </Row>
 </Card>);
 
-export default Item;
+export default RimeSettingItem;

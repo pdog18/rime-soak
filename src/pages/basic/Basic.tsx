@@ -2,12 +2,13 @@ import React from 'react';
 import { useDispatch } from 'react-redux/es/hooks/useDispatch';
 import { useSelector } from 'react-redux/es/exports';
 
-import { InputNumber, Row, Radio, Slider, Card, RadioChangeEvent } from 'antd';
+import { InputNumber, Row, Slider, Card, Space } from 'antd';
 import { PicRightOutlined as InputTypeIcon, DragOutlined, OrderedListOutlined as MenuSizeIcon } from '@ant-design/icons';
 
 
 import { changePreedit, changeOrientation, changePageSize } from '../../store/BasicSlice'
 import type { RootState } from '../../store/store'
+import RimeSettingItem from '../../components/RimeSettingItem';
 
 const IntegerStep = (props: any) => {
   const page_size = props.size
@@ -41,18 +42,6 @@ const Basic: React.FC = () => {
   const state = useSelector((state: RootState) => state.basic)
   const dispatch = useDispatch()
 
-  const onOrientationChange = ({ target: { value } }: RadioChangeEvent) => {
-    dispatch(changeOrientation(value))
-  };
-
-  const onPreeditChange = ({ target: { value } }: RadioChangeEvent) => {
-    dispatch(changePreedit(value))
-  };
-
-  const onSliderChange = (value: number) => {
-    dispatch(changePageSize(value))
-  };
-
   return (<div style={{
     display: 'flex',
     gap: '16px',
@@ -61,38 +50,42 @@ const Basic: React.FC = () => {
     justifyContent: 'center',
     alignItems: 'center'
   }}>
-    {/*  候选栏展示方向设置 */}
-    <Card>
-      <Row style={{ width: '60vw' }} justify='space-between'>
-        <div><DragOutlined style={{ fontSize: '24px', margin: '0px 16px' }} />候选栏展示方向</div>
-
-        <Radio.Group defaultValue={state.horizontal} buttonStyle="solid" onChange={onOrientationChange}  >
-          <Radio.Button value={true}>水平排列</Radio.Button>
-          <Radio.Button value={false}>垂直排列</Radio.Button>
-        </Radio.Group>
-      </Row>
-    </Card>
+    <RimeSettingItem
+      title='候选栏展示方向'
+      values={[true, false]}
+      defaultValue={state.horizontal}
+      names={['水平排列', '垂直排列']}
+      onChange={(value: boolean) => {
+        dispatch(changeOrientation(value))
+      }} >
+      <DragOutlined style={{ fontSize: '24px', margin: '0px 16px' }} />
+    </RimeSettingItem>
 
     {/*  候选词数量 */}
     <Card >
       <Row style={{ width: '60vw' }} justify='space-between'>
-        <div><MenuSizeIcon style={{ fontSize: '24px', margin: '0px 16px' }} />候选词数量</div>
+        <Space>
+          <MenuSizeIcon style={{ fontSize: '24px', margin: '0px 16px' }} />
+          候选词数量
+        </Space>
 
-        <IntegerStep size={state.menu.page_size} onChange={onSliderChange} />
+        <IntegerStep size={state.menu.page_size} onChange={(value: number) => {
+          dispatch(changePageSize(value))
+        }} />
       </Row>
     </Card>
 
     {/*  输入字符跟随光标候选面板 */}
-    <Card  >
-      <Row style={{ width: '60vw' }} justify='space-between'>
-        <div><InputTypeIcon style={{ fontSize: '24px', margin: '0px 16px' }} />输入内容 </div>
-
-        <Radio.Group defaultValue={state.inline_preedit} buttonStyle="solid" onChange={onPreeditChange}  >
-          <Radio.Button value={true}>光标处内嵌</Radio.Button>
-          <Radio.Button value={false}>候选词上方</Radio.Button>
-        </Radio.Group>
-      </Row>
-    </Card>
+    <RimeSettingItem
+      title='输入内容'
+      values={[true, false]}
+      defaultValue={state.inline_preedit}
+      names={['光标处内嵌', '候选词上方']}
+      onChange={(value: boolean) => {
+        dispatch(changePreedit(value))
+      }} >
+      <InputTypeIcon style={{ fontSize: '24px', margin: '0px 16px' }} />
+    </RimeSettingItem>
   </div>);
 }
 

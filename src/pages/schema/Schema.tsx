@@ -3,7 +3,7 @@ import { ClusterOutlined as InputTypeIcon, RetweetOutlined as SimpIcon } from '@
 import { useDispatch, useSelector } from 'react-redux';
 import { changeInputMode, changeSimplified } from '../../store/SchemaSlice';
 import { RootState } from '../../store/store';
-import Item from '../../components/Item';
+import RimeSettingItem from '../../components/RimeSettingItem';
 
 const Schema: React.FC = () => {
   const schema = useSelector((state: RootState) => state.schema)
@@ -18,7 +18,7 @@ const Schema: React.FC = () => {
     gap: '16px'
   }}>
 
-    <Item
+    <RimeSettingItem
       title='简体/繁体'
       values={[true, false]}
       defaultValue={schema.simplified}
@@ -27,9 +27,9 @@ const Schema: React.FC = () => {
         dispatch(changeSimplified(value))
       }} >
       <SimpIcon style={{ fontSize: '24px', margin: '0px 16px' }} />
-    </Item>
+    </RimeSettingItem>
 
-    <Item
+    <RimeSettingItem
       title='输入模式'
       values={['pinyin', 'double_pinyin', 'wubi']}
       defaultValue={schema.inputMode}
@@ -38,7 +38,7 @@ const Schema: React.FC = () => {
         dispatch(changeInputMode(value))
       }} >
       <InputTypeIcon style={{ fontSize: '24px', margin: '0px 16px' }} />
-    </Item>
+    </RimeSettingItem>
 
     {/* 具体方案 */}
     <div>当前方案</div>
