@@ -1,9 +1,9 @@
 import { Tabs } from 'antd';
 
-import Basic from './components/basic/Basic';
-import Skin from './components/skin/Skin';
-import Punctuation from './components/punctuation/Punctuation';
-import Schema from './components/schema/Schema';
+import Basic from './pages/basic/Basic';
+import Skin from './pages/skin/Skin';
+import Punctuation from './pages/punctuation/Punctuation';
+import Schema from './pages/schema/Schema';
 
 import { Provider } from 'react-redux';
 import store from './store/store';

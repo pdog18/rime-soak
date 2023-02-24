@@ -1,10 +1,9 @@
-import React, { ReactNode } from 'react';
-import { Card, RadioChangeEvent, Row, Radio, Space } from 'antd';
+import React from 'react';
 import { ClusterOutlined as InputTypeIcon, RetweetOutlined as SimpIcon } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeInputMode, changeSimplified } from '../../store/SchemaSlice';
 import { RootState } from '../../store/store';
-import Item from '../Item';
+import Item from '../../components/Item';
 
 const Schema: React.FC = () => {
   const schema = useSelector((state: RootState) => state.schema)
