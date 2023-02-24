@@ -1,7 +1,7 @@
 import { Card, Radio, RadioChangeEvent, Row, Space } from "antd";
 import { ReactNode } from "react";
 
-const RimeSettingItem = <T,>(props: {
+type Props<T> = {
   children: ReactNode,
   title: string,
   values: T[],
@@ -9,7 +9,9 @@ const RimeSettingItem = <T,>(props: {
   names: string[],
   onChange: (e: T) => void,
   icon?: ReactNode
-}): JSX.Element => (<Card>
+}
+
+const RimeSettingItem = <T,>(props: Props<T>) => (<Card>
   <Row
     style={{ width: '60vw' }}
     justify='space-between' >
