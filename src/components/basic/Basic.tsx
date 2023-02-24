@@ -62,7 +62,7 @@ const Basic: React.FC = () => {
     alignItems: 'center'
   }}>
     {/*  候选栏展示方向设置 */}
-    <Card  >
+    <Card>
       <Row style={{ width: '60vw' }} justify='space-between'>
         <div><DragOutlined style={{ fontSize: '24px', margin: '0px 16px' }} />候选栏展示方向</div>
 
