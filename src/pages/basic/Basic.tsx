@@ -8,7 +8,7 @@ import { PicRightOutlined as InputTypeIcon, DragOutlined, OrderedListOutlined as
 
 import { changePreedit, changeOrientation, changePageSize } from '../../store/BasicSlice'
 import type { RootState } from '../../store/store'
-import RimeSettingItem from '../../components/RimeSettingItem';
+import RimeSettingItem, { RadioChoice } from '../../components/RimeSettingItem';
 
 const IntegerStep = (props: any) => {
   const page_size = props.size
@@ -51,42 +51,45 @@ const Basic: React.FC = () => {
     alignItems: 'center'
   }}>
     <RimeSettingItem
-      title='候选栏展示方向'
-      values={[true, false]}
-      defaultValue={state.horizontal}
-      names={['水平排列', '垂直排列']}
-      onChange={(value: boolean) => {
-        dispatch(changeOrientation(value))
-      }} >
-      <DragOutlined style={{ fontSize: '24px', margin: '0px 16px' }} />
+      icon={<DragOutlined style={{ fontSize: '24px', margin: '0px 16px' }} />}
+      title='候选词方向'>
+      <RadioChoice
+        values={[true, false]}
+        defaultValue={state.horizontal}
+        names={['水平排列', '垂直排列']}
+        onChange={(value: boolean) => {
+          dispatch(changeOrientation(value))
+        }} />
     </RimeSettingItem>
 
-    {/*  候选词数量 */}
-    <Card >
-      <Row style={{ width: '60vw' }} justify='space-between'>
-        <Space>
-          <MenuSizeIcon style={{ fontSize: '24px', margin: '0px 16px' }} />
-          候选词数量
-        </Space>
 
-        <IntegerStep size={state.menu.page_size} onChange={(value: number) => {
-          dispatch(changePageSize(value))
-        }} />
-      </Row>
-    </Card>
+    {/*  候选词数量 */}
+    <RimeSettingItem
+      icon={<MenuSizeIcon style={{ fontSize: '24px', margin: '0px 16px' }} />}
+      title='候选词数量'>
+      <IntegerStep size={state.menu.page_size} onChange={(value: number) => {
+        dispatch(changePageSize(value))
+      }} />
+    </RimeSettingItem>
+
 
     {/*  输入字符跟随光标候选面板 */}
     <RimeSettingItem
-      title='输入内容'
-      values={[true, false]}
-      defaultValue={state.inline_preedit}
-      names={['光标处内嵌', '候选词上方']}
-      onChange={(value: boolean) => {
-        dispatch(changePreedit(value))
-      }} >
-      <InputTypeIcon style={{ fontSize: '24px', margin: '0px 16px' }} />
+      icon={<InputTypeIcon style={{ fontSize: '24px', margin: '0px 16px' }} />}
+      title='输入字符'>
+
+      <RadioChoice
+        values={[true, false]}
+        defaultValue={state.inline_preedit}
+        names={['光标处内嵌', '候选词上方']}
+        onChange={(value: boolean) => {
+          dispatch(changePreedit(value))
+        }} />
     </RimeSettingItem>
-  </div>);
+
+
+
+  </div >);
 }
 
 export default Basic;
