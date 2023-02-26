@@ -2,11 +2,10 @@ import React from 'react';
 import { useDispatch } from 'react-redux/es/hooks/useDispatch';
 import { useSelector } from 'react-redux/es/exports';
 
-import { InputNumber, Row, Slider, Card, Space } from 'antd';
+import { FloatButton, InputNumber, Row, Slider } from 'antd';
 import { PicRightOutlined as InputTypeIcon, DragOutlined, OrderedListOutlined as MenuSizeIcon } from '@ant-design/icons';
 
-
-import { changePreedit, changeOrientation, changePageSize } from '../../store/BasicSlice'
+import { changePreedit, changeOrientation, changePageSize, saveBasicSetting } from '../../store/BasicSlice'
 import type { RootState } from '../../store/store'
 import RimeSettingItem, { RadioChoice } from '../../components/RimeSettingItem';
 
@@ -88,6 +87,11 @@ const Basic: React.FC = () => {
     </RimeSettingItem>
 
 
+    <FloatButton
+      style={{ display: state.setting_changed ? 'block' : 'none' }}
+      type="primary"
+      tooltip={<div>Save</div>}
+      onClick={() => dispatch(saveBasicSetting())} />
 
   </div >);
 }

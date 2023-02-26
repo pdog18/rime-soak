@@ -1,9 +1,10 @@
 import React from 'react';
 import { ClusterOutlined as InputTypeIcon, RetweetOutlined as SimpIcon } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeInputMode, changeSimplified } from '../../store/SchemaSlice';
+import { changeInputMode, changeSimplified, saveSchemaSetting } from '../../store/SchemaSlice';
 import { RootState } from '../../store/store';
 import RimeSettingItem, { RadioChoice } from '../../components/RimeSettingItem';
+import { FloatButton } from 'antd';
 
 const Schema: React.FC = () => {
   const schema = useSelector((state: RootState) => state.schema)
@@ -47,6 +48,13 @@ const Schema: React.FC = () => {
 
     {/*  关闭方案选择快捷键( Control + Grave)        放到「按键管理」更合适？?  */}
     <div>更多方案</div>
+
+    
+    <FloatButton
+      style={{ display: schema.setting_changed ? 'block' : 'none' }}
+      type="primary"
+      tooltip={<div>Save</div>}
+      onClick={() => dispatch(saveSchemaSetting())} />
   </div >);
 }
 

@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore, Unsubscribe } from '@reduxjs/toolkit'
 import basicSlice from './BasicSlice'
 import punctuSlice from './PunctuSlice';
 import schemaSlice from './SchemaSlice';

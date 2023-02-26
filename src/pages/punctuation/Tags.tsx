@@ -46,11 +46,9 @@ export const AddTag = (prop: any) => {
 
     // 如果是空，那么 shape 变成 inputValue 追加
     if (Object.keys(shape).length == 0 || !shape) {
-      console.log('shape 是空的', shape);
-      console.log('shape 是空的 inputValue', inputValue);
+      console.log('shape 是空的 shape = ', shape, '  inputValue = ', inputValue);
       shape = inputValue
     } else if (Array.isArray(shape)) { // 如果是 array 直接追加
-      console.log('shape 数组', inputValue, typeof inputValue, typeof shape);
       shape = [...shape, inputValue]
     } else {// 把原来的值转成string，然后和 inputValue 一起加入到数组
       let real = shape

@@ -10,7 +10,12 @@ type PunctuType = {
   ascii_style: any
 }
 
-const data: PunctuType[] = []
+const punctuArray: PunctuType[] = []
+
+const data = {
+  setting_changed: false,
+  punctuArray: punctuArray
+}
 
 /**
  * json to table's array, forEach by [ascii_style]
@@ -18,7 +23,7 @@ const data: PunctuType[] = []
  * 如果有需要编辑 [space] 的需求，那么改成 [full_shape] 进行遍历
  */
 Object.keys(json.ascii_style).forEach((key, index) => {
-  data.push({
+  punctuArray.push({
     key: `key:${key} ${index}`,
     name: key,
     index: index,
@@ -33,22 +38,30 @@ const punctuSlice = createSlice({
   initialState: data,
   reducers: {
     changeHalfShapePunctuation: (state, actions) => {
-      const record = state.find((record) => record.index === actions.payload.index)
+      state.setting_changed = true
+
+      const record = state.punctuArray.find((record) => record.index === actions.payload.index)
       if (record) {
         // ✅ CORRECT: This object is still wrapped in a Proxy, so we can "mutate" it
         record.half_shape = actions.payload.half_shape
       }
+
     },
     changeFullShapePunctuation: (state, actions) => {
-      const record = state.find((record) => record.index === actions.payload.index)
+      state.setting_changed = true
+
+      const record = state.punctuArray.find((record) => record.index === actions.payload.index)
       if (record) {
         // ✅ CORRECT: This object is still wrapped in a Proxy, so we can "mutate" it
         record.full_shape = actions.payload.full_shape
       }
     },
+    savePunctuSetting: (state) => {
+      console.log('savePunctuSetting');
+    },
   }
 })
 
-export const { changeFullShapePunctuation, changeHalfShapePunctuation } = punctuSlice.actions;
+export const { changeFullShapePunctuation, changeHalfShapePunctuation, savePunctuSetting } = punctuSlice.actions;
 export default punctuSlice;
 export type { PunctuType } 

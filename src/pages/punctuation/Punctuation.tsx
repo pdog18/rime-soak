@@ -1,13 +1,16 @@
 import React from 'react';
-import { Table, Tag } from 'antd'
+import { FloatButton, Table, Tag } from 'antd'
 import Tags, { AddTag } from './Tags';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
-import type { PunctuType } from '../../store/PunctuSlice';
+import { PunctuType, savePunctuSetting } from '../../store/PunctuSlice';
 
 
 const Punctuation: React.FC = () => {
-  const punctuArray = useSelector((state: RootState) => state.punctu)
+  const state = useSelector((state: RootState) => state.punctu)
+  const punctuArray = state.punctuArray
+  const dispatch = useDispatch()
+
   const columns = [
     {
       title: '符号',
@@ -47,15 +50,28 @@ const Punctuation: React.FC = () => {
     },
   ];
 
-  return (<Table
-    style={{ margin: '4vh 4vw' }}
-    dataSource={punctuArray}
-    columns={columns}
-    pagination={false}
-    scroll={{
-      y: 360,
-    }}
-  />);
+
+  return (
+    <>
+
+      <Table
+        style={{ margin: '4vh 4vw' }}
+        dataSource={punctuArray}
+        columns={columns}
+        pagination={false}
+        scroll={{
+          y: 360,
+        }}
+      />
+
+
+      <FloatButton
+        style={{ display: state.setting_changed ? 'block' : 'none' }}
+        type="primary"
+        tooltip={<div>Save</div>}
+        onClick={() => dispatch(savePunctuSetting())} />
+    </>);
+
 }
 
 export default Punctuation;
