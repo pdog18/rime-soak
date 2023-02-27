@@ -42,10 +42,10 @@ export const AddTag = (prop: any) => {
       return
     }
 
-    let shape = type == 'half_shape' ? record.half_shape : record.full_shape
+    let shape = type === 'half_shape' ? record.half_shape : record.full_shape
 
     // 如果是空，那么 shape 变成 inputValue 追加
-    if (Object.keys(shape).length == 0 || !shape) {
+    if (Object.keys(shape).length === 0 || !shape) {
       console.log('shape 是空的 shape = ', shape, '  inputValue = ', inputValue);
       shape = inputValue
     } else if (Array.isArray(shape)) { // 如果是 array 直接追加
@@ -136,7 +136,7 @@ const AtuoShowClosebleIconTag = (prop: any) => {
     onClose={(e) => {
       e.preventDefault()
       // 首先根据 type 判断是 half_shape 还是 full_shape
-      const shape = type == 'half_shape' ? record.half_shape : record.full_shape
+      const shape = type === 'half_shape' ? record.half_shape : record.full_shape
       // 然后根据 shape 的类型判断，当前是 {} 还是 string 还是 []
       // 1. 如果是 []， 并且有多个元素，那么过滤
       const hasMultipleElements = (Array.isArray(shape) && shape.length !== 1)
@@ -193,8 +193,8 @@ const Tags = (prop: any) => {
       })}
     </>)
   }
-  // empty
-  return (<></>)
+
+  return (<></>)  // empty
 };
 
 export default Tags;

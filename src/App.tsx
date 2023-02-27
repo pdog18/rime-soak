@@ -1,30 +1,27 @@
 import { FloatButton, Tabs } from 'antd';
 
-import Basic from './pages/basic/Basic';
+import Style from './pages/style/Style';
 import Skin from './pages/skin/Skin';
 import Punctuation from './pages/punctuation/Punctuation';
-import Schema from './pages/schema/Schema';
+import Default from './pages/default/Default';
 
-
-import { Provider, useSelector } from 'react-redux';
-import store from './store/store';
 
 const labels: Array<String> = [
-  '方案选择',
-  '基本设置',
-  '皮肤调整',
-  '符号配置'
+  '基本',
+  '风格',
+  '皮肤',
+  '符号'
 ]
 
 const children = [
-  <Schema />,
-  <Basic />,
+  <Default />,
+  <Style />,
   <Skin />,
   <Punctuation />,
 ]
 
 const App: React.FC = () => {
- 
+
   return (<>
     <Tabs
       centered={true}
@@ -36,7 +33,7 @@ const App: React.FC = () => {
           label: `${labels[i]}`,
           key: id,
           children: children[i],
-          disabled: i == 2,
+          disabled: i === 2,
         };
       })}
     />

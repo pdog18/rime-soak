@@ -5,8 +5,8 @@ const skin = {
 }
 
 
-const skinSlice = createSlice({
-  name: 'skin',
+const rimeSlice = createSlice({
+  name: 'rime',
   initialState: skin,
   reducers: {
     xxx: (state, actions) => {
@@ -18,5 +18,5 @@ const skinSlice = createSlice({
   }
 })
 
-export const { xxx, xxxd } = skinSlice.actions;
-export default skinSlice;
+export const { xxx, xxxd } = rimeSlice.actions;
+export default rimeSlice;

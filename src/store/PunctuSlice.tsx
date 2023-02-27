@@ -56,7 +56,8 @@ const punctuSlice = createSlice({
         record.full_shape = actions.payload.full_shape
       }
     },
-    savePunctuSetting: (state) => {
+    savePunctuSetting: (state, actions) => {
+      const schemaName = actions.payload
       console.log('savePunctuSetting');
     },
   }
