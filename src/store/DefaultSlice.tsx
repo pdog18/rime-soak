@@ -12,9 +12,7 @@ const defaultCustom = {
       rime_version: '1.7.3',
     },
     patch: {
-      menu: {
-        page_size: 5
-      },
+      'menu/page_size': 5,
       schema_list: [{ schema: 'luna_pinyin' }]
     }
   },
@@ -29,8 +27,14 @@ const defaultSlice = createSlice({
   name: 'basicAndSchema',
   initialState: defaultCustom,
   reducers: {
+    handleDefaultDrop: (state, actions) => {
+      state.default = actions.payload
+      // todo 需要在这里识别方案
+      console.log(stringify(state));
+    },
     changePageSize: (state, actions) => {
-      state.default.patch.menu.page_size = actions.payload
+      // todo 需要想办法识别这种 / 语法
+      state.default.patch['menu/page_size'] = actions.payload
       state.default_setting_changed = true
     },
     changeSimplified: (state, actions) => {
@@ -43,7 +47,7 @@ const defaultSlice = createSlice({
       state.schema.inputMode = actions.payload
       state.default.patch.schema_list = [indexSchema(`${state.schema.simplified}`, state.schema.inputMode as 'double_pinyin' | 'wubi' | 'pinyin')]
     },
-    saveSchemaSetting: (state) => {
+    saveDefaultSetting: (state) => {
       console.log('schema');
       generateDefaultCustomYAML(state.default)
     },
@@ -68,20 +72,18 @@ function indexSchema(simplified: 'true' | 'false', schema: 'double_pinyin' | 'wu
 }
 
 function generateDefaultCustomYAML(_default: typeof defaultCustom.default) {
-  // todo modified_time
-  // default_custom_yaml.customization.modified_time = new Date().toLocaleString()
-
   _default.customization.modified_time = new Date().toLocaleString()
   console.log(stringify(_default));
 }
 
 
 export const {
+  handleDefaultDrop,
   changePageSize,
 
   changeSimplified,
   changeInputMode,
-  saveSchemaSetting: saveDefaultSetting
+  saveDefaultSetting
 } = defaultSlice.actions;
 export default defaultSlice;
 

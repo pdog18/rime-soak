@@ -1,11 +1,13 @@
 import React from 'react';
 import { ClusterOutlined as InputTypeIcon, RetweetOutlined as SimpIcon, OrderedListOutlined as MenuSizeIcon } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeInputMode, changeSimplified, saveDefaultSetting } from '../../store/DefaultSlice';
+import { changeInputMode, changeSimplified, handleDefaultDrop, saveDefaultSetting } from '../../store/DefaultSlice';
 import { RootState } from '../../store/Store';
 import RimeSettingItem, { RadioChoice } from '../../components/RimeSettingItem';
 import { FloatButton, InputNumber, Row, Slider } from 'antd';
+
 import { changePageSize } from '../../store/DefaultSlice'
+import { parse } from 'yaml';
 
 const IntegerStep = (props: any) => {
   const page_size = props.size
@@ -34,8 +36,13 @@ const IntegerStep = (props: any) => {
   </Row>);
 };
 
+
+
+
+
 const Default: React.FC = () => {
-  const defaultCustom = useSelector((state: RootState) => state.defaultCustom)
+  const state = useSelector((state: RootState) => state)
+  const defaultCustom = state.defaultCustom
   const dispatch = useDispatch()
 
   return (<div style={{
@@ -47,6 +54,61 @@ const Default: React.FC = () => {
     gap: '16px'
   }}>
 
+
+    <div>
+      <div
+        style={{
+          border: '5px solid gray',
+          width: '200px',
+          height: '100px'
+        }}
+
+        id="drop_zone"
+        onDrop={e => {
+
+          console.log('onDrop');
+
+          e.preventDefault()
+          e.stopPropagation()
+
+          const files = e.dataTransfer.files
+
+          if (files.length > 1) {
+            console.log(` files.length > 0`);
+            return
+          }
+
+          const file = files[0]
+          if (file.name !== `default.custom.yaml`) {
+            console.log(` !== default.custom.yaml`);
+            return
+          }
+
+          const reader = new FileReader();
+          reader.readAsText(file);
+          reader.onload = (e) => {
+            if (e.target !== null) {
+              const defaultYAML = e.target.result as string
+              const defaultObject = parse(defaultYAML)
+              dispatch(handleDefaultDrop(defaultObject))
+            }
+          }
+        }}
+        onDragOver={e => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+        onDragEnter={e => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+        onDragLeave={e => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}      >
+        <p>Drag [default.custom.yaml] to this <i>drop zone</i>.</p>
+      </div>
+    </div>
     <RimeSettingItem
       icon={<SimpIcon style={{ fontSize: '24px', margin: '0px 16px' }} />}
       title="简体/繁体">
@@ -73,7 +135,7 @@ const Default: React.FC = () => {
     <RimeSettingItem
       icon={<MenuSizeIcon style={{ fontSize: '24px', margin: '0px 16px' }} />}
       title='候选词数量'>
-      <IntegerStep size={defaultCustom.default.patch.menu.page_size} onChange={(value: number) => {
+      <IntegerStep size={defaultCustom.default.patch['menu/page_size']} onChange={(value: number) => {
         dispatch(changePageSize(value))
       }} />
     </RimeSettingItem>
