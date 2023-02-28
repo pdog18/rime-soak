@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ClusterOutlined as InputTypeIcon, RetweetOutlined as SimpIcon, OrderedListOutlined as MenuSizeIcon } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeInputMode, changeSimplified, handleDefaultDrop, saveDefaultSetting } from '../../store/DefaultSlice';
+import { changeInputMode, changeSimplified, handleDefaultDrop, saveDefaultSetting, saveDefaultCustomFileHandle } from '../../store/DefaultSlice';
 import { RootState } from '../../store/Store';
 import RimeSettingItem, { RadioChoice } from '../../components/RimeSettingItem';
 import { FloatButton, InputNumber, Row, Slider } from 'antd';
@@ -36,14 +36,30 @@ const IntegerStep = (props: any) => {
   </Row>);
 };
 
+function preventWindowDrop() {
+  function preventDrop(e: DragEvent) {
+    e.preventDefault()
+    e.stopPropagation()
+  }
+  window.addEventListener('drop', preventDrop)
+  window.addEventListener('dragover', preventDrop)
+  console.log('addEventListener');
 
-
+  return () => {
+    window.removeEventListener('drop', preventDrop)
+  };
+}
 
 
 const Default: React.FC = () => {
   const state = useSelector((state: RootState) => state)
   const defaultCustom = state.defaultCustom
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    preventWindowDrop()
+  }, [])
+
 
   return (<div style={{
     margin: '4vh 4vw',
@@ -53,63 +69,50 @@ const Default: React.FC = () => {
     alignItems: 'center',
     gap: '16px'
   }}>
+    <div
+      style={{
+        border: '5px solid gray',
+        width: '200px',
+        height: '100px'
+      }}
 
+      id="drop_zone"
+      onDrop={async e => {
+        e.preventDefault()
+        e.stopPropagation()
 
-    <div>
-      <div
-        style={{
-          border: '5px solid gray',
-          width: '200px',
-          height: '100px'
-        }}
+        let items = e.dataTransfer.items;
+        if (items.length > 1) console.log('只能上传一个文件')
+        if (items.length === 0) console.log('items.length === 0')
+        const item = items[0]
 
-        id="drop_zone"
-        onDrop={e => {
+        const handle = await item.getAsFileSystemHandle() as FileSystemFileHandle;
 
-          console.log('onDrop');
+        const fileData = await handle.getFile()
+        const text = await fileData.text()
+        const json = parse(text)
+        console.log('json json', json);
+        console.log('handle handle', handle);
 
-          e.preventDefault()
-          e.stopPropagation()
-
-          const files = e.dataTransfer.files
-
-          if (files.length > 1) {
-            console.log(` files.length > 0`);
-            return
-          }
-
-          const file = files[0]
-          if (file.name !== `default.custom.yaml`) {
-            console.log(` !== default.custom.yaml`);
-            return
-          }
-
-          const reader = new FileReader();
-          reader.readAsText(file);
-          reader.onload = (e) => {
-            if (e.target !== null) {
-              const defaultYAML = e.target.result as string
-              const defaultObject = parse(defaultYAML)
-              dispatch(handleDefaultDrop(defaultObject))
-            }
-          }
-        }}
-        onDragOver={e => {
-          e.preventDefault();
-          e.stopPropagation();
-        }}
-        onDragEnter={e => {
-          e.preventDefault();
-          e.stopPropagation();
-        }}
-        onDragLeave={e => {
-          e.preventDefault();
-          e.stopPropagation();
-        }}      >
-        <p>Drag [default.custom.yaml] to this <i>drop zone</i>.</p>
-      </div>
+        dispatch(saveDefaultCustomFileHandle({ handle, json }))
+      }}
+      onDragOver={e => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}
+      onDragEnter={e => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}
+      onDragLeave={e => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}      >
+      <p>Drag [default.custom.yaml] to this <i>drop zone</i>.</p>
     </div>
+
     <RimeSettingItem
+
       icon={<SimpIcon style={{ fontSize: '24px', margin: '0px 16px' }} />}
       title="简体/繁体">
       <RadioChoice

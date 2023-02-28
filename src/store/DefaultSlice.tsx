@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { stringify } from 'yaml'
-
+import { parse, stringify } from 'yaml'
 
 const defaultCustom = {
   default: {
@@ -20,13 +19,22 @@ const defaultCustom = {
     simplified: false,
     inputMode: 'pinyin'
   },
-  default_setting_changed: false,
+  default_setting_changed: false
 }
 
+let fileHandle: FileSystemFileHandle | null
+
 const defaultSlice = createSlice({
-  name: 'basicAndSchema',
+  name: 'default',
   initialState: defaultCustom,
   reducers: {
+    saveDefaultCustomFileHandle: (state, actions) => {
+      const { handle, json } = actions.payload
+      console.log(handle);
+
+      fileHandle = handle
+      state.default = json
+    },
     handleDefaultDrop: (state, actions) => {
       state.default = actions.payload
       // todo 需要在这里识别方案
@@ -48,11 +56,28 @@ const defaultSlice = createSlice({
       state.default.patch.schema_list = [indexSchema(`${state.schema.simplified}`, state.schema.inputMode as 'double_pinyin' | 'wubi' | 'pinyin')]
     },
     saveDefaultSetting: (state) => {
-      console.log('schema');
-      generateDefaultCustomYAML(state.default)
+      state.default.customization.modified_time = new Date().toLocaleString()
+      const output = stringify(state.default)
+      writeYAML(output, fileHandle!)
     },
   }
 })
+
+
+async function writeYAML(output: string, handle: FileSystemFileHandle) {
+  const opts: FileSystemHandlePermissionDescriptor = { mode: "readwrite" };
+  console.log('handle', handle);
+
+
+  if (await handle.queryPermission(opts) !== 'granted'
+    && (await handle.requestPermission(opts) !== 'granted')) {
+    return
+  }
+
+  const writable = await handle.createWritable()
+  await writable.write(output)
+  await writable.close()
+}
 
 function indexSchema(simplified: 'true' | 'false', schema: 'double_pinyin' | 'wubi' | 'pinyin') {
   const schema_array = {
@@ -71,15 +96,11 @@ function indexSchema(simplified: 'true' | 'false', schema: 'double_pinyin' | 'wu
   return { schema: schema_array[simplified][schema] };
 }
 
-function generateDefaultCustomYAML(_default: typeof defaultCustom.default) {
-  _default.customization.modified_time = new Date().toLocaleString()
-  console.log(stringify(_default));
-}
-
 
 export const {
   handleDefaultDrop,
   changePageSize,
+  saveDefaultCustomFileHandle,
 
   changeSimplified,
   changeInputMode,
