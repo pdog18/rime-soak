@@ -1,13 +1,14 @@
-import React, { useEffect } from 'react';
-import { ClusterOutlined as InputTypeIcon, RetweetOutlined as SimpIcon, OrderedListOutlined as MenuSizeIcon } from '@ant-design/icons';
-import { useDispatch, useSelector } from 'react-redux';
-import { changeInputMode, changeSimplified, handleDefaultDrop, saveDefaultSetting, saveDefaultCustomFileHandle } from '../../store/DefaultSlice';
-import { RootState } from '../../store/Store';
-import RimeSettingItem, { RadioChoice } from '../../components/RimeSettingItem';
-import { FloatButton, InputNumber, Row, Slider } from 'antd';
+import React, { useEffect } from 'react'
+import { ClusterOutlined as InputTypeIcon, RetweetOutlined as SimpIcon, OrderedListOutlined as MenuSizeIcon } from '@ant-design/icons'
+import { useDispatch, useSelector } from 'react-redux'
+import { changeInputMode, changeSimplified, handleDefaultDrop, saveDefaultSetting, saveDefaultCustomFileHandle } from '../../store/DefaultSlice'
+import { RootState } from '../../store/Store'
+import RimeSettingItem, { RadioChoice } from '../../components/RimeSettingItem'
+import { FloatButton, InputNumber, Row, Slider } from 'antd'
 
 import { changePageSize } from '../../store/DefaultSlice'
-import { parse } from 'yaml';
+import { parse } from 'yaml'
+
 
 const IntegerStep = (props: any) => {
   const page_size = props.size
@@ -85,7 +86,6 @@ const Default: React.FC = () => {
         if (items.length > 1) console.log('只能上传一个文件')
         if (items.length === 0) console.log('items.length === 0')
         const item = items[0]
-
         const handle = await item.getAsFileSystemHandle() as FileSystemFileHandle;
 
         const fileData = await handle.getFile()
