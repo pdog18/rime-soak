@@ -6,4 +6,8 @@
 
 希望使「鼠须管」与「小狼毫」的上手变得更为舒适，起到先润笔再书写的效果。
 
-使用方式：[在线使用](https://pdog18.github.io/soak/)
+使用方式：
+
+1. [在线使用](https://pdog18.github.io/soak/)
+
+2. Electron App (Todo)
