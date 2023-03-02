@@ -23,6 +23,8 @@ const rimeCustom = {
   basic_setting_changed: false
 }
 
+let fileHandle: FileSystemFileHandle | null
+
 const rimeSlice = createSlice({
   name: 'rime',
   initialState: rimeCustom,
@@ -36,8 +38,13 @@ const rimeSlice = createSlice({
       state.basic_setting_changed = true
     },
     saveBasicSetting: (state) => {
-      console.log('basic');
       generateRimeCustomYAML(state.style)
+    },
+
+    initStyleCustomFromFile: (state, actions) => {
+      const { handle, json } = actions.payload
+      fileHandle = handle
+      state.style = json
     },
   }
 })
@@ -47,5 +54,5 @@ export function generateRimeCustomYAML(rime: typeof rimeCustom.style) {
   console.log(stringify(rime));
 }
 
-export const { changeOrientation, changePreedit, saveBasicSetting } = rimeSlice.actions;
+export const { changeOrientation, changePreedit, saveBasicSetting, initStyleCustomFromFile } = rimeSlice.actions;
 export default rimeSlice;

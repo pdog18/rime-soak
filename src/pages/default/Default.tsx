@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react'
 import { ClusterOutlined as InputTypeIcon, RetweetOutlined as SimpIcon, OrderedListOutlined as MenuSizeIcon } from '@ant-design/icons'
 import { useDispatch, useSelector } from 'react-redux'
-import { changeInputMode, changeSimplified, handleDefaultDrop, saveDefaultSetting, saveDefaultCustomFileHandle } from '../../store/DefaultSlice'
+import { changeInputMode, changeSimplified, saveDefaultSetting, initDefaultCustomFile } from '../../store/DefaultSlice'
 import { RootState } from '../../store/Store'
 import RimeSettingItem, { RadioChoice } from '../../components/RimeSettingItem'
-import { FloatButton, InputNumber, Row, Slider } from 'antd'
+import { FloatButton, InputNumber, notification, Row, Slider } from 'antd'
 
 import { changePageSize } from '../../store/DefaultSlice'
 import { parse } from 'yaml'
+import { initStyleCustomFromFile } from '../../store/StyleSlice'
+import { title } from 'process'
 
 
 const IntegerStep = (props: any) => {
@@ -44,12 +46,8 @@ function preventWindowDrop() {
   }
   window.addEventListener('drop', preventDrop)
   window.addEventListener('dragover', preventDrop)
-  console.log('addEventListener');
-
-  return () => {
-    window.removeEventListener('drop', preventDrop)
-  };
 }
+
 
 
 const Default: React.FC = () => {
@@ -57,10 +55,19 @@ const Default: React.FC = () => {
   const defaultCustom = state.defaultCustom
   const dispatch = useDispatch()
 
+  const [api, contextHolder] = notification.useNotification();
+
+  const openNotificationWithIcon = (title: string, description: string) => {
+    api['error']({
+      message: title,
+      description: description
+    });
+  };
+
+
   useEffect(() => {
     preventWindowDrop()
   }, [])
-
 
   return (<div style={{
     margin: '4vh 4vw',
@@ -70,14 +77,16 @@ const Default: React.FC = () => {
     alignItems: 'center',
     gap: '16px'
   }}>
+    {contextHolder}
     <div
       style={{
-        border: '5px solid gray',
-        width: '200px',
-        height: '100px'
+        border: '2px dotted gray',
+        width: '300px',
+        height: '120px',
+        borderRadius: '16px',
+        background: '#dddddd',
+        textAlign: 'center'
       }}
-
-      id="drop_zone"
       onDrop={async e => {
         e.preventDefault()
         e.stopPropagation()
@@ -85,16 +94,44 @@ const Default: React.FC = () => {
         let items = e.dataTransfer.items;
         if (items.length > 1) console.log('只能上传一个文件')
         if (items.length === 0) console.log('items.length === 0')
-        const item = items[0]
-        const handle = await item.getAsFileSystemHandle() as FileSystemFileHandle;
 
-        const fileData = await handle.getFile()
-        const text = await fileData.text()
-        const json = parse(text)
-        console.log('json json', json);
-        console.log('handle handle', handle);
+        const handle = await items[0].getAsFileSystemHandle();
 
-        dispatch(saveDefaultCustomFileHandle({ handle, json }))
+        if (!(handle instanceof FileSystemDirectoryHandle)) {
+          openNotificationWithIcon('文件类型不符', '请投喂 Rime 文件夹')
+          return
+        }
+        if (handle?.name !== 'Rime') {
+          openNotificationWithIcon('文件夹名不符', '请投喂 Rime 文件夹')
+          return
+        }
+        // todo 如果 drop 了一个刚好叫 Rime 的文件夹，并且不是「用户文件夹」，此时应该即使报错
+
+        for await (const entry of handle.values()) {
+          if (entry instanceof FileSystemFileHandle) {
+            switch (entry.name) {
+              case 'default.custom.yaml':
+                console.log('>>>>>default.custom.yaml');
+                const defaultContent = await (await entry.getFile()).text()
+                dispatch(initDefaultCustomFile({
+                  handle: entry,
+                  json: parse(defaultContent)
+                }))
+                continue
+              case 'weasel.custom.yaml':
+              case 'squirrel.custom.yaml':
+                const styleContent = await (await entry.getFile()).text()
+                dispatch(initStyleCustomFromFile({
+                  handle: entry,
+                  json: parse(styleContent)
+                }))
+                continue
+              default:
+                // todo
+                continue
+            }
+          }
+        }
       }}
       onDragOver={e => {
         e.preventDefault();
@@ -107,12 +144,11 @@ const Default: React.FC = () => {
       onDragLeave={e => {
         e.preventDefault();
         e.stopPropagation();
-      }}      >
-      <p>Drag [default.custom.yaml] to this <i>drop zone</i>.</p>
+      }}>
+      <p>请投喂您的 Rime 文件夹 <p style={{ visibility: 'hidden' }}>(绝不会搜集隐私)</p></p>
     </div>
 
     <RimeSettingItem
-
       icon={<SimpIcon style={{ fontSize: '24px', margin: '0px 16px' }} />}
       title="简体/繁体">
       <RadioChoice

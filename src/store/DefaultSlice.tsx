@@ -28,9 +28,8 @@ const defaultSlice = createSlice({
   name: 'default',
   initialState: defaultCustom,
   reducers: {
-    saveDefaultCustomFileHandle: (state, actions) => {
+    initDefaultCustomFile: (state, actions) => {
       const { handle, json } = actions.payload
-      console.log(handle);
 
       fileHandle = handle
       state.default = json
@@ -68,7 +67,6 @@ async function writeYAML(output: string, handle: FileSystemFileHandle) {
   const opts: FileSystemHandlePermissionDescriptor = { mode: "readwrite" };
   console.log('handle', handle);
 
-
   if (await handle.queryPermission(opts) !== 'granted'
     && (await handle.requestPermission(opts) !== 'granted')) {
     return
@@ -100,7 +98,7 @@ function indexSchema(simplified: 'true' | 'false', schema: 'double_pinyin' | 'wu
 export const {
   handleDefaultDrop,
   changePageSize,
-  saveDefaultCustomFileHandle,
+  initDefaultCustomFile,
 
   changeSimplified,
   changeInputMode,
