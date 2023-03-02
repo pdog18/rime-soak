@@ -145,7 +145,7 @@ const Default: React.FC = () => {
         e.preventDefault();
         e.stopPropagation();
       }}>
-      <p>请投喂您的 Rime 文件夹 <p style={{ visibility: 'hidden' }}>(绝不会搜集隐私)</p></p>
+      <p>将 「用户文件夹」Rime 拖入此处 <p style={{ visibility: 'hidden' }}>(绝不会搜集隐私)</p></p>
     </div>
 
     <RimeSettingItem
