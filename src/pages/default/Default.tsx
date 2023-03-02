@@ -57,8 +57,8 @@ const Default: React.FC = () => {
 
   const [api, contextHolder] = notification.useNotification();
 
-  const openNotificationWithIcon = (title: string, description: string) => {
-    api['error']({
+  const openNotificationWithIcon = (title: string, description: string, type: 'success' | 'info' | 'warning' | 'error') => {
+    api[type]({
       message: title,
       description: description
     });
@@ -98,11 +98,11 @@ const Default: React.FC = () => {
         const handle = await items[0].getAsFileSystemHandle();
 
         if (!(handle instanceof FileSystemDirectoryHandle)) {
-          openNotificationWithIcon('文件类型不符', '请投喂 Rime 文件夹')
+          openNotificationWithIcon('文件类型不符', '请投喂 Rime 文件夹', 'error')
           return
         }
         if (handle?.name !== 'Rime') {
-          openNotificationWithIcon('文件夹名不符', '请投喂 Rime 文件夹')
+          openNotificationWithIcon('文件夹名不符', '请投喂 Rime 文件夹', 'error')
           return
         }
         // todo 如果 drop 了一个刚好叫 Rime 的文件夹，并且不是「用户文件夹」，此时应该即使报错
@@ -189,7 +189,10 @@ const Default: React.FC = () => {
       style={{ display: defaultCustom.default_setting_changed ? 'block' : 'none' }}
       type="primary"
       tooltip={<div>Save</div>}
-      onClick={() => dispatch(saveDefaultSetting())} />
+      onClick={() => {
+        dispatch(saveDefaultSetting())
+        openNotificationWithIcon('保存成功', '请执行「重新部署」，使本次修改生效！', 'success')
+      }} />
   </div >);
 }
 

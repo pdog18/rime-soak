@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { stringify } from 'yaml'
+import { writeYAML } from './YAMLUtils'
+
 
 const rimeCustom = {
   style: {
@@ -11,13 +12,19 @@ const rimeCustom = {
       rime_version: '1.7.3',
     },
     patch: {
-      style: {
-        horizontal: false,
-        inline_preedit: false
-      },
+      // style: {
+      //   horizontal: false,
+      //   inline_preedit: false,
+      //   display_tray_icon: false
+      // },
+      'style/horizontal': false,
+      'style/inline_preedit': false,
+      'style/display_tray_icon': false,
+
       preset_color_schemes: {
 
-      }
+      },
+
     }
   },
   basic_setting_changed: false
@@ -30,29 +37,35 @@ const rimeSlice = createSlice({
   initialState: rimeCustom,
   reducers: {
     changeOrientation: (state, actions) => {
-      state.style.patch.style.horizontal = actions.payload
+      state.style.patch['style/horizontal'] = actions.payload
       state.basic_setting_changed = true
     },
     changePreedit: (state, actions) => {
-      state.style.patch.style.inline_preedit = actions.payload
+      state.style.patch['style/inline_preedit'] = actions.payload
       state.basic_setting_changed = true
     },
-    saveBasicSetting: (state) => {
-      generateRimeCustomYAML(state.style)
+    changeDisplayTrayIcon: (state, actions) => {
+      state.style.patch['style/display_tray_icon'] = actions.payload
+      state.basic_setting_changed = true
+    },
+    saveStyleSetting: (state) => {
+      writeYAML(state.style, fileHandle!)
     },
 
     initStyleCustomFromFile: (state, actions) => {
       const { handle, json } = actions.payload
-      fileHandle = handle
       state.style = json
+      console.log('state.style', state.style);
+
+      fileHandle = handle
     },
   }
 })
 
-export function generateRimeCustomYAML(rime: typeof rimeCustom.style) {
-  rime.customization.modified_time = new Date().toLocaleString()
-  console.log(stringify(rime));
-}
 
-export const { changeOrientation, changePreedit, saveBasicSetting, initStyleCustomFromFile } = rimeSlice.actions;
+export const { changeOrientation,
+  changePreedit,
+  changeDisplayTrayIcon,
+  saveStyleSetting,
+  initStyleCustomFromFile } = rimeSlice.actions;
 export default rimeSlice;
