@@ -12,11 +12,6 @@ const rimeCustom = {
       rime_version: '1.7.3',
     },
     patch: {
-      // style: {
-      //   horizontal: false,
-      //   inline_preedit: false,
-      //   display_tray_icon: false
-      // },
       'style/horizontal': false,
       'style/inline_preedit': false,
       'style/display_tray_icon': false,
@@ -30,7 +25,7 @@ const rimeCustom = {
   basic_setting_changed: false
 }
 
-let fileHandle: FileSystemFileHandle | null
+let handle: FileSystemFileHandle
 
 const rimeSlice = createSlice({
   name: 'rime',
@@ -49,15 +44,14 @@ const rimeSlice = createSlice({
       state.basic_setting_changed = true
     },
     saveStyleSetting: (state) => {
-      writeYAML(state.style, fileHandle!)
+      writeYAML(state.style, handle)
     },
 
     initStyleCustomFromFile: (state, actions) => {
-      const { handle, json } = actions.payload
+      const { hd, json } = actions.payload
+      handle = hd
       state.style = json
       console.log('state.style', state.style);
-
-      fileHandle = handle
     },
   }
 })

@@ -4,6 +4,8 @@ import Style from './pages/style/Style';
 import Skin from './pages/skin/Skin';
 import Punctuation from './pages/punctuation/Punctuation';
 import Default from './pages/default/Default';
+import { useSelector } from 'react-redux';
+import { RootState } from './store/Store';
 
 
 const labels: Array<String> = [
@@ -21,6 +23,8 @@ const children = [
 ]
 
 const App: React.FC = () => {
+  const state = useSelector((state: RootState) => state)
+  const droped = state.defaultCustom.file_droped
 
   return (<>
     <Tabs
@@ -33,7 +37,7 @@ const App: React.FC = () => {
           label: `${labels[i]}`,
           key: id,
           children: children[i],
-          disabled: i === 2,
+          disabled: i !== 0 && !droped,
         };
       })}
     />

@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { writeYAML } from './YAMLUtils'
- 
- 
+
+
 
 const defaultCustom = {
   default: {
@@ -21,22 +21,24 @@ const defaultCustom = {
     simplified: false,
     inputMode: 'pinyin'
   },
-  default_setting_changed: false
+  default_setting_changed: false,
+  file_droped: false
 }
 
-let fileHandle: FileSystemFileHandle | null
+let handle: FileSystemFileHandle
 
 const defaultSlice = createSlice({
   name: 'default',
   initialState: defaultCustom,
   reducers: {
     initDefaultCustomFile: (state, actions) => {
-      const { handle, json } = actions.payload
+      const { hd, json } = actions.payload
 
-      fileHandle = handle
+      handle = hd
       state.default = json
+      state.file_droped = true
     },
-  
+
     changePageSize: (state, actions) => {
       // todo 需要想办法识别这种 / 语法
       state.default.patch['menu/page_size'] = actions.payload
@@ -52,8 +54,8 @@ const defaultSlice = createSlice({
       state.schema.inputMode = actions.payload
       state.default.patch.schema_list = [indexSchema(`${state.schema.simplified}`, state.schema.inputMode as 'double_pinyin' | 'wubi' | 'pinyin')]
     },
-    saveDefaultSetting: (state) => { 
-      writeYAML(state.default, fileHandle!)
+    saveDefaultSetting: (state) => {
+      writeYAML(state.default, handle)
     },
   }
 })

@@ -61,7 +61,7 @@ const Punctuation: React.FC = () => {
         style={{ display: state.punctu.setting_changed ? 'block' : 'none' }}
         type="primary"
         tooltip={<div>Save</div>}
-        onClick={() => dispatch(savePunctuSetting(state.defaultCustom.default.patch.schema_list[0]))} />
+        onClick={() => dispatch(savePunctuSetting(state.defaultCustom.default.patch.schema_list[0].schema))} />
     </>);
 }
 

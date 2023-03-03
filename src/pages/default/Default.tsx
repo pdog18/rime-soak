@@ -10,6 +10,7 @@ import { changePageSize } from '../../store/DefaultSlice'
 import { parse } from 'yaml'
 import { initStyleCustomFromFile } from '../../store/StyleSlice'
 import { title } from 'process'
+import { initSchemaCustomFromFile } from '../../store/PunctuSlice'
 
 
 const IntegerStep = (props: any) => {
@@ -114,7 +115,7 @@ const Default: React.FC = () => {
                 console.log('>>>>>default.custom.yaml');
                 const defaultContent = await (await entry.getFile()).text()
                 dispatch(initDefaultCustomFile({
-                  handle: entry,
+                  hd: entry,
                   json: parse(defaultContent)
                 }))
                 continue
@@ -122,8 +123,15 @@ const Default: React.FC = () => {
               case 'squirrel.custom.yaml':
                 const styleContent = await (await entry.getFile()).text()
                 dispatch(initStyleCustomFromFile({
-                  handle: entry,
+                  hd: entry,
                   json: parse(styleContent)
+                }))
+                continue
+              case 'pinyin_simp.custom.yaml':
+                const schemaCustomContent = await (await entry.getFile()).text()
+                dispatch(initSchemaCustomFromFile({
+                  hd: handle, // 注意！ 这里传入了 DirectoryHandle
+                  json: parse(schemaCustomContent)
                 }))
                 continue
               default:
