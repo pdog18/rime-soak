@@ -1,6 +1,7 @@
 import React from 'react';
 import { FloatButton, Table, Tag } from 'antd'
-import Tags, { AddTag } from './Tags';
+import Tags from './Tags';
+import AddTag from './AddTag';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/Store';
 import { PunctuType, savePunctuSetting } from '../../store/PunctuSlice';
