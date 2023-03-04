@@ -103,7 +103,7 @@ const Style: React.FC = () => {
         onClick={() => {
           dispatch(saveStyleSetting())
           openNotificationWithIcon(
-            "保存成功",
+            "此页设置保存成功",
             "请执行「重新部署」，使本次修改生效！",
             "success"
           )

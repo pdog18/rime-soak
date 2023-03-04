@@ -5,20 +5,16 @@ import {
   OrderedListOutlined as MenuSizeIcon,
 } from "@ant-design/icons"
 import { useDispatch, useSelector } from "react-redux"
-import {
-  changeInputMode,
-  changeSimplified,
-  saveDefaultSetting,
-  initDefaultCustomFile,
-} from "../../store/DefaultSlice"
+import { changeInputMode, changeSimplified, saveDefaultSetting, initDefaultCustomFile } from "../../store/DefaultSlice"
 import { RootState } from "../../store/Store"
 import RimeSettingItem, { RadioChoice } from "../../components/RimeSettingItem"
 import { FloatButton, InputNumber, notification, Row, Slider } from "antd"
 
 import { changePageSize } from "../../store/DefaultSlice"
 import { parse } from "yaml"
-import { initStyleCustomFromFile } from "../../store/StyleSlice"
+import { initStyleCustomFromFile, initStyleCustomFileName } from "../../store/StyleSlice"
 import { initSchemaCustomFromFile } from "../../store/PunctuSlice"
+import { Dispatch, AnyAction } from "redux"
 
 const IntegerStep = (props: any) => {
   const page_size = props.size
@@ -56,6 +52,84 @@ function preventWindowDrop() {
   }
   window.addEventListener("drop", preventDrop)
   window.addEventListener("dragover", preventDrop)
+}
+
+// todo 如果 drop 了一个刚好叫 Rime 的文件夹，并且不是正確的「用户文件夹」，此时应该即使报错
+const onDrop = async (dispatch: Dispatch<AnyAction>, rime: FileSystemDirectoryHandle) => {
+  // 1. 先确认文件夹中是否有 default.custom.yaml 以及  "weasel/squirrel.custom.yaml":
+  let defaultCustomFileExist = false
+  let styleCustomFileExist = false
+
+  for await (const entry of rime.values()) {
+    if (entry instanceof FileSystemFileHandle) {
+      // 刚开始安装时，Rime 文件夹中只有 user.yaml, installation.yaml, luna_pinyin.userdb, build
+      // 如果是 init 那么去读取 build 文件夹内的 default.yaml 与 weasel/squirrel.yaml 可能更合适
+      switch (entry.name) {
+        case "default.custom.yaml":
+          console.log(">>>>>default.custom.yaml")
+          defaultCustomFileExist = true
+          const defaultContent = await (await entry.getFile()).text()
+          dispatch(
+            initDefaultCustomFile({
+              hd: rime,
+              json: parse(defaultContent),
+            })
+          )
+          continue
+        case "weasel.custom.yaml":
+        case "squirrel.custom.yaml":
+          styleCustomFileExist = true
+
+          dispatch(initStyleCustomFileName(entry.name))
+          const styleContent = await (await entry.getFile()).text()
+          dispatch(
+            initStyleCustomFromFile({
+              hd: rime,
+              json: parse(styleContent),
+            })
+          )
+          continue
+        case "installation.yaml":
+          const installationContent = await (await entry.getFile()).text()
+          const obj = parse(installationContent)
+          const name = obj.distribution_code_name as string
+          dispatch(initStyleCustomFileName(`${name.toLowerCase()}.custom.yaml`))
+
+          continue
+        case "pinyin_simp.custom.yaml":
+          const schemaCustomContent = await (await entry.getFile()).text()
+          dispatch(
+            initSchemaCustomFromFile({
+              hd: rime,
+              json: parse(schemaCustomContent),
+            })
+          )
+          continue
+        default:
+          // todo
+          continue
+      }
+    }
+
+    // 刚安装 Rime
+    if (!defaultCustomFileExist) {
+      dispatch(
+        initDefaultCustomFile({
+          hd: rime,
+          json: null,
+        })
+      )
+    }
+
+    if (!styleCustomFileExist) {
+      dispatch(
+        initStyleCustomFromFile({
+          hd: rime,
+          json: null,
+        })
+      )
+    }
+  }
 }
 
 const Default: React.FC = () => {
@@ -112,63 +186,14 @@ const Default: React.FC = () => {
           const handle = await items[0].getAsFileSystemHandle()
 
           if (!(handle instanceof FileSystemDirectoryHandle)) {
-            openNotificationWithIcon(
-              "文件类型不符",
-              "请投喂 Rime 文件夹",
-              "error"
-            )
+            openNotificationWithIcon("文件类型不符", "请投喂 Rime 文件夹", "error")
             return
           }
           if (handle?.name !== "Rime") {
-            openNotificationWithIcon(
-              "文件夹名不符",
-              "请投喂 Rime 文件夹",
-              "error"
-            )
+            openNotificationWithIcon("文件夹名不符", "请投喂 Rime 文件夹", "error")
             return
           }
-          // todo 如果 drop 了一个刚好叫 Rime 的文件夹，并且不是正確的「用户文件夹」，此时应该即使报错
-          for await (const entry of handle.values()) {
-            if (entry instanceof FileSystemFileHandle) {
-              // todo 剛安裝時，可能 Rime 文件夾內無相關文件
-              switch (entry.name) {
-                case "default.custom.yaml":
-                  console.log(">>>>>default.custom.yaml")
-                  const defaultContent = await (await entry.getFile()).text()
-                  dispatch(
-                    initDefaultCustomFile({
-                      hd: entry,
-                      json: parse(defaultContent),
-                    })
-                  )
-                  continue
-                case "weasel.custom.yaml":
-                case "squirrel.custom.yaml":
-                  const styleContent = await (await entry.getFile()).text()
-                  dispatch(
-                    initStyleCustomFromFile({
-                      hd: entry,
-                      json: parse(styleContent),
-                    })
-                  )
-                  continue
-                case "pinyin_simp.custom.yaml":
-                  const schemaCustomContent = await (
-                    await entry.getFile()
-                  ).text()
-                  dispatch(
-                    initSchemaCustomFromFile({
-                      hd: handle, // 注意！ 这里传入了 DirectoryHandle
-                      json: parse(schemaCustomContent),
-                    })
-                  )
-                  continue
-                default:
-                  // todo
-                  continue
-              }
-            }
-          }
+          onDrop(dispatch, handle)
         }}
         onDragOver={(e) => {
           e.preventDefault()
@@ -184,15 +209,11 @@ const Default: React.FC = () => {
         }}
       >
         <p>
-          将 「用户文件夹」Rime 拖入此处{" "}
-          <p style={{ visibility: "hidden" }}>(绝不会搜集隐私)</p>
+          将 「用户文件夹」Rime 拖入此处 <p style={{ visibility: "hidden" }}>(绝不会搜集隐私)</p>
         </p>
       </div>
 
-      <RimeSettingItem
-        icon={<SimpIcon style={{ fontSize: "24px", margin: "0px 16px" }} />}
-        title="简体/繁体"
-      >
+      <RimeSettingItem icon={<SimpIcon style={{ fontSize: "24px", margin: "0px 16px" }} />} title="简体/繁体">
         <RadioChoice
           values={[true, false]}
           defaultValue={defaultCustom.schema.simplified}
@@ -203,12 +224,7 @@ const Default: React.FC = () => {
         />
       </RimeSettingItem>
 
-      <RimeSettingItem
-        icon={
-          <InputTypeIcon style={{ fontSize: "24px", margin: "0px 16px" }} />
-        }
-        title="输入模式"
-      >
+      <RimeSettingItem icon={<InputTypeIcon style={{ fontSize: "24px", margin: "0px 16px" }} />} title="输入模式">
         <RadioChoice
           values={["pinyin", "double_pinyin", "wubi"]}
           defaultValue={defaultCustom.schema.inputMode}
@@ -219,10 +235,7 @@ const Default: React.FC = () => {
         />
       </RimeSettingItem>
 
-      <RimeSettingItem
-        icon={<MenuSizeIcon style={{ fontSize: "24px", margin: "0px 16px" }} />}
-        title="候选词数量"
-      >
+      <RimeSettingItem icon={<MenuSizeIcon style={{ fontSize: "24px", margin: "0px 16px" }} />} title="候选词数量">
         <IntegerStep
           size={defaultCustom.default.patch["menu/page_size"]}
           onChange={(value: number) => {
@@ -245,11 +258,7 @@ const Default: React.FC = () => {
         tooltip={<div>Save</div>}
         onClick={() => {
           dispatch(saveDefaultSetting())
-          openNotificationWithIcon(
-            "保存成功",
-            "请执行「重新部署」，使本次修改生效！",
-            "success"
-          )
+          openNotificationWithIcon("此页设置保存成功", "请执行「重新部署」，使本次修改生效！", "success")
         }}
       />
     </div>

@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { writeYAML } from "./YAMLUtils"
+import { stringify } from "yaml"
+import { createNewYAML } from "./YAMLUtils"
 
 const rimeCustom = {
   style: {
@@ -19,14 +20,19 @@ const rimeCustom = {
     },
   },
   basic_setting_changed: false,
+  file_name: "weasel.custom.yaml",
 }
 
-let handle: FileSystemFileHandle
+let handle: FileSystemDirectoryHandle
 
 const rimeSlice = createSlice({
-  name: "rime",
+  name: "style",
   initialState: rimeCustom,
   reducers: {
+    initStyleCustomFileName: (state, actions) => {
+      state.file_name = actions.payload
+    },
+
     changeOrientation: (state, actions) => {
       state.style.patch["style/horizontal"] = actions.payload
       state.basic_setting_changed = true
@@ -40,19 +46,26 @@ const rimeSlice = createSlice({
       state.basic_setting_changed = true
     },
     saveStyleSetting: (state) => {
-      writeYAML(state.style, handle)
+      createNewYAML(state.style, state.file_name, handle)
     },
 
     initStyleCustomFromFile: (state, actions) => {
+      console.log("init")
+
       const { hd, json } = actions.payload
       handle = hd
-      state.style = json
+      const styleCustomYAMLExist = !!json
+      if (styleCustomYAMLExist) {
+        state.style = json
+      }
+
       console.log("state.style", state.style)
     },
   },
 })
 
 export const {
+  initStyleCustomFileName,
   changeOrientation,
   changePreedit,
   changeDisplayTrayIcon,

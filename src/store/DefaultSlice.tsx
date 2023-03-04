@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { writeYAML } from "./YAMLUtils"
+import { createNewYAML } from "./YAMLUtils"
 
 const defaultCustom = {
   default: {
@@ -23,7 +23,7 @@ const defaultCustom = {
   file_droped: false,
 }
 
-let handle: FileSystemFileHandle
+let handle: FileSystemDirectoryHandle
 
 const defaultSlice = createSlice({
   name: "default",
@@ -33,7 +33,11 @@ const defaultSlice = createSlice({
       const { hd, json } = actions.payload
 
       handle = hd
-      state.default = json
+      const defaultCustomYAMLExist = !!json
+      if (defaultCustomYAMLExist) {
+        state.default = json
+      }
+
       state.file_droped = true
     },
 
@@ -46,32 +50,23 @@ const defaultSlice = createSlice({
       state.default_setting_changed = true
       state.schema.simplified = actions.payload
       state.default.patch.schema_list = [
-        indexSchema(
-          `${state.schema.simplified}`,
-          state.schema.inputMode as "double_pinyin" | "wubi" | "pinyin"
-        ),
+        indexSchema(`${state.schema.simplified}`, state.schema.inputMode as "double_pinyin" | "wubi" | "pinyin"),
       ]
     },
     changeInputMode: (state, actions) => {
       state.default_setting_changed = true
       state.schema.inputMode = actions.payload
       state.default.patch.schema_list = [
-        indexSchema(
-          `${state.schema.simplified}`,
-          state.schema.inputMode as "double_pinyin" | "wubi" | "pinyin"
-        ),
+        indexSchema(`${state.schema.simplified}`, state.schema.inputMode as "double_pinyin" | "wubi" | "pinyin"),
       ]
     },
     saveDefaultSetting: (state) => {
-      writeYAML(state.default, handle)
+      createNewYAML(state.default, "default.custom.yaml", handle)
     },
   },
 })
 
-function indexSchema(
-  simplified: "true" | "false",
-  schema: "double_pinyin" | "wubi" | "pinyin"
-) {
+function indexSchema(simplified: "true" | "false", schema: "double_pinyin" | "wubi" | "pinyin") {
   const schema_array = {
     false: {
       double_pinyin: "double_pinyin",
