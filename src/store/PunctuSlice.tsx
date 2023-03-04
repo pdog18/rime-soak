@@ -1,8 +1,7 @@
-import { createSlice } from '@reduxjs/toolkit'
-import { WritableDraft } from 'immer/dist/internal'
-import { stringify } from 'yaml'
-import json from './punctuation.json'
-import { writeYAML } from './YAMLUtils'
+import { createSlice } from "@reduxjs/toolkit"
+import { WritableDraft } from "immer/dist/internal"
+import { stringify } from "yaml"
+import json from "./punctuation.json"
 
 type PunctuType = {
   key: string
@@ -18,58 +17,57 @@ const punctuArray: PunctuType[] = []
 const data = {
   schemaCustom: {
     customization: {
-      distribution_code_name: 'Weasel',
-      distribution_version: '0.14.3_dev_0.8',
+      distribution_code_name: "Weasel",
+      distribution_version: "0.14.3_dev_0.8",
       generator: "Rime::SwitcherSettings",
       modified_time: "Mon Jan 30 22:32:13 2023",
-      rime_version: '1.7.3',
+      rime_version: "1.7.3",
     },
     patch: {
-      'punctuator/half_shape': {},
-      'punctuator/full_shape': {},
-      'punctuator/ascii_style': {}
-    }
+      "punctuator/half_shape": {},
+      "punctuator/full_shape": {},
+      "punctuator/ascii_style": {},
+    },
   },
   setting_changed: false,
-  punctuArray: punctuArray
+  punctuArray: punctuArray,
 }
 
 let handle: FileSystemDirectoryHandle
 
 const punctuSlice = createSlice({
-  name: 'punctu',
+  name: "punctu",
   initialState: data,
   reducers: {
     initSchemaCustomFromFile: (state, actions) => {
       const { hd, json: content } = actions.payload
       handle = hd
 
-      const halfShape = content.patch['punctuator/half_shape']
-      const fullShape = content.patch['punctuator/full_shape']
+      const halfShape = content.patch["punctuator/half_shape"]
+      const fullShape = content.patch["punctuator/full_shape"]
       const halfShapeArray = halfShape ? Object.entries(halfShape) : []
       const fullShapeArray = fullShape ? Object.entries(fullShape) : []
 
-      // 1. content -> state.json 
+      // 1. content -> state.json
       state.schemaCustom = content
-
 
       // 2. 防止每次拖入文件夹丢失已有的配置
       fullShapeArray.forEach((e) => {
         const key = e[0]
         const newShape = e[1] as any
-        (json.full_shape as any)[key] = newShape
+        ;(json.full_shape as any)[key] = newShape
       })
       halfShapeArray.forEach((e) => {
         const key = e[0]
         const newShape = e[1] as any
-        (json.half_shape as any)[key] = newShape
+        ;(json.half_shape as any)[key] = newShape
       })
 
       /**
-      * json to table's array, forEach by [ascii_style]
-      * 注意：这里使用的是 [ascii_sytle] ，所以遍历中没有[space]
-      * 如果有需要编辑 [space] 的需求，那么改成 [full_shape] 进行遍历
-      */
+       * json to table's array, forEach by [ascii_style]
+       * 注意：这里使用的是 [ascii_sytle] ，所以遍历中没有[space]
+       * 如果有需要编辑 [space] 的需求，那么改成 [full_shape] 进行遍历
+       */
       Object.keys(json.ascii_style).forEach((key, index) => {
         state.punctuArray.push({
           key: `key:${key} ${index}`,
@@ -77,40 +75,63 @@ const punctuSlice = createSlice({
           index: index,
           full_shape: (json.full_shape as any)[key],
           half_shape: (json.half_shape as any)[key],
-          ascii_style: (json.ascii_style as any)[key]
+          ascii_style: (json.ascii_style as any)[key],
         })
       })
 
       // 3. json.punctuator -> state.schemaCustom.patch
-      state.schemaCustom.patch['punctuator/half_shape'] = json.half_shape
-      state.schemaCustom.patch['punctuator/full_shape'] = json.full_shape
-      state.schemaCustom.patch['punctuator/ascii_style'] = json.ascii_style
+      state.schemaCustom.patch["punctuator/half_shape"] = json.half_shape
+      state.schemaCustom.patch["punctuator/full_shape"] = json.full_shape
+      state.schemaCustom.patch["punctuator/ascii_style"] = json.ascii_style
 
-      console.log('data.schemaCustom.patch <<<<', state.schemaCustom.patch);
+      console.log("data.schemaCustom.patch <<<<", state.schemaCustom.patch)
     },
     changeHalfShapePunctuation: (state, actions) => {
       state.setting_changed = true
-      changeShape('half_shape', state, actions.payload.index, actions.payload.half_shape)
+      changeShape(
+        "half_shape",
+        state,
+        actions.payload.index,
+        actions.payload.half_shape
+      )
     },
     changeFullShapePunctuation: (state, actions) => {
       state.setting_changed = true
-      changeShape('full_shape', state, actions.payload.index, actions.payload.full_shape)
+      changeShape(
+        "full_shape",
+        state,
+        actions.payload.index,
+        actions.payload.full_shape
+      )
     },
     savePunctuSetting: (state, actions) => {
-      state.schemaCustom.customization.modified_time = new Date().toLocaleString()
+      state.schemaCustom.customization.modified_time =
+        new Date().toLocaleString()
       createNewYAML(stringify(state.schemaCustom), actions.payload, handle)
     },
-  }
+  },
 })
 
-const createNewYAML = async (content: string, schemaName: string, handle: FileSystemDirectoryHandle) => {
-  const newFileHandle = await handle.getFileHandle(`${schemaName}.custom.yaml`, { create: true })
+const createNewYAML = async (
+  content: string,
+  schemaName: string,
+  handle: FileSystemDirectoryHandle
+) => {
+  const newFileHandle = await handle.getFileHandle(
+    `${schemaName}.custom.yaml`,
+    { create: true }
+  )
   const writable = await newFileHandle.createWritable()
   await writable.write(content)
   await writable.close()
 }
 
-const changeShape = (type: 'half_shape' | 'full_shape', state: WritableDraft<typeof data>, index: number, newShpae: any) => {
+const changeShape = (
+  type: "half_shape" | "full_shape",
+  state: WritableDraft<typeof data>,
+  index: number,
+  newShpae: any
+) => {
   const record = state.punctuArray.find((record) => record.index === index)
   if (record) {
     // ✅ CORRECT: This object is still wrapped in a Proxy, so we can "mutate" it
@@ -121,6 +142,11 @@ const changeShape = (type: 'half_shape' | 'full_shape', state: WritableDraft<typ
   }
 }
 
-export const { initSchemaCustomFromFile, changeFullShapePunctuation, changeHalfShapePunctuation, savePunctuSetting } = punctuSlice.actions;
-export default punctuSlice;
-export type { PunctuType } 
+export const {
+  initSchemaCustomFromFile,
+  changeFullShapePunctuation,
+  changeHalfShapePunctuation,
+  savePunctuSetting,
+} = punctuSlice.actions
+export default punctuSlice
+export type { PunctuType }

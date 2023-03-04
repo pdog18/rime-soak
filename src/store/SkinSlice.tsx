@@ -1,22 +1,15 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit"
 
-const skin = {
-
-}
-
+const skin = {}
 
 const rimeSlice = createSlice({
-  name: 'rime',
+  name: "rime",
   initialState: skin,
   reducers: {
-    xxx: (state, actions) => {
-
-    },
-    xxxd: (state, actions) => {
-
-    },
-  }
+    xxx: (state, actions) => {},
+    xxxd: (state, actions) => {},
+  },
 })
 
-export const { xxx, xxxd } = rimeSlice.actions;
-export default rimeSlice;
+export const { xxx, xxxd } = rimeSlice.actions
+export default rimeSlice
