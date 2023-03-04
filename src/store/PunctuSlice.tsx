@@ -43,25 +43,26 @@ const punctuSlice = createSlice({
       const { hd, json: content } = actions.payload
       handle = hd
 
-      const halfShape = content.patch["punctuator/half_shape"]
-      const fullShape = content.patch["punctuator/full_shape"]
-      const halfShapeArray = halfShape ? Object.entries(halfShape) : []
-      const fullShapeArray = fullShape ? Object.entries(fullShape) : []
+      if (content !== null) {
+        const halfShape = content.patch["punctuator/half_shape"]
+        const fullShape = content.patch["punctuator/full_shape"]
+        const halfShapeArray = halfShape ? Object.entries(halfShape) : []
+        const fullShapeArray = fullShape ? Object.entries(fullShape) : []
 
-      // 1. content -> state.json
-      state.schemaCustom = content
-
-      // 2. 防止每次拖入文件夹丢失已有的配置
-      fullShapeArray.forEach((e) => {
-        const key = e[0]
-        const newShape = e[1] as any
-        ;(json.full_shape as any)[key] = newShape
-      })
-      halfShapeArray.forEach((e) => {
-        const key = e[0]
-        const newShape = e[1] as any
-        ;(json.half_shape as any)[key] = newShape
-      })
+        // 1. content -> state.json
+        state.schemaCustom = content
+        // 2. 防止每次拖入文件夹丢失已有的配置
+        fullShapeArray.forEach((e) => {
+          const key = e[0]
+          const newShape = e[1] as any
+          ;(json.full_shape as any)[key] = newShape
+        })
+        halfShapeArray.forEach((e) => {
+          const key = e[0]
+          const newShape = e[1] as any
+          ;(json.half_shape as any)[key] = newShape
+        })
+      }
 
       /**
        * json to table's array, forEach by [ascii_style]
@@ -83,44 +84,24 @@ const punctuSlice = createSlice({
       state.schemaCustom.patch["punctuator/half_shape"] = json.half_shape
       state.schemaCustom.patch["punctuator/full_shape"] = json.full_shape
       state.schemaCustom.patch["punctuator/ascii_style"] = json.ascii_style
-
-      console.log("data.schemaCustom.patch <<<<", state.schemaCustom.patch)
     },
     changeHalfShapePunctuation: (state, actions) => {
       state.setting_changed = true
-      changeShape(
-        "half_shape",
-        state,
-        actions.payload.index,
-        actions.payload.half_shape
-      )
+      changeShape("half_shape", state, actions.payload.index, actions.payload.half_shape)
     },
     changeFullShapePunctuation: (state, actions) => {
       state.setting_changed = true
-      changeShape(
-        "full_shape",
-        state,
-        actions.payload.index,
-        actions.payload.full_shape
-      )
+      changeShape("full_shape", state, actions.payload.index, actions.payload.full_shape)
     },
     savePunctuSetting: (state, actions) => {
-      state.schemaCustom.customization.modified_time =
-        new Date().toLocaleString()
+      state.schemaCustom.customization.modified_time = new Date().toLocaleString()
       createNewYAML(stringify(state.schemaCustom), actions.payload, handle)
     },
   },
 })
 
-const createNewYAML = async (
-  content: string,
-  schemaName: string,
-  handle: FileSystemDirectoryHandle
-) => {
-  const newFileHandle = await handle.getFileHandle(
-    `${schemaName}.custom.yaml`,
-    { create: true }
-  )
+const createNewYAML = async (content: string, schemaName: string, handle: FileSystemDirectoryHandle) => {
+  const newFileHandle = await handle.getFileHandle(`${schemaName}.custom.yaml`, { create: true })
   const writable = await newFileHandle.createWritable()
   await writable.write(content)
   await writable.close()
@@ -142,11 +123,7 @@ const changeShape = (
   }
 }
 
-export const {
-  initSchemaCustomFromFile,
-  changeFullShapePunctuation,
-  changeHalfShapePunctuation,
-  savePunctuSetting,
-} = punctuSlice.actions
+export const { initSchemaCustomFromFile, changeFullShapePunctuation, changeHalfShapePunctuation, savePunctuSetting } =
+  punctuSlice.actions
 export default punctuSlice
 export type { PunctuType }

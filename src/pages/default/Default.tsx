@@ -8,38 +8,10 @@ import { useDispatch, useSelector } from "react-redux"
 import { changeInputMode, changeSimplified, saveDefaultSetting } from "../../store/DefaultSlice"
 import { RootState } from "../../store/Store"
 import RimeSettingItem, { RadioChoice } from "../../components/RimeSettingItem"
-import { App, ConfigProvider, FloatButton, InputNumber, Row, Slider } from "antd"
+import { App, ConfigProvider, FloatButton } from "antd"
 
 import { changePageSize } from "../../store/DefaultSlice"
-
-const IntegerStep = (props: any) => {
-  const page_size = props.size
-  const onChange = props.onChange
-
-  return (
-    <Row>
-      <Slider
-        style={{ width: "20vw" }}
-        min={4}
-        max={9}
-        onChange={onChange}
-        value={typeof page_size === "number" ? page_size : 0}
-      />
-
-      <InputNumber
-        min={4}
-        max={9}
-        style={{
-          marginLeft: "16px",
-          padding: "0px",
-          width: "50px",
-        }}
-        value={page_size}
-        onChange={onChange}
-      />
-    </Row>
-  )
-}
+import IntegerStep from "../../components/IntegerStep"
 
 const Default: React.FC = () => {
   const state = useSelector((state: RootState) => state)
@@ -82,7 +54,7 @@ const Default: React.FC = () => {
       <RimeSettingItem icon={<MenuSizeIcon style={{ fontSize: "24px", margin: "0px 16px" }} />} title="候选词数量">
         <IntegerStep
           size={defaultCustom.default.patch["menu/page_size"]}
-          onChange={(value: number) => {
+          onChange={(value: number | null) => {
             dispatch(changePageSize(value))
           }}
         />

@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import { createSlice } from "@reduxjs/toolkit"
 import { createNewYAML } from "./YAMLUtils"
 
 const defaultCustom = {

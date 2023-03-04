@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { stringify } from "yaml"
 import { createNewYAML } from "./YAMLUtils"
 
 const rimeCustom = {
@@ -50,16 +49,12 @@ const rimeSlice = createSlice({
     },
 
     initStyleCustomFromFile: (state, actions) => {
-      console.log("init")
-
       const { hd, json } = actions.payload
       handle = hd
       const styleCustomYAMLExist = !!json
       if (styleCustomYAMLExist) {
         state.style = json
       }
-
-      console.log("state.style", state.style)
     },
   },
 })
