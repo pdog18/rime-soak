@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { HashRouter, Routes, Route } from "react-router-dom"
 import Home from "./pages/Home"
 import PreviousPage from "./pages/PreviousPage"
 
@@ -17,13 +17,13 @@ export default () => {
     preventWindowDrop()
   }, [])
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         <Route path="/">
           <Route index element={<PreviousPage />} />
           <Route path="home" element={<Home />} />
         </Route>
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   )
 }
