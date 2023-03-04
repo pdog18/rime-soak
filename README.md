@@ -35,3 +35,11 @@
 - [ ] Electron App 
   - [ ] 可以访问 Rime 文件夹，保存后自动部署。部署成功后展示输入框，用以测试本次的配置效果。
   
+
+
+### Why
+#### 为什么需要 Rime 文件夹？
+1. 需要 `default.custom.yaml` 来读取 `page_size` 等已经存在的设置
+2. 需要 `squirrel.custom.yaml(mac)/weasel.custom.yaml(win)` 来读取 `style/horizontal` 等已经存在的设置
+3. 某些情况下需要 `installation.yaml` 来获取你是 `squirrel` 还是 `weasel`
+4. 为什么需要拖入文件而不是使用 File System Access 的文件选择对话框呢？通常 Rime 文件夹存在 `...\AppData\Roaming\Rime` 中，在这类文件夹中的文件是无法通过 File System Access API 来获取的。所以需要使用拖入文件的方式。

@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { createNewYAML } from "./YAMLUtils"
 
 const defaultCustom = {
@@ -20,7 +20,6 @@ const defaultCustom = {
     inputMode: "pinyin",
   },
   default_setting_changed: false,
-  file_droped: false,
 }
 
 let handle: FileSystemDirectoryHandle
@@ -37,8 +36,6 @@ const defaultSlice = createSlice({
       if (defaultCustomYAMLExist) {
         state.default = json
       }
-
-      state.file_droped = true
     },
 
     changePageSize: (state, actions) => {

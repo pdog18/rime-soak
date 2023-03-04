@@ -1,20 +1,15 @@
 import { Tabs } from "antd"
+ 
+import Default from "./default/Default"
+import Punctuation from "./punctuation/Punctuation"
+import Skin from "./skin/Skin"
+import Style from "./style/Style"
 
-import Style from "./pages/style/Style"
-import Skin from "./pages/skin/Skin"
-import Punctuation from "./pages/punctuation/Punctuation"
-import Default from "./pages/default/Default"
-import { useSelector } from "react-redux"
-import { RootState } from "./store/Store"
-
-const labels: Array<String> = ["基本", "风格", "皮肤", "符号"]
+const labels: Array<string> = ["基本", "风格", "皮肤", "符号"]
 
 const children = [<Default />, <Style />, <Skin />, <Punctuation />]
 
-const App: React.FC = () => {
-  const state = useSelector((state: RootState) => state)
-  const droped = state.defaultCustom.file_droped
-
+export default () => {
   return (
     <>
       <Tabs
@@ -26,7 +21,6 @@ const App: React.FC = () => {
             label: `${labels[i]}`,
             key: id,
             children: children[i],
-            disabled: i !== 0 && !droped,
           }
         })}
       />
@@ -39,5 +33,3 @@ const App: React.FC = () => {
     </>
   )
 }
-
-export default App

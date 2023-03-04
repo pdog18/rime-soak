@@ -1,20 +1,16 @@
-import React, { useEffect } from "react"
+import React from "react"
 import {
   ClusterOutlined as InputTypeIcon,
   RetweetOutlined as SimpIcon,
   OrderedListOutlined as MenuSizeIcon,
 } from "@ant-design/icons"
 import { useDispatch, useSelector } from "react-redux"
-import { changeInputMode, changeSimplified, saveDefaultSetting, initDefaultCustomFile } from "../../store/DefaultSlice"
+import { changeInputMode, changeSimplified, saveDefaultSetting } from "../../store/DefaultSlice"
 import { RootState } from "../../store/Store"
 import RimeSettingItem, { RadioChoice } from "../../components/RimeSettingItem"
-import { FloatButton, InputNumber, notification, Row, Slider } from "antd"
+import { App, ConfigProvider, FloatButton, InputNumber, Row, Slider } from "antd"
 
 import { changePageSize } from "../../store/DefaultSlice"
-import { parse } from "yaml"
-import { initStyleCustomFromFile, initStyleCustomFileName } from "../../store/StyleSlice"
-import { initSchemaCustomFromFile } from "../../store/PunctuSlice"
-import { Dispatch, AnyAction } from "redux"
 
 const IntegerStep = (props: any) => {
   const page_size = props.size
@@ -45,115 +41,11 @@ const IntegerStep = (props: any) => {
   )
 }
 
-function preventWindowDrop() {
-  function preventDrop(e: DragEvent) {
-    e.preventDefault()
-    e.stopPropagation()
-  }
-  window.addEventListener("drop", preventDrop)
-  window.addEventListener("dragover", preventDrop)
-}
-
-// todo 如果 drop 了一个刚好叫 Rime 的文件夹，并且不是正確的「用户文件夹」，此时应该即使报错
-const onDrop = async (dispatch: Dispatch<AnyAction>, rime: FileSystemDirectoryHandle) => {
-  // 1. 先确认文件夹中是否有 default.custom.yaml 以及  "weasel/squirrel.custom.yaml":
-  let defaultCustomFileExist = false
-  let styleCustomFileExist = false
-
-  for await (const entry of rime.values()) {
-    if (entry instanceof FileSystemFileHandle) {
-      // 刚开始安装时，Rime 文件夹中只有 user.yaml, installation.yaml, luna_pinyin.userdb, build
-      // 如果是 init 那么去读取 build 文件夹内的 default.yaml 与 weasel/squirrel.yaml 可能更合适
-      switch (entry.name) {
-        case "default.custom.yaml":
-          console.log(">>>>>default.custom.yaml")
-          defaultCustomFileExist = true
-          const defaultContent = await (await entry.getFile()).text()
-          dispatch(
-            initDefaultCustomFile({
-              hd: rime,
-              json: parse(defaultContent),
-            })
-          )
-          continue
-        case "weasel.custom.yaml":
-        case "squirrel.custom.yaml":
-          styleCustomFileExist = true
-
-          dispatch(initStyleCustomFileName(entry.name))
-          const styleContent = await (await entry.getFile()).text()
-          dispatch(
-            initStyleCustomFromFile({
-              hd: rime,
-              json: parse(styleContent),
-            })
-          )
-          continue
-        case "installation.yaml":
-          const installationContent = await (await entry.getFile()).text()
-          const obj = parse(installationContent)
-          const name = obj.distribution_code_name as string
-          dispatch(initStyleCustomFileName(`${name.toLowerCase()}.custom.yaml`))
-
-          continue
-        case "pinyin_simp.custom.yaml":
-          const schemaCustomContent = await (await entry.getFile()).text()
-          dispatch(
-            initSchemaCustomFromFile({
-              hd: rime,
-              json: parse(schemaCustomContent),
-            })
-          )
-          continue
-        default:
-          // todo
-          continue
-      }
-    }
-
-    // 刚安装 Rime
-    if (!defaultCustomFileExist) {
-      dispatch(
-        initDefaultCustomFile({
-          hd: rime,
-          json: null,
-        })
-      )
-    }
-
-    if (!styleCustomFileExist) {
-      dispatch(
-        initStyleCustomFromFile({
-          hd: rime,
-          json: null,
-        })
-      )
-    }
-  }
-}
-
 const Default: React.FC = () => {
   const state = useSelector((state: RootState) => state)
   const defaultCustom = state.defaultCustom
   const dispatch = useDispatch()
-
-  const [api, contextHolder] = notification.useNotification()
-
-  const openNotificationWithIcon = (
-    title: string,
-    description: string,
-    type: "success" | "info" | "warning" | "error"
-  ) => {
-    api[type]({
-      message: title,
-      description: description,
-    })
-  }
-
-  useEffect(() => {
-    preventWindowDrop()
-  }, [])
-
+  const { notification } = App.useApp()
   return (
     <div
       style={{
@@ -165,54 +57,6 @@ const Default: React.FC = () => {
         gap: "16px",
       }}
     >
-      {contextHolder}
-      <div
-        style={{
-          border: "2px dotted gray",
-          width: "300px",
-          height: "120px",
-          borderRadius: "16px",
-          background: "#dddddd",
-          textAlign: "center",
-        }}
-        onDrop={async (e) => {
-          e.preventDefault()
-          e.stopPropagation()
-
-          let items = e.dataTransfer.items
-          if (items.length > 1) console.log("只能上传一个文件")
-          if (items.length === 0) console.log("items.length === 0")
-
-          const handle = await items[0].getAsFileSystemHandle()
-
-          if (!(handle instanceof FileSystemDirectoryHandle)) {
-            openNotificationWithIcon("文件类型不符", "请投喂 Rime 文件夹", "error")
-            return
-          }
-          if (handle?.name !== "Rime") {
-            openNotificationWithIcon("文件夹名不符", "请投喂 Rime 文件夹", "error")
-            return
-          }
-          onDrop(dispatch, handle)
-        }}
-        onDragOver={(e) => {
-          e.preventDefault()
-          e.stopPropagation()
-        }}
-        onDragEnter={(e) => {
-          e.preventDefault()
-          e.stopPropagation()
-        }}
-        onDragLeave={(e) => {
-          e.preventDefault()
-          e.stopPropagation()
-        }}
-      >
-        <p>
-          将 「用户文件夹」Rime 拖入此处 <p style={{ visibility: "hidden" }}>(绝不会搜集隐私)</p>
-        </p>
-      </div>
-
       <RimeSettingItem icon={<SimpIcon style={{ fontSize: "24px", margin: "0px 16px" }} />} title="简体/繁体">
         <RadioChoice
           values={[true, false]}
@@ -250,17 +94,25 @@ const Default: React.FC = () => {
       {/*  关闭方案选择快捷键( Control + Grave)        放到「按键管理」更合适？?  */}
       {/* <div>更多方案</div> */}
 
-      <FloatButton
-        style={{
-          display: defaultCustom.default_setting_changed ? "block" : "none",
+      <ConfigProvider
+        theme={{
+          token: {
+            colorPrimary: "#673AB7",
+          },
         }}
-        type="primary"
-        tooltip={<div>Save</div>}
-        onClick={() => {
-          dispatch(saveDefaultSetting())
-          openNotificationWithIcon("此页设置保存成功", "请执行「重新部署」，使本次修改生效！", "success")
-        }}
-      />
+      >
+        <FloatButton
+          style={{
+            display: defaultCustom.default_setting_changed ? "block" : "none",
+          }}
+          type="primary"
+          tooltip={<div>Save</div>}
+          onClick={() => {
+            dispatch(saveDefaultSetting())
+            notification.success({ message: "此页设置保存成功", description: "请执行「重新部署」，使本次修改生效！" })
+          }}
+        />
+      </ConfigProvider>
     </div>
   )
 }

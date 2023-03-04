@@ -3,6 +3,7 @@ import defaultCustom from "./DefaultSlice"
 import punctuSlice from "./PunctuSlice"
 import skinSlice from "./SkinSlice"
 import rimeSlice from "./StyleSlice"
+import soakSlice from "./SoakSlice"
 
 const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
     skin: skinSlice.reducer,
     punctu: punctuSlice.reducer,
     rimeCustom: rimeSlice.reducer,
+    soak: soakSlice.reducer,
   },
 })
 
