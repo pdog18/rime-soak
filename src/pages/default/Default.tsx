@@ -106,10 +106,10 @@ const Default: React.FC = () => {
           openNotificationWithIcon('文件夹名不符', '请投喂 Rime 文件夹', 'error')
           return
         }
-        // todo 如果 drop 了一个刚好叫 Rime 的文件夹，并且不是「用户文件夹」，此时应该即使报错
-
+        // todo 如果 drop 了一个刚好叫 Rime 的文件夹，并且不是正確的「用户文件夹」，此时应该即使报错
         for await (const entry of handle.values()) {
           if (entry instanceof FileSystemFileHandle) {
+            // todo 剛安裝時，可能 Rime 文件夾內無相關文件
             switch (entry.name) {
               case 'default.custom.yaml':
                 console.log('>>>>>default.custom.yaml');
