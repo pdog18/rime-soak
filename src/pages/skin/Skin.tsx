@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Card } from "antd"
+import { Card, Spin } from "antd"
 import { useDispatch, useSelector } from "react-redux"
 import { changeColorScheme } from "../../store/StyleSlice"
 import { RootState } from "../../store/Store"
@@ -61,15 +61,15 @@ interface ImageRadioGroupProps {
 
 const ImageRadioGroup: React.FC<ImageRadioGroupProps> = ({ images }) => {
   const colorScheme = useSelector((state: RootState) => state.rimeCustom.style.patch["style/color_scheme"])
-  console.log("colorScheme", colorScheme)
-
-  // const [selectedImage, setSelectedImage] = useState<string>(colorScheme)
+  const [loadingState, setLoadingState] = useState(
+    names.map((name) => {
+      return {
+        name: name,
+        loading: true,
+      }
+    })
+  )
   const dispatch = useDispatch()
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // setSelectedImage(e.target.value)
-    dispatch(changeColorScheme(trimStart(e.target.value, "color_scheme_")))
-  }
 
   return (
     <div
@@ -95,11 +95,28 @@ const ImageRadioGroup: React.FC<ImageRadioGroupProps> = ({ images }) => {
               padding: "2px",
             }}
             cover={
-              <img
-                src={`${process.env.PUBLIC_URL}/images/${image}.png`}
-                alt={image}
-                style={{ width: 160, height: 180, objectFit: "contain" }}
-              />
+              <Spin spinning={loadingState.find((entry) => entry.name === image)!.loading}>
+                <img
+                  src={`${process.env.PUBLIC_URL}/images/${image}.png`}
+                  alt={image}
+                  onLoad={(e: React.SyntheticEvent) => {
+                    setLoadingState((prev) => {
+                      const name = (e.target as any)["alt"]
+                      const entry = prev.find((entry) => entry.name === name)!
+                      entry.loading = false
+                      console.log("change entry.onload")
+                      console.log(
+                        prev.map((e) => {
+                          return `${e.name}   ${e.loading}`
+                        })
+                      )
+
+                      return [...prev]
+                    })
+                  }}
+                  style={{ width: 160, height: 180, objectFit: "contain" }}
+                />
+              </Spin>
             }
           >
             <input
@@ -108,7 +125,9 @@ const ImageRadioGroup: React.FC<ImageRadioGroupProps> = ({ images }) => {
               name="image"
               value={image}
               checked={colorScheme === image}
-              onChange={handleImageChange}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                dispatch(changeColorScheme(trimStart(e.target.value, "color_scheme_")))
+              }}
             />
           </Card>
         </label>
