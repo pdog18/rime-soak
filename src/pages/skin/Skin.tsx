@@ -3,6 +3,7 @@ import { Card, Spin } from "antd"
 import { useDispatch, useSelector } from "react-redux"
 import { changeColorScheme } from "../../store/StyleSlice"
 import { RootState } from "../../store/Store"
+import { CheckCircleFilled } from "@ant-design/icons"
 
 const names = [
   "color_scheme_android",
@@ -94,6 +95,18 @@ const ImageRadioGroup: React.FC<ImageRadioGroupProps> = ({ images }) => {
               backgroundColor: `${trimStart(image, "color_scheme_") === colorScheme ? "#FF5733" : "white"}`,
               padding: "2px",
             }}
+            extra={
+              trimStart(image, "color_scheme_") === colorScheme ? (
+                <CheckCircleFilled
+                  style={{
+                    fontSize: "22px",
+                    color: "#FFEE33",
+                  }}
+                />
+              ) : (
+                <div></div>
+              )
+            }
             cover={
               <Spin spinning={loadingState.find((entry) => entry.name === image)!.loading}>
                 <img
@@ -102,14 +115,7 @@ const ImageRadioGroup: React.FC<ImageRadioGroupProps> = ({ images }) => {
                   onLoad={(e: React.SyntheticEvent) => {
                     setLoadingState((prev) => {
                       const name = (e.target as any)["alt"]
-                      const entry = prev.find((entry) => entry.name === name)!
-                      entry.loading = false
-                      console.log("change entry.onload")
-                      console.log(
-                        prev.map((e) => {
-                          return `${e.name}   ${e.loading}`
-                        })
-                      )
+                      prev.find((entry) => entry.name === name)!.loading = false
 
                       return [...prev]
                     })
