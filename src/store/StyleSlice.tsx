@@ -14,6 +14,7 @@ const rimeCustom = {
       "style/horizontal": false,
       "style/inline_preedit": false,
       "style/display_tray_icon": false,
+      "style/color_scheme": "aqua",
 
       preset_color_schemes: {},
     },
@@ -32,6 +33,9 @@ const rimeSlice = createSlice({
       state.file_name = actions.payload
     },
 
+    changeColorScheme: (state, actions) => {
+      state.style.patch["style/color_scheme"] = actions.payload
+    },
     changeOrientation: (state, actions) => {
       state.style.patch["style/horizontal"] = actions.payload
       state.basic_setting_changed = true
@@ -61,6 +65,7 @@ const rimeSlice = createSlice({
 
 export const {
   initStyleCustomFileName,
+  changeColorScheme,
   changeOrientation,
   changePreedit,
   changeDisplayTrayIcon,

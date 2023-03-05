@@ -1,43 +1,9 @@
-import React from "react"
-import { Radio } from "antd"
-// import color_scheme_android from "./images/color_scheme_android.png"
-// import color_scheme_aqua from "./images/color_scheme_aqua.png"
-// import color_scheme_azure from "./images/color_scheme_azure.png"
-// import color_scheme_brasil from "./images/color_scheme_brasil.png"
-// import color_scheme_brisk from "./images/color_scheme_brisk.png"
-// import color_scheme_cool_breeze from "./images/color_scheme_cool_breeze.png"
-// import color_scheme_dark_temple from "./images/color_scheme_dark_temple.png"
-// import color_scheme_doraemon from "./images/color_scheme_doraemon.png"
-// import color_scheme_dota_2 from "./images/color_scheme_dota_2.png"
-// import color_scheme_espagna from "./images/color_scheme_espagna.png"
-// import color_scheme_flypy from "./images/color_scheme_flypy.png"
-// import color_scheme_gholabok from "./images/color_scheme_gholabok.png"
-// import color_scheme_google from "./images/color_scheme_google.png"
-// import color_scheme_google_plus from "./images/color_scheme_google_plus.png"
-// import color_scheme_ink from "./images/color_scheme_ink.png"
-// import color_scheme_kuma_shuzboz from "./images/color_scheme_kuma_shuzboz.png"
-// import color_scheme_kuon from "./images/color_scheme_kuon.png"
-// import color_scheme_lost_temple from "./images/color_scheme_lost_temple.png"
-// import color_scheme_luna from "./images/color_scheme_luna.png"
-// import color_scheme_macau from "./images/color_scheme_macau.png"
-// import color_scheme_metroblue from "./images/color_scheme_metroblue.png"
-// import color_scheme_modern_warfare from "./images/color_scheme_modern_warfare.png"
-// import color_scheme_nba from "./images/color_scheme_nba.png"
-// import color_scheme_psionics from "./images/color_scheme_psionics.png"
-// import color_scheme_skype from "./images/color_scheme_skype.png"
-// import color_scheme_smurfs from "./images/color_scheme_smurfs.png"
-// import color_scheme_ps4 from "./images/color_scheme_ps4.png"
-// import color_scheme_so_young from "./images/color_scheme_so_young.png"
-// import color_scheme_solarized_rock from "./images/color_scheme_solarized_rock.png"
-// import color_scheme_starcraft from "./images/color_scheme_starcraft.png"
-// import color_scheme_starcraft_ii from "./images/color_scheme_starcraft_ii.png"
-// import color_scheme_steam from "./images/color_scheme_steam.png"
-// import color_scheme_tintin from "./images/color_scheme_tintin.png"
-// import color_scheme_wii from "./images/color_scheme_wii.png"
-// import color_scheme_xbox_silver from "./images/color_scheme_xbox_silver.png"
-// import color_scheme_youtube from "./images/color_scheme_youtube.png"
+import React, { useState } from "react"
+import { Card } from "antd"
+import { useDispatch, useSelector } from "react-redux"
+import { changeColorScheme } from "../../store/StyleSlice"
+import { RootState } from "../../store/Store"
 
-//<Image preview={false} src="/color_scheme_android.png" width={"30vw"} />
 const names = [
   "color_scheme_android",
   "color_scheme_aqua",
@@ -77,28 +43,82 @@ const names = [
   "color_scheme_youtube",
 ]
 
-// const options = names.map((name) => {
-//   return {
-//     label: <Image src={`./images/${name}.png`}></Image>,
-//     value: { name },
-//     alt: { name },
-//   }
-// })
-
 const Skin: React.FC = () => {
-  const options = names.map((name) => {
-    const imageUrl = `https://raw.githubusercontent.com/pdog18/soak/main/public/images/${name}.png`
-    return {
-      label: <img src={imageUrl} alt={name} style={{ width: "240px", height: "320px", objectFit: "cover" }}></img>,
-      value: name,
-    }
-  })
-
   return (
-    <div style={{ height: "80vh" }}>
-      <Radio.Group options={options} />
+    <div
+      style={{
+        backgroundColor: "#f3f3f3",
+      }}
+    >
+      <ImageRadioGroup images={names}></ImageRadioGroup>
     </div>
   )
+}
+
+interface ImageRadioGroupProps {
+  images: string[]
+}
+
+const ImageRadioGroup: React.FC<ImageRadioGroupProps> = ({ images }) => {
+  const colorScheme = useSelector((state: RootState) => state.rimeCustom.style.patch["style/color_scheme"])
+  console.log("colorScheme", colorScheme)
+
+  // const [selectedImage, setSelectedImage] = useState<string>(colorScheme)
+  const dispatch = useDispatch()
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // setSelectedImage(e.target.value)
+    dispatch(changeColorScheme(trimStart(e.target.value, "color_scheme_")))
+  }
+
+  return (
+    <div
+      style={{
+        width: "80vw",
+        margin: "0 auto",
+        paddingTop: "16px",
+        display: "flex",
+        flexWrap: "wrap",
+        justifyContent: "center",
+        gap: "4px",
+      }}
+    >
+      {images.map((image: string) => (
+        <label key={image}>
+          <Card
+            hoverable
+            title={trimStart(image, "color_scheme_")}
+            size="small"
+            bordered
+            style={{
+              backgroundColor: `${trimStart(image, "color_scheme_") === colorScheme ? "#FF5733" : "white"}`,
+              padding: "2px",
+            }}
+            cover={
+              <img
+                src={`${process.env.PUBLIC_URL}/images/${image}.png`}
+                alt={image}
+                style={{ width: 160, height: 180, objectFit: "contain" }}
+              />
+            }
+          >
+            <input
+              type="radio"
+              style={{ WebkitAppearance: "none", margin: 0 }}
+              name="image"
+              value={image}
+              checked={colorScheme === image}
+              onChange={handleImageChange}
+            />
+          </Card>
+        </label>
+      ))}
+    </div>
+  )
+}
+
+const trimStart = (content: string, start: string) => {
+  return content.startsWith(start) ? content.substring(start.length) : content
 }
 
 export default Skin
