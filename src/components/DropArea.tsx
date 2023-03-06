@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { AnyAction } from "redux"
 import { parse } from "yaml"
+import { FolderOutlined } from "@ant-design/icons"
 import { initDefaultCustomFile } from "../store/DefaultSlice"
 import { initSchemaCustomFromFile } from "../store/PunctuSlice"
 import { changeDroped } from "../store/SoakSlice"
@@ -130,13 +131,19 @@ const DropArea = () => {
   return (
     <div
       style={{
-        border: "2px dotted gray",
-        width: "300px",
-        height: "220px",
-        borderRadius: "16px",
-        background: "#dddddd",
-        lineHeight: "220px",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        border: "1px dashed #c0c0c0",
+        width: "30vw",
+        height: "18vw",
+        minWidth: "300px",
+        minHeight: "180px",
+        borderRadius: "8px",
+        background: "rgb(248,249,250)",
         textAlign: "center",
+        fontSize: "16px",
+        lineHeight: "30px",
       }}
       onDrop={async (e) => {
         e.preventDefault()
@@ -171,7 +178,7 @@ const DropArea = () => {
         e.stopPropagation()
       }}
     >
-      将 「用户文件夹」Rime 拖入此处
+      <FolderOutlined style={{ fontSize: "24px", padding: "16px" }} /> 将 Rime 文件夹放到此处
     </div>
   )
 }
