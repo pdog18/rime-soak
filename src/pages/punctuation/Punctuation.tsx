@@ -1,28 +1,21 @@
-import React from "react"
-import { FloatButton, notification, Table, Tag } from "antd"
+import React, { useEffect } from "react"
+import { App, FloatButton, Table, Tag } from "antd"
 import Tags from "./Tags"
 import AddTag from "./AddTag"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../../store/Store"
-import { PunctuType, savePunctuSetting } from "../../store/PunctuSlice"
+import { initPunctuOrigin, PunctuType, savePunctuSetting } from "../../store/SchemaSlice"
 
 const Punctuation: React.FC = () => {
+  const { notification } = App.useApp()
+
   const state = useSelector((state: RootState) => state)
-  const punctuArray = state.punctu.punctuArray
+  const punctuArray = state.schema.punctuArray
   const dispatch = useDispatch()
 
-  const [api, contextHolder] = notification.useNotification()
-
-  const openNotificationWithIcon = (
-    title: string,
-    description: string,
-    type: "success" | "info" | "warning" | "error"
-  ) => {
-    api[type]({
-      message: title,
-      description: description,
-    })
-  }
+  useEffect(() => {
+    dispatch(initPunctuOrigin())
+  }, [])
 
   const columns = [
     {
@@ -30,9 +23,7 @@ const Punctuation: React.FC = () => {
       dataIndex: "name",
       align: "center" as const,
       width: 100,
-      render: (_: any, record: PunctuType) => (
-        <Tag style={{ width: "24px", textAlign: "center" }}>{record.name}</Tag>
-      ),
+      render: (_: any, record: PunctuType) => <Tag style={{ width: "24px", textAlign: "center" }}>{record.name}</Tag>,
     },
     {
       title: "英文模式",
@@ -41,9 +32,7 @@ const Punctuation: React.FC = () => {
       dataIndex: "ascii_style",
       render: (_: any, record: PunctuType) => (
         <Tag style={{ width: "24px", textAlign: "center" }}>
-          {record.ascii_style["commit"]
-            ? record.ascii_style["commit"]
-            : record.name}
+          {record.ascii_style["commit"] ? record.ascii_style["commit"] : record.name}
         </Tag>
       ),
     },
@@ -73,7 +62,6 @@ const Punctuation: React.FC = () => {
 
   return (
     <>
-      {contextHolder}
       <Table
         style={{ margin: "4vh 4vw" }}
         dataSource={punctuArray}
@@ -85,18 +73,16 @@ const Punctuation: React.FC = () => {
       />
 
       <FloatButton
-        style={{ display: state.punctu.setting_changed ? "block" : "none" }}
+        style={{ display: state.schema.setting_changed ? "block" : "none" }}
         type="primary"
         tooltip={<div>Save</div>}
         onClick={() => {
-          const schemaName =
-            state.defaultCustom.default.patch.schema_list[0].schema
+          const schemaName = state.defaultCustom.default.patch.schema_list[0].schema
           dispatch(savePunctuSetting(schemaName))
-          openNotificationWithIcon(
-            `${schemaName}.custom.yaml 保存成功`,
-            "请执行「重新部署」，使本次修改生效！",
-            "success"
-          )
+          notification.success({
+            message: `${schemaName}.custom.yaml 保存成功`,
+            description: "请执行「重新部署」，使本次修改生效！",
+          })
         }}
       />
     </>

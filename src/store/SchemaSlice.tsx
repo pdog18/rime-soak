@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { WritableDraft } from "immer/dist/internal"
-import { stringify } from "yaml"
 import json from "./punctuation.json"
 
 type PunctuType = {
@@ -33,57 +32,63 @@ const data = {
   punctuArray: punctuArray,
 }
 
-let handle: FileSystemDirectoryHandle
-
+const initArray = (state: typeof data) => {
+  Object.keys(json.ascii_style).forEach((key, index) => {
+    state.punctuArray.push({
+      key: `key:${key} ${index}`,
+      name: key,
+      index: index,
+      full_shape: (json.full_shape as any)[key],
+      half_shape: (json.half_shape as any)[key],
+      ascii_style: (json.ascii_style as any)[key],
+    })
+  })
+}
 const punctuSlice = createSlice({
   name: "punctu",
   initialState: data,
   reducers: {
+    initPunctuOrigin: (state) => {
+      initArray(state)
+    },
     initSchemaCustomFromFile: (state, actions) => {
-      const { hd, json: content } = actions.payload
-      handle = hd
+      const content = actions.payload
 
-      if (content !== null) {
-        const halfShape = content.patch["punctuator/half_shape"]
-        const fullShape = content.patch["punctuator/full_shape"]
-        const halfShapeArray = halfShape ? Object.entries(halfShape) : []
-        const fullShapeArray = fullShape ? Object.entries(fullShape) : []
+      // todo : 需要处理 YAML 语法中的 / 无法正确识别为层级的情况
 
-        // 1. content -> state.json
-        state.schemaCustom = content
-        // 2. 防止每次拖入文件夹丢失已有的配置
-        fullShapeArray.forEach((e) => {
-          const key = e[0]
-          const newShape = e[1] as any
-          ;(json.full_shape as any)[key] = newShape
-        })
-        halfShapeArray.forEach((e) => {
-          const key = e[0]
-          const newShape = e[1] as any
-          ;(json.half_shape as any)[key] = newShape
-        })
-      }
+      const halfShape = content.patch["punctuator/half_shape"]
+      const fullShape = content.patch["punctuator/full_shape"]
+      const halfShapeArray = halfShape ? Object.entries(halfShape) : []
+      const fullShapeArray = fullShape ? Object.entries(fullShape) : []
+
+      // 1. content -> state.json
+      state.schemaCustom = content
+      // 2. 防止每次拖入文件夹丢失已有的配置
+      fullShapeArray.forEach((e) => {
+        const key = e[0]
+        const newShape = e[1] as any
+        ;(json.full_shape as any)[key] = newShape
+      })
+      halfShapeArray.forEach((e) => {
+        const key = e[0]
+        const newShape = e[1] as any
+        ;(json.half_shape as any)[key] = newShape
+      })
 
       /**
        * json to table's array, forEach by [ascii_style]
        * 注意：这里使用的是 [ascii_sytle] ，所以遍历中没有[space]
        * 如果有需要编辑 [space] 的需求，那么改成 [full_shape] 进行遍历
        */
-      Object.keys(json.ascii_style).forEach((key, index) => {
-        state.punctuArray.push({
-          key: `key:${key} ${index}`,
-          name: key,
-          index: index,
-          full_shape: (json.full_shape as any)[key],
-          half_shape: (json.half_shape as any)[key],
-          ascii_style: (json.ascii_style as any)[key],
-        })
-      })
-
+      initArray(state)
       // 3. json.punctuator -> state.schemaCustom.patch
       state.schemaCustom.patch["punctuator/half_shape"] = json.half_shape
       state.schemaCustom.patch["punctuator/full_shape"] = json.full_shape
       state.schemaCustom.patch["punctuator/ascii_style"] = json.ascii_style
+
+      console.log(json.half_shape)
+      console.log(json.full_shape)
+      console.log(json.ascii_style)
     },
     changeHalfShapePunctuation: (state, actions) => {
       state.setting_changed = true
@@ -95,17 +100,9 @@ const punctuSlice = createSlice({
     },
     savePunctuSetting: (state, actions) => {
       state.schemaCustom.customization.modified_time = new Date().toLocaleString()
-      createNewYAML(stringify(state.schemaCustom), actions.payload, handle)
     },
   },
 })
-
-const createNewYAML = async (content: string, schemaName: string, handle: FileSystemDirectoryHandle) => {
-  const newFileHandle = await handle.getFileHandle(`${schemaName}.custom.yaml`, { create: true })
-  const writable = await newFileHandle.createWritable()
-  await writable.write(content)
-  await writable.close()
-}
 
 const changeShape = (
   type: "half_shape" | "full_shape",
@@ -123,7 +120,12 @@ const changeShape = (
   }
 }
 
-export const { initSchemaCustomFromFile, changeFullShapePunctuation, changeHalfShapePunctuation, savePunctuSetting } =
-  punctuSlice.actions
+export const {
+  initSchemaCustomFromFile,
+  initPunctuOrigin,
+  changeFullShapePunctuation,
+  changeHalfShapePunctuation,
+  savePunctuSetting,
+} = punctuSlice.actions
 export default punctuSlice
 export type { PunctuType }

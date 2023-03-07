@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit"
 import defaultCustom from "./DefaultSlice"
-import punctuSlice from "./PunctuSlice"
+import schemaSlic from "./SchemaSlice"
 import skinSlice from "./SkinSlice"
 import rimeSlice from "./StyleSlice"
 import soakSlice from "./SoakSlice"
@@ -9,7 +9,7 @@ const store = configureStore({
   reducer: {
     defaultCustom: defaultCustom.reducer,
     skin: skinSlice.reducer,
-    punctu: punctuSlice.reducer,
+    schema: schemaSlic.reducer,
     rimeCustom: rimeSlice.reducer,
     soak: soakSlice.reducer,
   },

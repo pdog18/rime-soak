@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux"
 import {
   changeHalfShapePunctuation,
   changeFullShapePunctuation,
-} from "../../store/PunctuSlice"
+} from "../../store/SchemaSlice"
 import { PlusCircleFilled as PlusIcon } from "@ant-design/icons"
 
 export const AddTag = (prop: any) => {

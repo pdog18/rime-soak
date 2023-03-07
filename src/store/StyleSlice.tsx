@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { createNewYAML } from "./YAMLUtils"
+import copy from "../utils/SimpleDeepCopy"
 
 const rimeCustom = {
   style: {
@@ -19,20 +19,15 @@ const rimeCustom = {
       preset_color_schemes: {},
     },
   },
-  basic_setting_changed: false,
-  file_name: "weasel.custom.yaml",
-}
 
-let handle: FileSystemDirectoryHandle
+  basic_setting_changed: false,
+  fileName: "weasel.custom.yaml",
+}
 
 const rimeSlice = createSlice({
   name: "style",
   initialState: rimeCustom,
   reducers: {
-    initStyleCustomFileName: (state, actions) => {
-      state.file_name = actions.payload
-    },
-
     changeColorScheme: (state, actions) => {
       state.style.patch["style/color_scheme"] = actions.payload
     },
@@ -49,16 +44,15 @@ const rimeSlice = createSlice({
       state.basic_setting_changed = true
     },
     saveStyleSetting: (state) => {
-      createNewYAML(state.style, state.file_name, handle)
+      state.style.customization.modified_time = new Date().toLocaleString()
     },
 
-    initStyleCustomFromFile: (state, actions) => {
-      const { hd, json } = actions.payload
-      handle = hd
-      const styleCustomYAMLExist = !!json
-      if (styleCustomYAMLExist) {
-        state.style = json
-      }
+    initStyleFromDropDictory: (state, actions) => {
+      state.style = actions.payload
+    },
+
+    initStyleCustomFileName: (state, actions) => {
+      state.fileName = actions.payload
     },
   },
 })
@@ -70,6 +64,6 @@ export const {
   changePreedit,
   changeDisplayTrayIcon,
   saveStyleSetting,
-  initStyleCustomFromFile,
+  initStyleFromDropDictory,
 } = rimeSlice.actions
 export default rimeSlice

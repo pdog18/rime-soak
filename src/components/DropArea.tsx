@@ -1,22 +1,34 @@
 import { App, notification } from "antd"
-import { Dispatch, useEffect } from "react"
+import { Dispatch, useContext, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { AnyAction } from "redux"
-import { parse } from "yaml"
+import { parse as YAMLparse } from "yaml"
 import { FolderOutlined } from "@ant-design/icons"
-import { initDefaultCustomFile } from "../store/DefaultSlice"
-import { initSchemaCustomFromFile } from "../store/PunctuSlice"
+import { initDefaultFormDropDictory } from "../store/DefaultSlice"
+import { initSchemaCustomFromFile } from "../store/SchemaSlice"
 import { changeDroped } from "../store/SoakSlice"
 import { RootState } from "../store/Store"
-import { initStyleCustomFileName, initStyleCustomFromFile } from "../store/StyleSlice"
+import { initStyleCustomFileName, initStyleFromDropDictory } from "../store/StyleSlice"
+import FileSystemHandleContext from "../FileSystemHandleContext"
+import OriginContext, { SoakDefault } from "../OriginContext"
 
 // todo 如果 drop 了一个刚好叫 Rime 的文件夹，并且不是正確的「用户文件夹」，此时应该即使报错
-const onDrop = async (dispatch: Dispatch<AnyAction>, rime: FileSystemDirectoryHandle) => {
+const onDrop = async (
+  state: RootState,
+  dispatch: Dispatch<AnyAction>,
+  rime: FileSystemDirectoryHandle,
+  setSoakDefault: (entry: SoakDefault) => void
+) => {
   // 1. 先确认文件夹中是否有 default.custom.yaml 以及  "weasel/squirrel.custom.yaml":
   let defaultCustomFileExist = false
   let styleCustomFileExist = false
   let otherCustomFiles = []
+  const soakOrigin: SoakDefault = {
+    soakDefault: state.defaultCustom,
+    soakSchema: state.schema,
+    soakStyle: state.rimeCustom,
+  }
 
   for await (const entry of rime.values()) {
     if (entry instanceof FileSystemFileHandle) {
@@ -26,30 +38,22 @@ const onDrop = async (dispatch: Dispatch<AnyAction>, rime: FileSystemDirectoryHa
         case "default.custom.yaml":
           console.log(">>>>>default.custom.yaml")
           defaultCustomFileExist = true
-          const defaultContent = await (await entry.getFile()).text()
-          dispatch(
-            initDefaultCustomFile({
-              hd: rime,
-              json: parse(defaultContent),
-            })
-          )
+          const defaultJSON = YAMLparse(await (await entry.getFile()).text())
+          soakOrigin.soakDefault = defaultJSON
+          dispatch(initDefaultFormDropDictory(defaultJSON))
           continue
         case "weasel.custom.yaml":
         case "squirrel.custom.yaml":
           styleCustomFileExist = true
 
           dispatch(initStyleCustomFileName(entry.name))
-          const styleContent = await (await entry.getFile()).text()
-          dispatch(
-            initStyleCustomFromFile({
-              hd: rime,
-              json: parse(styleContent),
-            })
-          )
+          const styleJSON = YAMLparse(await (await entry.getFile()).text())
+          soakOrigin.soakStyle = styleJSON
+          dispatch(initStyleFromDropDictory(styleJSON))
           continue
         case "installation.yaml":
           const installationContent = await (await entry.getFile()).text()
-          const obj = parse(installationContent)
+          const obj = YAMLparse(installationContent)
           const name = obj.distribution_code_name as string
           dispatch(initStyleCustomFileName(`${name.toLowerCase()}.custom.yaml`))
           continue
@@ -64,41 +68,14 @@ const onDrop = async (dispatch: Dispatch<AnyAction>, rime: FileSystemDirectoryHa
   }
 
   // 刚安装 Rime
-  if (!defaultCustomFileExist) {
-    dispatch(
-      initDefaultCustomFile({
-        hd: rime,
-        json: null,
-      })
-    )
-  }
-
-  if (!styleCustomFileExist) {
-    dispatch(
-      initStyleCustomFromFile({
-        hd: rime,
-        json: null,
-      })
-    )
-  }
-
   switch (otherCustomFiles.length) {
     case 0:
-      dispatch(
-        initSchemaCustomFromFile({
-          hd: rime,
-          json: null,
-        })
-      )
+      console.log("已拖入 Rime 文件夹，但是没有 ?schema.custom.yaml 文件")
       break
     case 1:
-      const schemaCustomContent = await (await otherCustomFiles[0].getFile()).text()
-      dispatch(
-        initSchemaCustomFromFile({
-          hd: rime,
-          json: parse(schemaCustomContent),
-        })
-      )
+      const schemaJSON = YAMLparse(await (await otherCustomFiles[0].getFile()).text())
+      soakOrigin.soakSchema = schemaJSON
+      dispatch(initSchemaCustomFromFile(schemaJSON))
       break
     // todo 如果 Rime 下有多个方案，需要看现在是哪个 schema，再确认方案
     default:
@@ -112,21 +89,32 @@ const onDrop = async (dispatch: Dispatch<AnyAction>, rime: FileSystemDirectoryHa
       break
   }
 
+  setSoakDefault(soakOrigin)
   dispatch(changeDroped(true))
 }
 
 const DropArea = () => {
   const { notification } = App.useApp()
   const dispatch = useDispatch()
-  const soak = useSelector((state: RootState) => state.soak)
+  const state = useSelector((state: RootState) => state)
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (soak.droped) {
-      notification.success({ message: "接收 Rime 文件夹成功" })
+    if (state.soak.droped) {
+      notification.success({ message: "成功接收 Rime 文件夹" })
       navigate("/home")
     }
-  }, [soak.droped, notification, navigate])
+  }, [state.soak.droped, notification, navigate])
+
+  const { handle: contextHandle, setHandle } = useContext(FileSystemHandleContext)
+
+  const { setSoakDefault } = useContext(OriginContext)
+  console.log(contextHandle)
+  console.log(setHandle)
+
+  useEffect(() => {
+    console.log("contextHandle", contextHandle)
+  }, [contextHandle])
 
   return (
     <div
@@ -163,7 +151,8 @@ const DropArea = () => {
           notification.error({ message: "文件名不符", description: "需要 Rime 文件夹" })
           return
         }
-        onDrop(dispatch, handle)
+        setHandle(handle)
+        onDrop(state, dispatch, handle, setSoakDefault!)
       }}
       onDragOver={(e) => {
         e.preventDefault()

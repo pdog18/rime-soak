@@ -1,14 +1,19 @@
 import { Button } from "antd"
+import { useContext } from "react"
 
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 
 import DropArea from "../components/DropArea"
+import OriginContext from "../OriginContext"
 import { changeMode } from "../store/SoakSlice"
+import { RootState } from "../store/Store"
 
 const PreviousPage = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const state = useSelector((state: RootState) => state)
+  const { soakDefault, setSoakDefault } = useContext(OriginContext)
 
   return (
     <>
@@ -34,6 +39,11 @@ const PreviousPage = () => {
           onClick={() => {
             navigate("home")
             dispatch(changeMode(false))
+            setSoakDefault!({
+              soakDefault: state.defaultCustom,
+              soakSchema: state.schema,
+              soakStyle: state.rimeCustom,
+            })
           }}
         >
           跳过

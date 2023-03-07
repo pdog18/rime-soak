@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { createNewYAML } from "./YAMLUtils"
+import copy from "../utils/SimpleDeepCopy"
 
 const defaultCustom = {
+  // 以这个对象来判断，各项设置是否有修改
   default: {
     customization: {
       distribution_code_name: "Weasel",
@@ -15,6 +16,7 @@ const defaultCustom = {
       schema_list: [{ schema: "luna_pinyin" }],
     },
   },
+
   schema: {
     simplified: false,
     inputMode: "pinyin",
@@ -22,20 +24,12 @@ const defaultCustom = {
   default_setting_changed: false,
 }
 
-let handle: FileSystemDirectoryHandle
-
 const defaultSlice = createSlice({
   name: "default",
   initialState: defaultCustom,
   reducers: {
-    initDefaultCustomFile: (state, actions) => {
-      const { hd, json } = actions.payload
-
-      handle = hd
-      const defaultCustomYAMLExist = !!json
-      if (defaultCustomYAMLExist) {
-        state.default = json
-      }
+    initDefaultFormDropDictory: (state, actions) => {
+      state.default = actions.payload
     },
 
     changePageSize: (state, actions) => {
@@ -58,7 +52,7 @@ const defaultSlice = createSlice({
       ]
     },
     saveDefaultSetting: (state) => {
-      createNewYAML(state.default, "default.custom.yaml", handle)
+      state.default.customization.modified_time = new Date().toLocaleString()
     },
   },
 })
@@ -82,7 +76,7 @@ function indexSchema(simplified: "true" | "false", schema: "double_pinyin" | "wu
 
 export const {
   changePageSize,
-  initDefaultCustomFile,
+  initDefaultFormDropDictory,
 
   changeSimplified,
   changeInputMode,

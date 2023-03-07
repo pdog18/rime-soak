@@ -9,7 +9,7 @@ import { useDispatch } from "react-redux"
 import {
   changeFullShapePunctuation,
   changeHalfShapePunctuation,
-} from "../../store/PunctuSlice"
+} from "../../store/SchemaSlice"
 
 // todo 拆分 AddTag
 export const AddTag = (prop: any) => {

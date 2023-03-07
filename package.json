@@ -13,6 +13,8 @@
     "@types/react-dom": "^18.0.11",
     "@types/wicg-file-system-access": "^2020.9.5",
     "antd": "^5.2.1",
+    "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.5",
@@ -51,6 +53,7 @@
     ]
   },
   "devDependencies": {
+    "@types/lodash-es": "^4.17.6",
     "electron": "^23.1.0",
     "gh-pages": "^5.0.0",
     "prettier": "2.8.4"

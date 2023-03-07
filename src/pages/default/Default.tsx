@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from "react-redux"
 import { changeInputMode, changeSimplified, saveDefaultSetting } from "../../store/DefaultSlice"
 import { RootState } from "../../store/Store"
 import RimeSettingItem, { RadioChoice } from "../../components/RimeSettingItem"
-import { App, ConfigProvider, FloatButton } from "antd"
 
 import { changePageSize } from "../../store/DefaultSlice"
 import IntegerStep from "../../components/IntegerStep"
@@ -17,7 +16,7 @@ const Default: React.FC = () => {
   const state = useSelector((state: RootState) => state)
   const defaultCustom = state.defaultCustom
   const dispatch = useDispatch()
-  const { notification } = App.useApp()
+
   return (
     <div
       style={{
@@ -65,26 +64,6 @@ const Default: React.FC = () => {
 
       {/*  关闭方案选择快捷键( Control + Grave)        放到「按键管理」更合适？?  */}
       {/* <div>更多方案</div> */}
-
-      <ConfigProvider
-        theme={{
-          token: {
-            colorPrimary: "#673AB7",
-          },
-        }}
-      >
-        <FloatButton
-          style={{
-            display: defaultCustom.default_setting_changed ? "block" : "none",
-          }}
-          type="primary"
-          tooltip={<div>Save</div>}
-          onClick={() => {
-            dispatch(saveDefaultSetting())
-            notification.success({ message: "此页设置保存成功", description: "请执行「重新部署」，使本次修改生效！" })
-          }}
-        />
-      </ConfigProvider>
     </div>
   )
 }
