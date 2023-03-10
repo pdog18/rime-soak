@@ -3,12 +3,11 @@ import { useEffect } from "react"
 import { useSelector } from "react-redux"
 import { HashRouter, Routes, Route } from "react-router-dom"
 import FileSystemHandleContext from "./FileSystemHandleContext"
-import OriginContext, { SoakDefault, SoakDefaultState } from "./OriginContext"
+import OriginContext, { SoakDefault } from "./OriginContext"
 import Home from "./pages/Home"
 import PreviousPage from "./pages/PreviousPage"
 import { RootState } from "./store/Store"
 import copy from "./utils/SimpleDeepCopy"
-import { writeYAML } from "./utils/YAMLUtils"
 
 function preventWindowDrop() {
   function preventDrop(e: DragEvent) {

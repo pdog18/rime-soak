@@ -15,7 +15,7 @@ const Punctuation: React.FC = () => {
 
   useEffect(() => {
     dispatch(initPunctuOrigin())
-  }, [])
+  }, [dispatch])
 
   const columns = [
     {

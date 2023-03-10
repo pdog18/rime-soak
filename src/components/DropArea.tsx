@@ -82,6 +82,7 @@ const onDrop = async (
       const entryNames = otherCustomFiles.map((entry) => {
         return `[${entry.name}]`
       })
+      // todo: 如果有多个方案，展示：看来您是老玩家了，请选择你的方案用于修改标点
       notification.info({
         message: "无法确定标点对应的方案",
         description: `Rime 中有这些方案：${entryNames},能否删除不使用的方案对应的 .custom.yaml?`,

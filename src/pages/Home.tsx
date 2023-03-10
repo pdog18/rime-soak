@@ -1,6 +1,7 @@
-import { App, ConfigProvider, FloatButton, Tabs } from "antd"
+import { App, Button, FloatButton, Tabs } from "antd"
 import { useContext } from "react"
 import { useSelector } from "react-redux"
+import { useNavigate } from "react-router-dom"
 import FileSystemHandleContext from "../FileSystemHandleContext"
 import { RootState } from "../store/Store"
 import { writeYAML } from "../utils/YAMLUtils"
@@ -18,6 +19,7 @@ const Home = () => {
   const state = useSelector((state: RootState) => state)
   const { handle } = useContext(FileSystemHandleContext)
   const { notification } = App.useApp()
+  const navigate = useNavigate()
 
   return (
     <>
@@ -46,7 +48,20 @@ const Home = () => {
             writeYAML("style.custom.yaml", state.rimeCustom.style, handle)
             writeYAML("schema.custom.yaml", state.schema.schemaCustom, handle)
           } else {
-            notification.warning({ message: "需要 Rime 用户文件夹" })
+            // todo 返回拖入文件夹/或者弹一个窗口展示拖入文件夹界面
+            notification.warning({
+              message: "需要 Rime 用户文件夹",
+              btn: (
+                <Button
+                  type="dashed"
+                  onClick={() => {
+                    navigate("/")
+                  }}
+                >
+                  返回上页，关联 Rime
+                </Button>
+              ),
+            })
           }
         }}
       />

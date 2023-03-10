@@ -13,7 +13,7 @@ const PreviousPage = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const state = useSelector((state: RootState) => state)
-  const { soakDefault, setSoakDefault } = useContext(OriginContext)
+  const { setSoakDefault } = useContext(OriginContext)
 
   return (
     <>

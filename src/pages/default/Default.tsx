@@ -5,7 +5,7 @@ import {
   OrderedListOutlined as MenuSizeIcon,
 } from "@ant-design/icons"
 import { useDispatch, useSelector } from "react-redux"
-import { changeInputMode, changeSimplified, saveDefaultSetting } from "../../store/DefaultSlice"
+import { changeInputMode, changeSimplified } from "../../store/DefaultSlice"
 import { RootState } from "../../store/Store"
 import RimeSettingItem, { RadioChoice } from "../../components/RimeSettingItem"
 
