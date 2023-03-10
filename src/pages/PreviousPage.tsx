@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 
 import DropArea from "../components/DropArea"
-import OriginContext from "../OriginContext"
+import ShapShotContext from "../OriginContext"
 import { changeMode } from "../store/SoakSlice"
 import { RootState } from "../store/Store"
 
@@ -13,7 +13,7 @@ const PreviousPage = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const state = useSelector((state: RootState) => state)
-  const { setSoakDefault } = useContext(OriginContext)
+  const { setSoakDefault } = useContext(ShapShotContext)
 
   return (
     <>
@@ -40,9 +40,9 @@ const PreviousPage = () => {
             navigate("home")
             dispatch(changeMode(false))
             setSoakDefault!({
-              soakDefault: state.defaultCustom,
+              soakDefault: state.default,
               soakSchema: state.schema,
-              soakStyle: state.rimeCustom,
+              soakStyle: state.style,
             })
           }}
         >

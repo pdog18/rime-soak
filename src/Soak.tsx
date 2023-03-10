@@ -3,7 +3,7 @@ import { useEffect } from "react"
 import { useSelector } from "react-redux"
 import { HashRouter, Routes, Route } from "react-router-dom"
 import FileSystemHandleContext from "./FileSystemHandleContext"
-import OriginContext, { SoakDefault } from "./OriginContext"
+import ShapShotContext, { SoakSnapshot } from "./OriginContext"
 import Home from "./pages/Home"
 import PreviousPage from "./pages/PreviousPage"
 import { RootState } from "./store/Store"
@@ -23,14 +23,14 @@ const Soak = () => {
     preventWindowDrop()
   }, [])
   const [stateHandle, setState] = useState<FileSystemDirectoryHandle | undefined>(undefined)
-  const [soakDefault, setOrigin] = useState<SoakDefault | undefined>(undefined)
+  const [soakDefault, setOrigin] = useState<SoakSnapshot | undefined>(undefined)
   const state = useSelector((state: RootState) => state)
 
   useEffect(() => {
-    console.log(state.defaultCustom)
-    console.log(state.rimeCustom)
+    console.log(state.default)
+    console.log(state.style)
     console.log(state.schema)
-  }, [state.defaultCustom, state.rimeCustom, state.schema, state.skin])
+  }, [state.default, state.style, state.schema, state.skin])
 
   return (
     <FileSystemHandleContext.Provider
@@ -41,10 +41,10 @@ const Soak = () => {
         },
       }}
     >
-      <OriginContext.Provider
+      <ShapShotContext.Provider
         value={{
           soakDefault,
-          setSoakDefault: (entry: SoakDefault) => {
+          setSoakDefault: (entry: SoakSnapshot) => {
             setOrigin(copy(entry))
           },
         }}
@@ -57,7 +57,7 @@ const Soak = () => {
             </Route>
           </Routes>
         </HashRouter>
-      </OriginContext.Provider>
+      </ShapShotContext.Provider>
     </FileSystemHandleContext.Provider>
   )
 }

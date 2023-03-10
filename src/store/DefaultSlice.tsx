@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit"
  
 
-const defaultCustom = {
+const initState = {
   // 以这个对象来判断，各项设置是否有修改
-  default: {
+  defaultCustom: {
     customization: {
       distribution_code_name: "Weasel",
       distribution_version: "0.14.3_dev_0.8",
@@ -26,33 +26,33 @@ const defaultCustom = {
 
 const defaultSlice = createSlice({
   name: "default",
-  initialState: defaultCustom,
+  initialState: initState,
   reducers: {
     initDefaultFormDropDictory: (state, actions) => {
-      state.default = actions.payload
+      state.defaultCustom = actions.payload
     },
 
     changePageSize: (state, actions) => {
       // todo 需要想办法识别这种 / 语法
-      state.default.patch["menu/page_size"] = actions.payload
+      state.defaultCustom.patch["menu/page_size"] = actions.payload
       state.default_setting_changed = true
     },
     changeSimplified: (state, actions) => {
       state.default_setting_changed = true
       state.schema.simplified = actions.payload
-      state.default.patch.schema_list = [
+      state.defaultCustom.patch.schema_list = [
         indexSchema(`${state.schema.simplified}`, state.schema.inputMode as "double_pinyin" | "wubi" | "pinyin"),
       ]
     },
     changeInputMode: (state, actions) => {
       state.default_setting_changed = true
       state.schema.inputMode = actions.payload
-      state.default.patch.schema_list = [
+      state.defaultCustom.patch.schema_list = [
         indexSchema(`${state.schema.simplified}`, state.schema.inputMode as "double_pinyin" | "wubi" | "pinyin"),
       ]
     },
     saveDefaultSetting: (state) => {
-      state.default.customization.modified_time = new Date().toLocaleString()
+      state.defaultCustom.customization.modified_time = new Date().toLocaleString()
     },
   },
 })

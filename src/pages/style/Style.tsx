@@ -12,10 +12,10 @@ import { RootState } from "../../store/Store"
 
 const Style: React.FC = () => {
   const state = useSelector((state: RootState) => state)
-  const rimePatch = state.rimeCustom.style.patch
+  const rimePatch = state.style.styleCustom.patch
   const dispatch = useDispatch()
 
-  const showSaveButton = state.rimeCustom.basic_setting_changed
+  const showSaveButton = state.style.basic_setting_changed
 
   const { notification } = App.useApp()
 

@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit"
  
 
-const rimeCustom = {
-  style: {
+const initState = {
+  styleCustom: {
     customization: {
       distribution_code_name: "Weasel",
       distribution_version: "0.14.3_dev_0.8",
@@ -26,29 +26,29 @@ const rimeCustom = {
 
 const rimeSlice = createSlice({
   name: "style",
-  initialState: rimeCustom,
+  initialState: initState,
   reducers: {
     changeColorScheme: (state, actions) => {
-      state.style.patch["style/color_scheme"] = actions.payload
+      state.styleCustom.patch["style/color_scheme"] = actions.payload
     },
     changeOrientation: (state, actions) => {
-      state.style.patch["style/horizontal"] = actions.payload
+      state.styleCustom.patch["style/horizontal"] = actions.payload
       state.basic_setting_changed = true
     },
     changePreedit: (state, actions) => {
-      state.style.patch["style/inline_preedit"] = actions.payload
+      state.styleCustom.patch["style/inline_preedit"] = actions.payload
       state.basic_setting_changed = true
     },
     changeDisplayTrayIcon: (state, actions) => {
-      state.style.patch["style/display_tray_icon"] = actions.payload
+      state.styleCustom.patch["style/display_tray_icon"] = actions.payload
       state.basic_setting_changed = true
     },
     saveStyleSetting: (state) => {
-      state.style.customization.modified_time = new Date().toLocaleString()
+      state.styleCustom.customization.modified_time = new Date().toLocaleString()
     },
 
     initStyleFromDropDictory: (state, actions) => {
-      state.style = actions.payload
+      state.styleCustom = actions.payload
     },
 
     initStyleCustomFileName: (state, actions) => {

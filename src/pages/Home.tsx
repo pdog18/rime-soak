@@ -3,8 +3,11 @@ import { useContext } from "react"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import FileSystemHandleContext from "../FileSystemHandleContext"
+import { SoakSnapshot } from "../OriginContext"
+import ShapShotContext from "../OriginContext"
 import { RootState } from "../store/Store"
 import { writeYAML } from "../utils/YAMLUtils"
+import { isEqual } from "lodash"
 
 import Default from "./default/Default"
 import Punctuation from "./punctuation/Punctuation"
@@ -15,9 +18,17 @@ const labels: Array<string> = ["基本", "风格", "皮肤", "符号"]
 
 const children = [<Default />, <Style />, <Skin />, <Punctuation />]
 
+const saveSettings = (handle: FileSystemDirectoryHandle, state: RootState, soakDefault: SoakSnapshot) => {
+  // console.log(handle, state, soakDefault)
+  console.log(isEqual(state.default.defaultCustom, soakDefault.soakDefault))
+  console.log(isEqual(state.style.styleCustom, soakDefault.soakStyle))
+  console.log(isEqual(state.schema.schemaCustom, soakDefault.soakSchema))
+}
+
 const Home = () => {
   const state = useSelector((state: RootState) => state)
   const { handle } = useContext(FileSystemHandleContext)
+  const { soakDefault } = useContext(ShapShotContext)
   const { notification } = App.useApp()
   const navigate = useNavigate()
 
@@ -40,15 +51,7 @@ const Home = () => {
         type="primary"
         tooltip={<div>Save</div>}
         onClick={() => {
-          if (handle) {
-            notification.success({ message: `handel: ${handle.toString()}` })
-            // 1. 判断是哪个文件发生改变了
-            // 2. 修改文件
-            writeYAML("def.custom.yaml", state.defaultCustom.default, handle)
-            writeYAML("style.custom.yaml", state.rimeCustom.style, handle)
-            writeYAML("schema.custom.yaml", state.schema.schemaCustom, handle)
-          } else {
-            // todo 返回拖入文件夹/或者弹一个窗口展示拖入文件夹界面
+          if (!handle) {
             notification.warning({
               message: "需要 Rime 用户文件夹",
               btn: (
@@ -62,6 +65,8 @@ const Home = () => {
                 </Button>
               ),
             })
+          } else {
+            saveSettings(handle, state, soakDefault!)
           }
         }}
       />

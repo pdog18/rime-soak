@@ -61,7 +61,7 @@ interface ImageRadioGroupProps {
 }
 
 const ImageRadioGroup: React.FC<ImageRadioGroupProps> = ({ images }) => {
-  const colorScheme = useSelector((state: RootState) => state.rimeCustom.style.patch["style/color_scheme"])
+  const colorScheme = useSelector((state: RootState) => state.style.styleCustom.patch["style/color_scheme"])
   const [loadingState, setLoadingState] = useState(
     names.map((name) => {
       return {

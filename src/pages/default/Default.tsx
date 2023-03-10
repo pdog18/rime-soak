@@ -14,7 +14,7 @@ import IntegerStep from "../../components/IntegerStep"
 
 const Default: React.FC = () => {
   const state = useSelector((state: RootState) => state)
-  const defaultCustom = state.defaultCustom
+  const defaultCustom = state.default
   const dispatch = useDispatch()
 
   return (
@@ -52,7 +52,7 @@ const Default: React.FC = () => {
 
       <RimeSettingItem icon={<MenuSizeIcon style={{ fontSize: "24px", margin: "0px 16px" }} />} title="候选词数量">
         <IntegerStep
-          size={defaultCustom.default.patch["menu/page_size"]}
+          size={defaultCustom.defaultCustom.patch["menu/page_size"]}
           onChange={(value: number | null) => {
             dispatch(changePageSize(value))
           }}

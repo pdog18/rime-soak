@@ -13,7 +13,7 @@ type PunctuType = {
 
 const punctuArray: PunctuType[] = []
 
-const data = {
+const initState = {
   schemaCustom: {
     customization: {
       distribution_code_name: "Weasel",
@@ -28,11 +28,11 @@ const data = {
       "punctuator/ascii_style": {},
     },
   },
-  setting_changed: false,
+  schemaCustomYAMLs: [],
   punctuArray: punctuArray,
 }
 
-const initArray = (state: typeof data) => {
+const initArray = (state: typeof initState) => {
   Object.keys(json.ascii_style).forEach((key, index) => {
     state.punctuArray.push({
       key: `key:${key} ${index}`,
@@ -44,9 +44,9 @@ const initArray = (state: typeof data) => {
     })
   })
 }
-const punctuSlice = createSlice({
-  name: "punctu",
-  initialState: data,
+const schemaSlice = createSlice({
+  name: "schema",
+  initialState: initState,
   reducers: {
     initPunctuOrigin: (state) => {
       initArray(state)
@@ -91,12 +91,14 @@ const punctuSlice = createSlice({
       console.log(json.ascii_style)
     },
     changeHalfShapePunctuation: (state, actions) => {
-      state.setting_changed = true
       changeShape("half_shape", state, actions.payload.index, actions.payload.half_shape)
     },
     changeFullShapePunctuation: (state, actions) => {
-      state.setting_changed = true
       changeShape("full_shape", state, actions.payload.index, actions.payload.full_shape)
+    },
+    setSchemaCustomFileNames: (state, actions) => {
+      state.schemaCustomYAMLs = actions.payload
+      console.log('setSchemaCustomFileNames',actions.payload);
     },
     savePunctuSetting: (state, actions) => {
       state.schemaCustom.customization.modified_time = new Date().toLocaleString()
@@ -106,7 +108,7 @@ const punctuSlice = createSlice({
 
 const changeShape = (
   type: "half_shape" | "full_shape",
-  state: WritableDraft<typeof data>,
+  state: WritableDraft<typeof initState>,
   index: number,
   newShpae: any
 ) => {
@@ -126,6 +128,7 @@ export const {
   changeFullShapePunctuation,
   changeHalfShapePunctuation,
   savePunctuSetting,
-} = punctuSlice.actions
-export default punctuSlice
+  setSchemaCustomFileNames,
+} = schemaSlice.actions
+export default schemaSlice
 export type { PunctuType }

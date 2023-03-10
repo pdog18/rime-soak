@@ -71,20 +71,6 @@ const Punctuation: React.FC = () => {
           y: 360,
         }}
       />
-
-      <FloatButton
-        style={{ display: state.schema.setting_changed ? "block" : "none" }}
-        type="primary"
-        tooltip={<div>Save</div>}
-        onClick={() => {
-          const schemaName = state.defaultCustom.default.patch.schema_list[0].schema
-          dispatch(savePunctuSetting(schemaName))
-          notification.success({
-            message: `${schemaName}.custom.yaml 保存成功`,
-            description: "请执行「重新部署」，使本次修改生效！",
-          })
-        }}
-      />
     </>
   )
 }

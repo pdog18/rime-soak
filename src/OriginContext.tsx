@@ -1,14 +1,14 @@
 import React from "react"
 
-export interface SoakDefault {
+export interface SoakSnapshot {
   soakDefault?: object
   soakStyle?: object
   soakSchema?: object
 }
 
-export interface SoakDefaultState {
-  soakDefault?: SoakDefault
-  setSoakDefault?: (entry: SoakDefault) => void
+interface SoakSnapshotState {
+  soakDefault?: SoakSnapshot
+  setSoakDefault?: (entry: SoakSnapshot) => void
 }
 
 /**
@@ -20,6 +20,6 @@ export interface SoakDefaultState {
  *
  * 这几个值会被用于判断某个文件是否需要改变，同时即也为 FloatButton 的显示/隐藏的依据
  */
-const OriginContext = React.createContext<SoakDefaultState>({})
+const ShapShotContext = React.createContext<SoakSnapshotState>({})
 
-export default OriginContext
+export default ShapShotContext

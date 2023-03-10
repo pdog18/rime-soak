@@ -1,16 +1,16 @@
 import { configureStore } from "@reduxjs/toolkit"
-import defaultCustom from "./DefaultSlice"
-import schemaSlic from "./SchemaSlice"
+import defaultSlice from "./DefaultSlice"
+import schemaSlice from "./SchemaSlice"
 import skinSlice from "./SkinSlice"
-import rimeSlice from "./StyleSlice"
+import styleSlice from "./StyleSlice"
 import soakSlice from "./SoakSlice"
 
 const store = configureStore({
   reducer: {
-    defaultCustom: defaultCustom.reducer,
+    default: defaultSlice.reducer,
     skin: skinSlice.reducer,
-    schema: schemaSlic.reducer,
-    rimeCustom: rimeSlice.reducer,
+    schema: schemaSlice.reducer,
+    style: styleSlice.reducer,
     soak: soakSlice.reducer,
   },
 })
