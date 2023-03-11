@@ -28,6 +28,15 @@ const initState = {
       "style/inline_preedit": false,
       "style/display_tray_icon": false,
       "style/color_scheme": "aqua",
+      app_options: {
+        "cmd.exe": {
+          ascii_mode: true,
+        },
+
+        "conhost.exe": {
+          ascii_mode: true,
+        },
+      },
     },
   },
 
@@ -50,8 +59,19 @@ const rimeSlice = createSlice({
     changeDisplayTrayIcon: (state, actions) => {
       state.styleCustom.patch["style/display_tray_icon"] = actions.payload
     },
+    changeAsciiModeApps: (state, actions) => {
+      state.styleCustom.patch.app_options = actions.payload
+    },
+
+    setTags: (state, actions) => {
+      actions.payload.forEach((tag: string) => {
+        ;(state.styleCustom.patch.app_options as any)[tag] = {
+          ascii_mode: true,
+        }
+      })
+    },
   },
 })
 
-export const { changeColorScheme, changeOrientation, changePreedit, changeDisplayTrayIcon } = rimeSlice.actions
+export const { changeColorScheme, changeOrientation, changePreedit, changeDisplayTrayIcon, setTags } = rimeSlice.actions
 export default rimeSlice

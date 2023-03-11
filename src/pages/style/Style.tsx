@@ -8,6 +8,7 @@ import { changeDisplayTrayIcon, changeOrientation, changePreedit } from "../../s
 
 import RimeSettingItem, { RadioChoice } from "../../components/RimeSettingItem"
 import { RootState } from "../../store/Store"
+import AppOptions from "../../components/AppOptions"
 
 const Style: React.FC = () => {
   const state = useSelector((state: RootState) => state)
@@ -56,6 +57,10 @@ const Style: React.FC = () => {
             dispatch(changeDisplayTrayIcon(value))
           }}
         />
+      </RimeSettingItem>
+
+      <RimeSettingItem icon={<InputTypeIcon style={{ fontSize: "24px", margin: "0px 16px" }} />} title="字符模式">
+        <AppOptions />
       </RimeSettingItem>
     </div>
   )
