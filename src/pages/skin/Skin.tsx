@@ -1,9 +1,10 @@
 import React, { useState } from "react"
-import { Card, Spin } from "antd"
+import { Button, Card, Spin } from "antd"
 import { useDispatch, useSelector } from "react-redux"
 import { changeColorScheme } from "../../store/StyleSlice"
 import { RootState } from "../../store/Store"
 import { CheckCircleFilled } from "@ant-design/icons"
+import { useNavigate } from "react-router-dom"
 
 const names = [
   "color_scheme_android",
@@ -45,12 +46,27 @@ const names = [
 ]
 
 const Skin: React.FC = () => {
+  const navigate = useNavigate()
   return (
     <div
       style={{
         backgroundColor: "#f3f3f3",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
       }}
     >
+      <Button
+        style={{ width: "120px" }}
+        type="primary"
+        onClick={() => {
+          navigate("custom-skin")
+        }}
+      >
+        去自定义皮肤
+      </Button>
+
       <ImageRadioGroup images={names}></ImageRadioGroup>
     </div>
   )
@@ -62,6 +78,7 @@ interface ImageRadioGroupProps {
 
 const ImageRadioGroup: React.FC<ImageRadioGroupProps> = ({ images }) => {
   const colorScheme = useSelector((state: RootState) => state.style.styleCustom.patch["style/color_scheme"])
+
   const [loadingState, setLoadingState] = useState(
     names.map((name) => {
       return {
