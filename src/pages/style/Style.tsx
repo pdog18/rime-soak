@@ -2,10 +2,9 @@ import React from "react"
 import { useDispatch } from "react-redux/es/hooks/useDispatch"
 import { useSelector } from "react-redux/es/exports"
 
-import { App, ConfigProvider, FloatButton } from "antd"
 import { PicRightOutlined as InputTypeIcon, DragOutlined } from "@ant-design/icons"
 
-import { changeDisplayTrayIcon, changeOrientation, changePreedit, saveStyleSetting } from "../../store/StyleSlice"
+import { changeDisplayTrayIcon, changeOrientation, changePreedit } from "../../store/StyleSlice"
 
 import RimeSettingItem, { RadioChoice } from "../../components/RimeSettingItem"
 import { RootState } from "../../store/Store"
@@ -14,10 +13,6 @@ const Style: React.FC = () => {
   const state = useSelector((state: RootState) => state)
   const rimePatch = state.style.styleCustom.patch
   const dispatch = useDispatch()
-
-  const showSaveButton = state.style.basic_setting_changed
-
-  const { notification } = App.useApp()
 
   return (
     <div
@@ -62,24 +57,6 @@ const Style: React.FC = () => {
           }}
         />
       </RimeSettingItem>
-
-      <ConfigProvider
-        theme={{
-          token: {
-            colorPrimary: "#4CAF50",
-          },
-        }}
-      >
-        <FloatButton
-          style={{ display: showSaveButton ? "block" : "none" }}
-          type="primary"
-          tooltip={<div>Save</div>}
-          onClick={() => {
-            dispatch(saveStyleSetting())
-            notification.success({ message: "style 保存成功", description: "请执行「重新部署」，使本次修改生效！" })
-          }}
-        />
-      </ConfigProvider>
     </div>
   )
 }

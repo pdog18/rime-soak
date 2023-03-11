@@ -1,5 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit"
- 
+
+const rimeName = () => {
+  const userAgent = navigator.userAgent
+
+  let rime = "?"
+
+  if (userAgent.indexOf("Win") !== -1) {
+    rime = "weasel"
+  } else if (userAgent.indexOf("Mac") !== -1) {
+    rime = "squirrel"
+  }
+
+  return `${rime}.custom.yaml`
+}
 
 const initState = {
   styleCustom: {
@@ -15,13 +28,10 @@ const initState = {
       "style/inline_preedit": false,
       "style/display_tray_icon": false,
       "style/color_scheme": "aqua",
-
-      preset_color_schemes: {},
     },
   },
 
-  basic_setting_changed: false,
-  fileName: "weasel.custom.yaml",
+  fileName: `${rimeName()}`,
 }
 
 const rimeSlice = createSlice({
@@ -33,37 +43,15 @@ const rimeSlice = createSlice({
     },
     changeOrientation: (state, actions) => {
       state.styleCustom.patch["style/horizontal"] = actions.payload
-      state.basic_setting_changed = true
     },
     changePreedit: (state, actions) => {
       state.styleCustom.patch["style/inline_preedit"] = actions.payload
-      state.basic_setting_changed = true
     },
     changeDisplayTrayIcon: (state, actions) => {
       state.styleCustom.patch["style/display_tray_icon"] = actions.payload
-      state.basic_setting_changed = true
-    },
-    saveStyleSetting: (state) => {
-      state.styleCustom.customization.modified_time = new Date().toLocaleString()
-    },
-
-    initStyleFromDropDictory: (state, actions) => {
-      state.styleCustom = actions.payload
-    },
-
-    initStyleCustomFileName: (state, actions) => {
-      state.fileName = actions.payload
     },
   },
 })
 
-export const {
-  initStyleCustomFileName,
-  changeColorScheme,
-  changeOrientation,
-  changePreedit,
-  changeDisplayTrayIcon,
-  saveStyleSetting,
-  initStyleFromDropDictory,
-} = rimeSlice.actions
+export const { changeColorScheme, changeOrientation, changePreedit, changeDisplayTrayIcon } = rimeSlice.actions
 export default rimeSlice

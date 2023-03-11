@@ -28,80 +28,33 @@ const initState = {
       "punctuator/ascii_style": {},
     },
   },
-  schemaCustomYAMLs: [],
+  fileName: "luna_pinyin_simp.schema.yaml",
   punctuArray: punctuArray,
 }
 
-const initArray = (state: typeof initState) => {
-  Object.keys(json.ascii_style).forEach((key, index) => {
-    state.punctuArray.push({
-      key: `key:${key} ${index}`,
-      name: key,
-      index: index,
-      full_shape: (json.full_shape as any)[key],
-      half_shape: (json.half_shape as any)[key],
-      ascii_style: (json.ascii_style as any)[key],
-    })
+Object.keys(json.ascii_style).forEach((key, index) => {
+  initState.punctuArray.push({
+    key: `key:${key} ${index}`,
+    name: key,
+    index: index,
+    full_shape: (json.full_shape as any)[key],
+    half_shape: (json.half_shape as any)[key],
+    ascii_style: (json.ascii_style as any)[key],
   })
-}
+})
+
 const schemaSlice = createSlice({
   name: "schema",
   initialState: initState,
   reducers: {
-    initPunctuOrigin: (state) => {
-      initArray(state)
-    },
-    initSchemaCustomFromFile: (state, actions) => {
-      const content = actions.payload
-
-      // todo : 需要处理 YAML 语法中的 / 无法正确识别为层级的情况
-
-      const halfShape = content.patch["punctuator/half_shape"]
-      const fullShape = content.patch["punctuator/full_shape"]
-      const halfShapeArray = halfShape ? Object.entries(halfShape) : []
-      const fullShapeArray = fullShape ? Object.entries(fullShape) : []
-
-      // 1. content -> state.json
-      state.schemaCustom = content
-      // 2. 防止每次拖入文件夹丢失已有的配置
-      fullShapeArray.forEach((e) => {
-        const key = e[0]
-        const newShape = e[1] as any
-        ;(json.full_shape as any)[key] = newShape
-      })
-      halfShapeArray.forEach((e) => {
-        const key = e[0]
-        const newShape = e[1] as any
-        ;(json.half_shape as any)[key] = newShape
-      })
-
-      /**
-       * json to table's array, forEach by [ascii_style]
-       * 注意：这里使用的是 [ascii_sytle] ，所以遍历中没有[space]
-       * 如果有需要编辑 [space] 的需求，那么改成 [full_shape] 进行遍历
-       */
-      initArray(state)
-      // 3. json.punctuator -> state.schemaCustom.patch
-      state.schemaCustom.patch["punctuator/half_shape"] = json.half_shape
-      state.schemaCustom.patch["punctuator/full_shape"] = json.full_shape
-      state.schemaCustom.patch["punctuator/ascii_style"] = json.ascii_style
-
-      console.log(json.half_shape)
-      console.log(json.full_shape)
-      console.log(json.ascii_style)
-    },
     changeHalfShapePunctuation: (state, actions) => {
       changeShape("half_shape", state, actions.payload.index, actions.payload.half_shape)
     },
     changeFullShapePunctuation: (state, actions) => {
       changeShape("full_shape", state, actions.payload.index, actions.payload.full_shape)
     },
-    setSchemaCustomFileNames: (state, actions) => {
-      state.schemaCustomYAMLs = actions.payload
-      console.log('setSchemaCustomFileNames',actions.payload);
-    },
-    savePunctuSetting: (state, actions) => {
-      state.schemaCustom.customization.modified_time = new Date().toLocaleString()
+    changeSchemaName: (state, actions) => {
+      state.fileName = `${actions.payload}.custom.yaml`
     },
   },
 })
@@ -122,13 +75,6 @@ const changeShape = (
   }
 }
 
-export const {
-  initSchemaCustomFromFile,
-  initPunctuOrigin,
-  changeFullShapePunctuation,
-  changeHalfShapePunctuation,
-  savePunctuSetting,
-  setSchemaCustomFileNames,
-} = schemaSlice.actions
+export const { changeFullShapePunctuation, changeHalfShapePunctuation, changeSchemaName } = schemaSlice.actions
 export default schemaSlice
 export type { PunctuType }

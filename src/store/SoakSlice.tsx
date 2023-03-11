@@ -1,22 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit"
 
-const soak = {
-  dropBeforeModify: true,
-  droped: false,
-}
+const soak = {}
 
 const soakSlice = createSlice({
   name: "soak",
   initialState: soak,
-  reducers: {
-    changeMode: (state, actions) => {
-      state.dropBeforeModify = actions.payload
-    },
-    changeDroped: (state, actions) => {
-      state.droped = actions.payload
-    },
-  },
+  reducers: {},
 })
 
-export const { changeMode, changeDroped } = soakSlice.actions
+export const {} = soakSlice.actions
 export default soakSlice

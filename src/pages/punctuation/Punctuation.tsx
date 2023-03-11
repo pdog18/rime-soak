@@ -1,21 +1,15 @@
-import React, { useEffect } from "react"
-import { App, FloatButton, Table, Tag } from "antd"
+import React from "react"
+import { Table, Tag } from "antd"
 import Tags from "./Tags"
 import AddTag from "./AddTag"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../../store/Store"
-import { initPunctuOrigin, PunctuType, savePunctuSetting } from "../../store/SchemaSlice"
+import { PunctuType } from "../../store/SchemaSlice"
 
 const Punctuation: React.FC = () => {
-  const { notification } = App.useApp()
-
   const state = useSelector((state: RootState) => state)
   const punctuArray = state.schema.punctuArray
   const dispatch = useDispatch()
-
-  useEffect(() => {
-    dispatch(initPunctuOrigin())
-  }, [dispatch])
 
   const columns = [
     {

@@ -1,22 +1,33 @@
 import React from "react"
-import {
-  ClusterOutlined as InputTypeIcon,
-  RetweetOutlined as SimpIcon,
-  OrderedListOutlined as MenuSizeIcon,
-} from "@ant-design/icons"
+import { ClusterOutlined as InputTypeIcon, OrderedListOutlined as MenuSizeIcon } from "@ant-design/icons"
 import { useDispatch, useSelector } from "react-redux"
-import { changeInputMode, changeSimplified } from "../../store/DefaultSlice"
+import { changeTargetSchema } from "../../store/DefaultSlice"
 import { RootState } from "../../store/Store"
 import RimeSettingItem, { RadioChoice } from "../../components/RimeSettingItem"
 
 import { changePageSize } from "../../store/DefaultSlice"
 import IntegerStep from "../../components/IntegerStep"
+import { changeSchemaName } from "../../store/SchemaSlice"
 
 const Default: React.FC = () => {
   const state = useSelector((state: RootState) => state)
   const defaultCustom = state.default
   const dispatch = useDispatch()
 
+  /**
+   *   - schema: luna_pinyin
+  - schema: luna_pinyin_simp
+  - schema: luna_pinyin_fluency
+  - schema: bopomofo
+  - schema: bopomofo_tw
+  - schema: cangjie5
+  - schema: stroke
+  - schema: terra_pinyin
+  - schema: bopomofo_express
+  - schema: cangjie5_express
+  - schema: luna_pinyin_tw
+  - schema: luna_quanpin
+   */
   return (
     <div
       style={{
@@ -28,24 +39,14 @@ const Default: React.FC = () => {
         gap: "16px",
       }}
     >
-      <RimeSettingItem icon={<SimpIcon style={{ fontSize: "24px", margin: "0px 16px" }} />} title="简体/繁体">
+      <RimeSettingItem icon={<InputTypeIcon style={{ fontSize: "24px", margin: "0px 16px" }} />} title="输入方案">
         <RadioChoice
-          values={[true, false]}
-          defaultValue={defaultCustom.schema.simplified}
-          names={["简体", "繁体"]}
-          onChange={(value: boolean) => {
-            dispatch(changeSimplified(value))
-          }}
-        />
-      </RimeSettingItem>
-
-      <RimeSettingItem icon={<InputTypeIcon style={{ fontSize: "24px", margin: "0px 16px" }} />} title="输入模式">
-        <RadioChoice
-          values={["pinyin", "double_pinyin", "wubi"]}
-          defaultValue={defaultCustom.schema.inputMode}
+          values={["luna_pinyin_simp", "double-pinyin", "wubi"]}
+          defaultValue={defaultCustom.defaultCustom.patch.schema_list[0].schema}
           names={["拼音", "双拼", "五笔"]}
           onChange={(value: string) => {
-            dispatch(changeInputMode(value))
+            dispatch(changeTargetSchema(value))
+            dispatch(changeSchemaName(value))
           }}
         />
       </RimeSettingItem>

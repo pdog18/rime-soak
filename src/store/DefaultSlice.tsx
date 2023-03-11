@@ -1,8 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit"
- 
 
 const initState = {
-  // 以这个对象来判断，各项设置是否有修改
   defaultCustom: {
     customization: {
       distribution_code_name: "Weasel",
@@ -13,73 +11,24 @@ const initState = {
     },
     patch: {
       "menu/page_size": 5,
-      schema_list: [{ schema: "luna_pinyin" }],
+      schema_list: [{ schema: "luna_pinyin_simp" }],
     },
   },
-
-  schema: {
-    simplified: false,
-    inputMode: "pinyin",
-  },
-  default_setting_changed: false,
 }
 
 const defaultSlice = createSlice({
   name: "default",
   initialState: initState,
   reducers: {
-    initDefaultFormDropDictory: (state, actions) => {
-      state.defaultCustom = actions.payload
+    changePageSize: (state, actions) => {
+      state.defaultCustom.patch["menu/page_size"] = actions.payload
     },
 
-    changePageSize: (state, actions) => {
-      // todo 需要想办法识别这种 / 语法
-      state.defaultCustom.patch["menu/page_size"] = actions.payload
-      state.default_setting_changed = true
-    },
-    changeSimplified: (state, actions) => {
-      state.default_setting_changed = true
-      state.schema.simplified = actions.payload
-      state.defaultCustom.patch.schema_list = [
-        indexSchema(`${state.schema.simplified}`, state.schema.inputMode as "double_pinyin" | "wubi" | "pinyin"),
-      ]
-    },
-    changeInputMode: (state, actions) => {
-      state.default_setting_changed = true
-      state.schema.inputMode = actions.payload
-      state.defaultCustom.patch.schema_list = [
-        indexSchema(`${state.schema.simplified}`, state.schema.inputMode as "double_pinyin" | "wubi" | "pinyin"),
-      ]
-    },
-    saveDefaultSetting: (state) => {
-      state.defaultCustom.customization.modified_time = new Date().toLocaleString()
+    changeTargetSchema: (state, actions) => {
+      state.defaultCustom.patch.schema_list = [{ schema: actions.payload }]
     },
   },
 })
 
-function indexSchema(simplified: "true" | "false", schema: "double_pinyin" | "wubi" | "pinyin") {
-  const schema_array = {
-    false: {
-      double_pinyin: "double_pinyin",
-      wubi: "wubi_trad",
-      pinyin: "luna_pinyin",
-    },
-    true: {
-      double_pinyin: "double_pinyin", // todo 目前没有简体双拼
-      wubi: "wubi86",
-      pinyin: "pinyin_simp", // 袖珍拼音的词库比 luna 好
-    },
-  }
-
-  return { schema: schema_array[simplified][schema] }
-}
-
-export const {
-  changePageSize,
-  initDefaultFormDropDictory,
-
-  changeSimplified,
-  changeInputMode,
-  saveDefaultSetting,
-} = defaultSlice.actions
+export const { changePageSize, changeTargetSchema } = defaultSlice.actions
 export default defaultSlice
