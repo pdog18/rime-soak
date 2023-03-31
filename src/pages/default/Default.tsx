@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import { ClusterOutlined as InputTypeIcon, OrderedListOutlined as MenuSizeIcon } from "@ant-design/icons"
 import { useDispatch, useSelector } from "react-redux"
 import { changeSwitcherHotkeys, changeTargetSchema } from "../../store/DefaultSlice"

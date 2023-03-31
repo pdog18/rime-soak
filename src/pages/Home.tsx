@@ -17,7 +17,7 @@ const Home = () => {
     <>
       <Tabs
         centered={true}
-        style={{ height: "100vh", backgroundColor: "#f3f3f3" }}
+        style={{ height: "100%", minHeight: "100vh", backgroundColor: "#f3f3f3" }}
         items={labels.map((_, i) => {
           const id = String(i)
           return {
