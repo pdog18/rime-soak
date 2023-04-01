@@ -13,6 +13,8 @@
     "@types/react-dom": "^18.0.11",
     "@types/wicg-file-system-access": "^2020.9.5",
     "antd": "^5.2.1",
+    "immer": "^9.0.21",
+    "jotai": "^2.0.3",
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
     "react": "^18.2.0",
@@ -23,7 +25,8 @@
     "redux": "^4.2.1",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4",
-    "yaml": "^2.2.1"
+    "yaml": "^2.2.1",
+    "zustand": "^4.3.7"
   },
   "scripts": {
     "predeploy": "npm run build",

@@ -3,6 +3,7 @@ import { stringify } from "yaml"
 import { RootState } from "../store/Store"
 import { Tabs } from "antd"
 import React, { CSSProperties, useEffect, useState } from "react"
+import useSchemaState, { SchemaState } from "../store/SchemaStore"
 
 const user = "rime"
 const repo = "rime-pinyin-simp"
@@ -14,7 +15,8 @@ const Result: React.FC = () => {
   const rootState = useSelector((state: RootState) => state)
   const defaultCustom = stringify(rootState.default.defaultCustom)
   const styleCustom = stringify(rootState.style.styleCustom)
-  const schemaCustom = stringify(rootState.schema.schemaCustom)
+  const schemaState = useSchemaState<SchemaState>((state) => state)
+  const schemaCustom = stringify(schemaState.schema)
 
   const [schema, setSchema] = useState<string>()
   const [dict, setDict] = useState<string>()
@@ -54,7 +56,7 @@ const Result: React.FC = () => {
       children: <div style={styles}>{styleCustom}</div>,
     },
     {
-      label: `${rootState.schema.fileName}`,
+      label: `${schemaState.fileName}`,
       key: "schemaCustom",
       children: <div style={styles}>{schemaCustom}</div>,
     },

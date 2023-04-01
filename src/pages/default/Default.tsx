@@ -7,11 +7,11 @@ import RimeSettingItem, { RadioChoice } from "../../components/RimeSettingItem"
 
 import { changePageSize } from "../../store/DefaultSlice"
 import IntegerStep from "../../components/IntegerStep"
-import { changeSchemaName } from "../../store/SchemaSlice"
 
 import { Checkbox } from "antd"
 
 import type { CheckboxValueType } from "antd/es/checkbox/Group"
+import useSchemaState from "../../store/SchemaStore"
 
 const CheckboxGroup = Checkbox.Group
 
@@ -23,6 +23,7 @@ const Default: React.FC = () => {
   const dispatch = useDispatch()
 
   const checkedList = state.default.defaultCustom.patch["switcher/hotkeys"]
+  const schemaState = useSchemaState()
 
   const onChange = (list: CheckboxValueType[]) => {
     dispatch(changeSwitcherHotkeys(list))
@@ -46,7 +47,7 @@ const Default: React.FC = () => {
           names={["拼音", "双拼", "五笔"]}
           onChange={(value: string) => {
             dispatch(changeTargetSchema(value))
-            dispatch(changeSchemaName(value))
+            schemaState.changeSchema(value)
           }}
         />
       </RimeSettingItem>

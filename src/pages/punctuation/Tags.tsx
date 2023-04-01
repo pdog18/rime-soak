@@ -47,8 +47,8 @@ const Tags = (prop: any) => {
   if (Array.isArray(shape)) {
     return (
       <>
-        {shape.map((char, _) => {
-          return <AtuoShowClosebleIconTag key={`${char}`} shape={char} onDelete={onDelete} />
+        {shape.map((char, index) => {
+          return <AtuoShowClosebleIconTag key={`${char}${index}`} shape={char} onDelete={onDelete} />
         })}
       </>
     )
