@@ -16,7 +16,7 @@ interface SchemaState {
 }
 
 const useSchemaState = create<SchemaState>()((set) => ({
-  fileName: "luna_pinyin_simp.custom.yaml",
+  fileName: "pinyin_simp.custom.yaml",
   schema: {
     patch: {
       punctuation: punctuationJson,
@@ -37,7 +37,7 @@ const useSchemaState = create<SchemaState>()((set) => ({
   changeSchema: (name) => {
     set(
       produce((state) => {
-        state.fileName = name
+        state.fileName = `${name}.custom.yaml`
       })
     )
   },
