@@ -1,9 +1,10 @@
-import { useSelector } from "react-redux"
 import { stringify } from "yaml"
-import { RootState } from "../store/Store"
+
 import { Tabs } from "antd"
 import React, { CSSProperties, useEffect, useState } from "react"
 import useSchemaState, { SchemaState } from "../store/SchemaStore"
+import useDefaultState from "../store/DefaultStore"
+import useStyleState from "../store/StyleStore"
 
 const user = "rime"
 const repo = "rime-pinyin-simp"
@@ -12,9 +13,9 @@ const dictFileName = "pinyin_simp.dict.yaml"
 const schemaFileName = "pinyin_simp.schema.yaml"
 
 const Result: React.FC = () => {
-  const rootState = useSelector((state: RootState) => state)
-  const defaultCustom = stringify(rootState.default.defaultCustom)
-  const styleCustom = stringify(rootState.style.styleCustom)
+  const styleState = useStyleState()
+  const defaultCustom = stringify(useDefaultState().defaultCustom)
+  const styleCustom = stringify(styleState.styleCustom)
   const schemaState = useSchemaState<SchemaState>((state) => state)
   const schemaCustom = stringify(schemaState.schema)
 
@@ -28,7 +29,6 @@ const Result: React.FC = () => {
       const dictData = await dictResponse.text()
       const schemaData = await schemaRespone.text()
 
-      console.log(dictData, schemaData)
       setSchema(schemaData)
       setDict(dictData)
     }
@@ -51,7 +51,7 @@ const Result: React.FC = () => {
       children: <div style={styles}>{defaultCustom}</div>,
     },
     {
-      label: `${rootState.style.fileName}`,
+      label: `${styleState.fileName}`,
       key: "styleCustom",
       children: <div style={styles}>{styleCustom}</div>,
     },

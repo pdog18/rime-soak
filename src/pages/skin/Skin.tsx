@@ -1,10 +1,10 @@
 import React, { useState } from "react"
 import { Button, Card, Spin } from "antd"
 import { useDispatch, useSelector } from "react-redux"
-import { changeColorScheme } from "../../store/StyleSlice"
-import { RootState } from "../../store/Store"
+
 import { CheckCircleFilled } from "@ant-design/icons"
 import { useNavigate } from "react-router-dom"
+import useStyleState, { StyleState } from "../../store/StyleStore"
 
 const names = [
   "color_scheme_android",
@@ -77,7 +77,8 @@ interface ImageRadioGroupProps {
 }
 
 const ImageRadioGroup: React.FC<ImageRadioGroupProps> = ({ images }) => {
-  const colorScheme = useSelector((state: RootState) => state.style.styleCustom.patch["style/color_scheme"])
+  const styleState = useStyleState<StyleState>((state) => state)
+  const colorScheme = styleState.styleCustom.patch["style/color_scheme"]
 
   const [loadingState, setLoadingState] = useState(
     names.map((name) => {
@@ -87,7 +88,6 @@ const ImageRadioGroup: React.FC<ImageRadioGroupProps> = ({ images }) => {
       }
     })
   )
-  const dispatch = useDispatch()
 
   return (
     <div
@@ -149,7 +149,7 @@ const ImageRadioGroup: React.FC<ImageRadioGroupProps> = ({ images }) => {
               value={image}
               checked={colorScheme === image}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                dispatch(changeColorScheme(trimStart(e.target.value, "color_scheme_")))
+                styleState.changeColorScheme(trimStart(e.target.value, "color_scheme_"))
               }}
             />
           </Card>

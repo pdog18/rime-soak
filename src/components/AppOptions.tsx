@@ -2,17 +2,13 @@ import React, { useEffect, useRef, useState } from "react"
 import { PlusOutlined } from "@ant-design/icons"
 import type { InputRef } from "antd"
 import { Space, Input, Tag, Tooltip } from "antd"
-import { useDispatch, useSelector } from "react-redux"
-import { RootState } from "../store/Store"
-import { setTags } from "../store/StyleSlice"
 
-const AppOptions: React.FC = () => {
-  const appOptions = useSelector((state: RootState) => state.style.styleCustom.patch.app_options)
-  const tags = Object.keys(appOptions)
-  console.log(tags)
+interface AppOptionsProps {
+  tags: string[]
+  onChange: (input: string[]) => void
+}
 
-  const dispatch = useDispatch()
-
+const AppOptions: React.FC<AppOptionsProps> = ({ tags, onChange }) => {
   const [inputVisible, setInputVisible] = useState(false)
   const [inputValue, setInputValue] = useState("")
   const [editInputIndex, setEditInputIndex] = useState(-1)
@@ -33,7 +29,7 @@ const AppOptions: React.FC = () => {
   const handleClose = (removedTag: string) => {
     const newTags = tags.filter((tag) => tag !== removedTag)
 
-    dispatch(setTags(newTags))
+    onChange(newTags)
   }
 
   const showInput = () => {
@@ -46,9 +42,7 @@ const AppOptions: React.FC = () => {
 
   const handleInputConfirm = () => {
     if (inputValue && tags.indexOf(inputValue) === -1) {
-      console.log([...tags, inputValue])
-
-      dispatch(setTags([...tags, inputValue]))
+      onChange([...tags, inputValue])
     }
     setInputVisible(false)
     setInputValue("")
@@ -61,7 +55,7 @@ const AppOptions: React.FC = () => {
   const handleEditInputConfirm = () => {
     const newTags = [...tags]
     newTags[editInputIndex] = editInputValue
-    dispatch(setTags(newTags))
+    onChange(newTags)
     setEditInputIndex(-1)
     setInputValue("")
   }

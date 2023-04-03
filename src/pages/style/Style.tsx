@@ -1,19 +1,12 @@
 import React from "react"
-import { useDispatch } from "react-redux/es/hooks/useDispatch"
-import { useSelector } from "react-redux/es/exports"
-
 import { PicRightOutlined as InputTypeIcon, DragOutlined } from "@ant-design/icons"
-
-import { changeDisplayTrayIcon, changeOrientation, changePreedit } from "../../store/StyleSlice"
-
 import RimeSettingItem, { RadioChoice } from "../../components/RimeSettingItem"
-import { RootState } from "../../store/Store"
 import AppOptions from "../../components/AppOptions"
+import useStyleState, { StyleState } from "../../store/StyleStore"
 
 const Style: React.FC = () => {
-  const state = useSelector((state: RootState) => state)
-  const rimePatch = state.style.styleCustom.patch
-  const dispatch = useDispatch()
+  const styleState = useStyleState<StyleState>((state) => state)
+  const stylePatch = styleState.styleCustom.patch
 
   return (
     <div
@@ -29,10 +22,10 @@ const Style: React.FC = () => {
       <RimeSettingItem icon={<DragOutlined style={{ fontSize: "24px", margin: "0px 16px" }} />} title="候选词方向">
         <RadioChoice
           values={[true, false]}
-          defaultValue={rimePatch["style/horizontal"]}
+          defaultValue={stylePatch["style/horizontal"]}
           names={["水平排列", "垂直排列"]}
           onChange={(value: boolean) => {
-            dispatch(changeOrientation(value))
+            styleState.changeOrientation(value)
           }}
         />
       </RimeSettingItem>
@@ -40,10 +33,10 @@ const Style: React.FC = () => {
       <RimeSettingItem icon={<InputTypeIcon style={{ fontSize: "24px", margin: "0px 16px" }} />} title="输入字符">
         <RadioChoice
           values={[true, false]}
-          defaultValue={rimePatch["style/inline_preedit"]}
+          defaultValue={stylePatch["style/inline_preedit"]}
           names={["光标处内嵌", "候选词上方"]}
           onChange={(value: boolean) => {
-            dispatch(changePreedit(value))
+            styleState.changePreedit(value)
           }}
         />
       </RimeSettingItem>
@@ -51,16 +44,21 @@ const Style: React.FC = () => {
       <RimeSettingItem icon={<InputTypeIcon style={{ fontSize: "24px", margin: "0px 16px" }} />} title="任务栏图标">
         <RadioChoice
           values={[true, false]}
-          defaultValue={rimePatch["style/display_tray_icon"]}
+          defaultValue={stylePatch["style/display_tray_icon"]}
           names={["显示", "隐藏"]}
           onChange={(value: boolean) => {
-            dispatch(changeDisplayTrayIcon(value))
+            styleState.changeDisplayTrayIcon(value)
           }}
         />
       </RimeSettingItem>
 
       <RimeSettingItem icon={<InputTypeIcon style={{ fontSize: "24px", margin: "0px 16px" }} />} title="字符模式">
-        <AppOptions />
+        <AppOptions
+          tags={Object.keys(stylePatch.app_options)}
+          onChange={(input: string[]) => {
+            styleState.changeAsciiModeApps(input)
+          }}
+        />
       </RimeSettingItem>
     </div>
   )
