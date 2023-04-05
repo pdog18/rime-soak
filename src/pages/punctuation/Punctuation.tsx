@@ -37,7 +37,7 @@ const Punctuation: React.FC = () => {
   }
 
   const state = useSchemaState((state) => state)
-  const punctuation = state.schema.patch.punctuation
+  const punctuation = state.schemaCustom.patch.punctuation
   const array = Object.keys(punctuation.ascii_style).map((key, index) => {
     return {
       name: key,

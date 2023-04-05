@@ -1,5 +1,6 @@
 import { create } from "zustand"
 import produce from "immer"
+import { stringify } from "yaml"
 
 const rimeName = () => {
   const userAgent = navigator.userAgent
@@ -19,25 +20,38 @@ interface AppOptions {
   }
 }
 
+interface StylePatch {
+  "style/horizontal": boolean
+  "style/inline_preedit": boolean
+  "style/display_tray_icon": boolean
+  "style/color_scheme": string
+  app_options: AppOptions
+}
+
 interface StyleState {
   fileName: string
   styleCustom: {
-    patch: {
-      "style/horizontal": boolean
-      "style/inline_preedit": boolean
-      "style/display_tray_icon": boolean
-      "style/color_scheme": string
-      app_options: AppOptions
-    }
+    patch: StylePatch
   }
   changeColorScheme: (color_scheme: string) => void
   changeOrientation: (horizontal: boolean) => void
   changePreedit: (inline_preedit: boolean) => void
   changeDisplayTrayIcon: (display_tray_icon: boolean) => void
   changeAsciiModeApps: (appOptions: string[]) => void
+  generateYAML: () => string | null
 }
 
-const useStyleState = create<StyleState>()((set) => ({
+function appOtionsOK(app_options: AppOptions | undefined) {
+  if (!app_options) {
+    return false
+  }
+  if (Object.keys(app_options).length !== 2) {
+    return false
+  }
+  return app_options["cmd.exe"].ascii_mode && app_options["conhost.exe"].ascii_mode
+}
+
+const useStyleState = create<StyleState>()((set, get) => ({
   fileName: `${rimeName()}`,
   styleCustom: {
     patch: {
@@ -55,6 +69,34 @@ const useStyleState = create<StyleState>()((set) => ({
         },
       },
     },
+  },
+
+  generateYAML: () => {
+    const patch: Partial<StylePatch> = { ...get().styleCustom.patch }
+
+    if (!patch["style/horizontal"]) {
+      delete patch["style/horizontal"]
+    }
+    if (!patch["style/inline_preedit"]) {
+      delete patch["style/inline_preedit"]
+    }
+    if (!patch["style/display_tray_icon"]) {
+      delete patch["style/display_tray_icon"]
+    }
+
+    if (patch["style/color_scheme"] === "aqua") {
+      delete patch["style/color_scheme"]
+    }
+
+    if (appOtionsOK(patch.app_options)) {
+      delete patch.app_options
+    }
+
+    if (Object.keys(patch).length === 0) {
+      return null
+    }
+
+    return stringify(patch)
   },
 
   changeColorScheme: (color_scheme) =>
