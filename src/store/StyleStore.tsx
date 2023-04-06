@@ -96,7 +96,7 @@ const useStyleState = create<StyleState>()((set, get) => ({
       return null
     }
 
-    return stringify(patch)
+    return stringify({ patch: patch })
   },
 
   changeColorScheme: (color_scheme) =>

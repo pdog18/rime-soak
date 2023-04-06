@@ -4,14 +4,10 @@ import useSchemaState from "../store/SchemaStore"
 import useDefaultState from "../store/DefaultStore"
 import useStyleState from "../store/StyleStore"
 
-const user = "rime"
-const repo = "rime-pinyin-simp"
-const branch = "master"
-const dictFileName = "pinyin_simp.dict.yaml"
-const schemaFileName = "pinyin_simp.schema.yaml"
-
 const Result: React.FC = () => {
-  const defaultCustom = useDefaultState().generateYAML()
+  const defaultState = useDefaultState()
+  const defaultCustom = defaultState.generateYAML()
+  const { url, dictFileName, schemaFileName } = defaultState.needDownload()
 
   const styleState = useStyleState()
   const styleCustom = styleState.generateYAML()
@@ -24,16 +20,18 @@ const Result: React.FC = () => {
 
   useEffect(() => {
     async function fetchSchema() {
-      const dictResponse = await fetch(`https://raw.githubusercontent.com/${user}/${repo}/${branch}/${dictFileName}`)
-      const schemaRespone = await fetch(`https://raw.githubusercontent.com/${user}/${repo}/${branch}/${schemaFileName}`)
-      const dictData = await dictResponse.text()
-      const schemaData = await schemaRespone.text()
+      if (dictFileName) {
+        const dictData = await (await fetch(`${url}${dictFileName}`)).text()
+        setDict(dictData)
+      }
 
-      setSchema(schemaData)
-      setDict(dictData)
+      if (schemaFileName) {
+        const schemaData = await (await fetch(`${url}${schemaFileName}`)).text()
+        setSchema(schemaData)
+      }
     }
     fetchSchema()
-  }, [])
+  }, [url, dictFileName, schemaFileName])
 
   // todo 袖珍拼音/双拼／五笔等方案，Rime 未自带，需要额外安装，拖入 Rime 文件夹直接安装
   // 拖入后，备份相关文件
@@ -42,11 +40,11 @@ const Result: React.FC = () => {
     { condition: defaultCustom, label: "default.custom.yaml", key: "defaultCustom", content: defaultCustom },
     { condition: styleCustom, label: styleState.fileName, key: "styleCustom", content: styleCustom },
     { condition: schemaCustom, label: schemaState.fileName, key: "schemaCustom", content: schemaCustom },
-    { condition: schema, label: schemaFileName, key: schemaFileName, content: schema },
+    { condition: schemaFileName, label: schemaFileName, key: "schemaFileName", content: schema },
     {
-      condition: dict,
+      condition: dictFileName,
       label: dictFileName,
-      key: dictFileName,
+      key: "dictFileName",
       content: (
         <details>
           <summary>点击展开 dict</summary>
@@ -76,7 +74,17 @@ const Result: React.FC = () => {
       }
     })
 
-  return <Tabs type="card" items={items} />
+  if (items.length === 0) {
+    return (
+      <div
+        style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh", fontSize: "32px" }}
+      >
+        配置無任何修改
+      </div>
+    )
+  }
+
+  return <Tabs style={{ padding: "10vh 10vw" }} type="card" items={items} />
 }
 
 export default Result

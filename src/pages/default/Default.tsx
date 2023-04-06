@@ -13,6 +13,8 @@ const Default: React.FC = () => {
   const defaultState = useDefaultState<DefaultState>((store) => store)
   const schemaState = useSchemaState()
 
+  const iconStyle = { fontSize: "24px", margin: "0px 16px" }
+
   return (
     <div
       style={{
@@ -24,11 +26,11 @@ const Default: React.FC = () => {
         gap: "16px",
       }}
     >
-      <RimeSettingItem icon={<InputTypeIcon style={{ fontSize: "24px", margin: "0px 16px" }} />} title="输入方案">
+      <RimeSettingItem icon={<InputTypeIcon style={iconStyle} />} title="输入方案">
         <RadioChoice
-          values={["pinyin_simp", "double-pinyin", "wubi"]}
+          values={["luna_pinyin", "pinyin_simp", "double_pinyin_flypy", "wubi"]}
           defaultValue={defaultState.defaultCustom.patch.schema_list[0].schema}
-          names={["拼音", "双拼", "五笔"]}
+          names={["朙月拼音", "袖珍拼音", "小鹤双拼", "五笔"]}
           onChange={(value: string) => {
             defaultState.changeTargetSchema(value)
             schemaState.changeSchema(value)
@@ -36,7 +38,7 @@ const Default: React.FC = () => {
         />
       </RimeSettingItem>
 
-      <RimeSettingItem icon={<MenuSizeIcon style={{ fontSize: "24px", margin: "0px 16px" }} />} title="候选词数量">
+      <RimeSettingItem icon={<MenuSizeIcon style={iconStyle} />} title="候选词数量">
         <IntegerStep
           size={defaultState.defaultCustom.patch["menu/page_size"]}
           onChange={(value: number | null) => {
@@ -45,7 +47,7 @@ const Default: React.FC = () => {
         />
       </RimeSettingItem>
 
-      <RimeSettingItem icon={<MenuSizeIcon style={{ fontSize: "24px", margin: "0px 16px" }} />} title="切换方案热键">
+      <RimeSettingItem icon={<MenuSizeIcon style={iconStyle} />} title="切换方案热键">
         <CheckboxGroup
           options={["Control+grave", "Control+Shift+grave", "F4"]}
           value={defaultState.defaultCustom.patch["switcher/hotkeys"]}

@@ -41,7 +41,7 @@ const useSchemaState = create<SchemaState>()((set, get) => ({
       return null
     }
 
-    return stringify(patch)
+    return stringify({ patch: patch })
   },
   useAsciiStyle: (ascii) =>
     set(
