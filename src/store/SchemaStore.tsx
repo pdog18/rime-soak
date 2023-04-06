@@ -6,6 +6,7 @@ import { stringify } from "yaml"
 
 interface SchemaPatch {
   punctuation: any
+  "engine/translators/+"?: []
 }
 
 interface SchemaState {
@@ -17,6 +18,7 @@ interface SchemaState {
   changeShape: (type: string, key: string, value: any) => void
   changeSchema: (name: string) => void
   generateYAML: () => string | null
+  quickType: (checked: boolean, name: string) => void
 }
 
 function objectsEqual(a: object, b: object): boolean {
@@ -35,6 +37,10 @@ const useSchemaState = create<SchemaState>()((set, get) => ({
     const patch: Partial<SchemaPatch> = { ...get().schemaCustom.patch }
     if (objectsEqual(patch.punctuation, punctuationJson)) {
       delete patch.punctuation
+    }
+
+    if (patch["engine/translators/+"] && patch["engine/translators/+"].length === 0) {
+      delete patch["engine/translators/+"]
     }
 
     if (Object.keys(patch).length === 0) {
@@ -59,6 +65,23 @@ const useSchemaState = create<SchemaState>()((set, get) => ({
     set(
       produce((state) => {
         state.fileName = `${name}.custom.yaml`
+      })
+    )
+  },
+  quickType: (checked, name) => {
+    set(
+      produce((state) => {
+        const translator = `lua_translator@${name}_translator`
+        let translators: string[] = []
+
+        if (state.schemaCustom.patch["engine/translators/+"]) {
+          translators = [...state.schemaCustom.patch["engine/translators/+"]]
+        }
+        if (checked) {
+          state.schemaCustom.patch["engine/translators/+"] = [...translators, translator]
+        } else {
+          state.schemaCustom.patch["engine/translators/+"] = translators.filter((t: string) => t !== translator)
+        }
       })
     )
   },

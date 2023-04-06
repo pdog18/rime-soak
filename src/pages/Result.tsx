@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react"
 import useSchemaState from "../store/SchemaStore"
 import useDefaultState from "../store/DefaultStore"
 import useStyleState from "../store/StyleStore"
+import useRimeLuaState from "../store/RimeLuaStore"
 
 const Result: React.FC = () => {
   const defaultState = useDefaultState()
@@ -14,6 +15,10 @@ const Result: React.FC = () => {
 
   const schemaState = useSchemaState()
   const schemaCustom = schemaState.generateYAML()
+
+  const rimeLuaState = useRimeLuaState()
+
+  const luaContent = rimeLuaState.generateRimeLua()
 
   const [schema, setSchema] = useState<string>()
   const [dict, setDict] = useState<string>()
@@ -40,11 +45,11 @@ const Result: React.FC = () => {
     { condition: defaultCustom, label: "default.custom.yaml", key: "defaultCustom", content: defaultCustom },
     { condition: styleCustom, label: styleState.fileName, key: "styleCustom", content: styleCustom },
     { condition: schemaCustom, label: schemaState.fileName, key: "schemaCustom", content: schemaCustom },
-    { condition: schemaFileName, label: schemaFileName, key: "schemaFileName", content: schema },
+    { condition: schemaFileName, label: schemaFileName, key: "schema", content: schema },
     {
       condition: dictFileName,
       label: dictFileName,
-      key: "dictFileName",
+      key: "dict",
       content: (
         <details>
           <summary>点击展开 dict</summary>
@@ -52,6 +57,7 @@ const Result: React.FC = () => {
         </details>
       ),
     },
+    { condition: luaContent, label: "rime.lua", key: "rime.lua", content: luaContent },
   ]
   const items = candidates
     .filter((candidate) => candidate.condition)

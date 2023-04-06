@@ -1,4 +1,4 @@
-import { theme, InputRef, Space, Input, Button, Tag } from "antd"
+import { InputRef, Space, Input, Button, Tag } from "antd"
 import { useState, useRef, useEffect } from "react"
 import { PlusCircleFilled as PlusIcon } from "@ant-design/icons"
 
@@ -7,7 +7,6 @@ interface AddTagProps {
 }
 
 export const AddTag = ({ onPunctuationAdded }: AddTagProps) => {
-  const { token } = theme.useToken()
   const [inputVisible, setInputVisible] = useState(false)
   const [inputValue, setInputValue] = useState("")
   const inputRef = useRef<InputRef>(null)
@@ -55,7 +54,6 @@ export const AddTag = ({ onPunctuationAdded }: AddTagProps) => {
       ) : (
         <Tag
           style={{
-            background: token.colorBgContainer,
             borderStyle: "dashed",
           }}
           onClick={() => {

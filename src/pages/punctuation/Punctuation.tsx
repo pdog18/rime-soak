@@ -48,8 +48,6 @@ const Punctuation: React.FC = () => {
     }
   })
 
-  console.log(state)
-
   return (
     <>
       <Checkbox
