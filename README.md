@@ -10,7 +10,7 @@
 
 ### 使用方式：
 
- [在线使用](https://pdog18.github.io/soak/)
+ [在线使用](https://pdog18.github.io/rime-soak/)
 
 
 
