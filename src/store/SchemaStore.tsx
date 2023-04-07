@@ -1,11 +1,11 @@
 import { create } from "zustand"
 import produce from "immer"
 import punctuationJson from "./punctuation.json"
-import assciPunctuationJson from "./assciPunctuation.json"
+import asciiPunctuationJson from "./asciiPunctuation.json"
 import { stringify } from "yaml"
 
 interface SchemaPatch {
-  punctuation: any
+  punctuator: any
   "engine/translators/+"?: string[]
   "engine/filters/+"?: string[]
   custom_phrase?: object
@@ -16,6 +16,7 @@ interface SchemaState {
     patch: SchemaPatch
   }
   fileName: string
+  useAsciiPunctuation: boolean
   useAsciiStyle: (ascii: boolean) => void
   changeShape: (type: string, key: string, value: any) => void
   changeSchema: (name: string) => void
@@ -60,21 +61,24 @@ const updateFilters = (filter: string, state: any, add: boolean) => {
 
 const useSchemaState = create<SchemaState>()((set, get) => ({
   fileName: "luna_pinyin.custom.yaml",
+  useAsciiPunctuation: false,
   schemaCustom: {
     patch: {
-      punctuation: punctuationJson,
+      punctuator: punctuationJson,
     },
   },
 
   generateYAML: () => {
-    const patch: Partial<SchemaPatch> = { ...get().schemaCustom.patch }
-    if (objectsEqual(patch.punctuation, punctuationJson)) {
-      delete patch.punctuation
+    const { fileName, useAsciiPunctuation, schemaCustom } = get()
+
+    const patch: Partial<SchemaPatch> = { ...schemaCustom.patch }
+    if (objectsEqual(patch.punctuator!, punctuationJson)) {
+      delete patch.punctuator
     }
     const translatorsKey = "engine/translators/+"
     const filterKey = "engine/filters/+"
 
-    if ((patch[filterKey] && patch[filterKey].length === 0) || schemaIsLunaPinyin(get().fileName)) {
+    if (patch[filterKey] && (patch[filterKey].length === 0 || schemaIsLunaPinyin(fileName))) {
       delete patch[filterKey]
 
       patch[translatorsKey] = patch[translatorsKey]!.filter(
@@ -87,6 +91,15 @@ const useSchemaState = create<SchemaState>()((set, get) => ({
 
     if (patch[translatorsKey] && patch[translatorsKey].length === 0) {
       delete patch[translatorsKey]
+    }
+
+    const justCheckUseAscii = useAsciiPunctuation && patch.punctuator === asciiPunctuationJson
+    if (justCheckUseAscii) {
+      patch.punctuator = {
+        full_shape: {},
+        half_shape: {},
+        ascii_style: {},
+      }
     }
 
     if (Object.keys(patch).length === 0) {
@@ -104,8 +117,6 @@ const useSchemaState = create<SchemaState>()((set, get) => ({
         const filter = "uniquifier"
         updateFilters(filter, state, enable)
         if (enable) {
-          console.log(enable)
-
           state.schemaCustom.patch.custom_phrase = {
             dictionary: "",
             user_dict: "custom_phrase",
@@ -121,13 +132,14 @@ const useSchemaState = create<SchemaState>()((set, get) => ({
   useAsciiStyle: (ascii) =>
     set(
       produce((state) => {
-        state.schemaCustom.patch.punctuation = ascii ? assciPunctuationJson : punctuationJson
+        state.schemaCustom.patch.punctuator = ascii ? asciiPunctuationJson : punctuationJson
+        state.useAsciiPunctuation = ascii
       })
     ),
   changeShape: (type, key, value) =>
     set(
       produce((state) => {
-        state.schemaCustom.patch.punctuation[type][key] = value
+        state.schemaCustom.patch.punctuator[type][key] = value
       })
     ),
   changeSchema: (name) => {
@@ -142,16 +154,6 @@ const useSchemaState = create<SchemaState>()((set, get) => ({
       produce((state) => {
         const translator = `lua_translator@${name}_translator`
         updateTranslators(translator, state, checked)
-        // let translators: string[] = []
-
-        // if (state.schemaCustom.patch["engine/translators/+"]) {
-        //   translators = [...state.schemaCustom.patch["engine/translators/+"]]
-        // }
-        // if (checked) {
-        //   state.schemaCustom.patch["engine/translators/+"] = [...translators, translator]
-        // } else {
-        //   state.schemaCustom.patch["engine/translators/+"] = translators.filter((t: string) => t !== translator)
-        // }
       })
     )
   },

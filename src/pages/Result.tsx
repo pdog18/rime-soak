@@ -1,12 +1,15 @@
-import { Tabs } from "antd"
+import { Button, Tabs } from "antd"
 import React, { useEffect, useState } from "react"
 import useSchemaState from "../store/SchemaStore"
 import useDefaultState from "../store/DefaultStore"
 import useStyleState from "../store/StyleStore"
 import useRimeLuaState from "../store/RimeLuaStore"
 import useCustomPhrase from "../store/CustomPhraseStore"
+import { useNavigate } from "react-router-dom"
 
 const Result: React.FC = () => {
+  const navigate = useNavigate()
+
   const defaultState = useDefaultState()
   const defaultCustom = defaultState.generateYAML()
   const { url, dictFileName, schemaFileName } = defaultState.needDownload()
@@ -76,6 +79,8 @@ const Result: React.FC = () => {
               fontSize: "20px",
               wordSpacing: "6px",
               whiteSpace: "pre-wrap",
+              height: "80vh",
+              overflowY: "auto",
             }}
           >
             {content}
@@ -84,17 +89,47 @@ const Result: React.FC = () => {
       }
     })
 
+  let content = <Tabs style={{ padding: "0vh 10vw" }} type="card" items={items} />
+
   if (items.length === 0) {
-    return (
+    content = (
       <div
-        style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh", fontSize: "32px" }}
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "80vh",
+          fontSize: "32px",
+        }}
       >
-        配置無任何修改
+        <p> 配置无任何修改</p>
       </div>
     )
   }
 
-  return <Tabs style={{ padding: "10vh 10vw" }} type="card" items={items} />
+  return (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "start",
+        flexDirection: "column",
+        gap: "8px",
+        marginTop: "8px",
+        maxHeight: "100vh",
+      }}
+    >
+      <Button
+        style={{ alignSelf: "center" }}
+        type="primary"
+        onClick={() => {
+          navigate("/")
+        }}
+      >
+        返回
+      </Button>
+      {content}
+    </div>
+  )
 }
 
 export default Result

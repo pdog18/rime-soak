@@ -36,7 +36,7 @@ const Punctuation: React.FC = () => {
   }
 
   const state = useSchemaState((state) => state)
-  const punctuation = state.schemaCustom.patch.punctuation
+  const punctuation = state.schemaCustom.patch.punctuator
   const array = Object.keys(punctuation.ascii_style).map((key, index) => {
     return {
       name: key,
@@ -82,7 +82,6 @@ const Punctuation: React.FC = () => {
                   <Tags
                     shape={shape.half_shape}
                     onDelete={(e: any) => {
-                      console.log(e, "half_shape", "shape.key = ", shape.name)
                       state.changeShape("half_shape", shape.name, removeValue(e, shape.half_shape))
                     }}
                   />
@@ -92,7 +91,6 @@ const Punctuation: React.FC = () => {
                   onPunctuationAdded={(inputValue: string) => {
                     const result = insertNewValue(inputValue, shape.half_shape)
                     state.changeShape("half_shape", shape.name, result)
-                    console.log(inputValue, "result", result, "half_shape", "shape.key = ", shape.name)
                   }}
                 />
               </div>
@@ -102,7 +100,6 @@ const Punctuation: React.FC = () => {
                   <Tags
                     shape={shape.full_shape}
                     onDelete={(e: any) => {
-                      console.log(e, "full_shape", "shape.key = ", shape.name)
                       state.changeShape("full_shape", shape.name, removeValue(e, shape.full_shape))
                     }}
                   />
@@ -112,8 +109,6 @@ const Punctuation: React.FC = () => {
                   onPunctuationAdded={(inputValue: string) => {
                     const result = insertNewValue(inputValue, shape.full_shape)
                     state.changeShape("full_shape", shape.name, result)
-
-                    console.log(inputValue, "result", result, "half_shape", "shape.key = ", shape.name)
                   }}
                 />
               </div>
