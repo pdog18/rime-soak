@@ -25,99 +25,101 @@ const CustomPhrase: React.FC = () => {
   }
 
   return (
-    <div
-      style={{
-        margin: "4vh 4vw",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        gap: "16px",
-      }}
-    >
-      <RimeSettingItem icon={<InputTypeIcon />} title="开启自定义短语">
-        <Switch
-          checked={customPhraseState.enable}
-          onChange={(checked) => {
-            customPhraseState.enableCustomPhrase(checked)
-            schemaState.enableCustomPhrase(checked)
-          }}
-        />
-      </RimeSettingItem>
+    <div style={{ height: "90vh", overflowY: "scroll" }}>
+      <div
+        style={{
+          margin: "4vh 4vw",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: "16px",
+        }}
+      >
+        <RimeSettingItem icon={<InputTypeIcon />} title="开启自定义短语">
+          <Switch
+            checked={customPhraseState.enable}
+            onChange={(checked) => {
+              customPhraseState.enableCustomPhrase(checked)
+              schemaState.enableCustomPhrase(checked)
+            }}
+          />
+        </RimeSettingItem>
 
-      {customPhraseState.enable && (
-        <Space wrap>
-          输入码:
-          <Input
-            placeholder="例: msd"
-            value={newCustomPhrase.shortcut}
-            onChange={(event) => {
-              setNewCustomPhrase({
-                ...newCustomPhrase,
-                shortcut: event.target.value,
-              })
-            }}
-          />
-          短语:
-          <Input
-            placeholder="例: 马上到"
-            value={newCustomPhrase.phrase}
-            onChange={(event) => {
-              setNewCustomPhrase({
-                ...newCustomPhrase,
-                phrase: event.target.value,
-              })
-            }}
-          />
-          优先级:
-          <Select
-            defaultValue="1000"
-            style={{ width: 60 }}
-            onChange={(value) => {
-              setNewCustomPhrase({
-                ...newCustomPhrase,
-                weight: +value,
-              })
-            }}
-            options={[
-              { value: "1000", label: "高" },
-              { value: "100", label: "中" },
-              { value: "1", label: "低" },
-            ]}
-          />
-          <Button
-            type="primary"
-            disabled={newCustomPhrase.shortcut.length === 0 || newCustomPhrase.phrase.length === 0}
-            onClick={() => {
-              const { shortcut, phrase, weight } = newCustomPhrase
-              customPhraseState.addPhrase(shortcut, phrase, weight)
-              setNewCustomPhrase(initInput)
-            }}
-          >
-            添加
-          </Button>
-        </Space>
-      )}
+        {customPhraseState.enable && (
+          <Space wrap>
+            输入码:
+            <Input
+              placeholder="例: msd"
+              value={newCustomPhrase.shortcut}
+              onChange={(event) => {
+                setNewCustomPhrase({
+                  ...newCustomPhrase,
+                  shortcut: event.target.value,
+                })
+              }}
+            />
+            短语:
+            <Input
+              placeholder="例: 马上到"
+              value={newCustomPhrase.phrase}
+              onChange={(event) => {
+                setNewCustomPhrase({
+                  ...newCustomPhrase,
+                  phrase: event.target.value,
+                })
+              }}
+            />
+            优先级:
+            <Select
+              defaultValue="3"
+              style={{ width: 60 }}
+              onChange={(value) => {
+                setNewCustomPhrase({
+                  ...newCustomPhrase,
+                  weight: +value,
+                })
+              }}
+              options={[
+                { value: "3", label: "高" },
+                { value: "2", label: "中" },
+                { value: "1", label: "低" },
+              ]}
+            />
+            <Button
+              type="primary"
+              disabled={newCustomPhrase.shortcut.length === 0 || newCustomPhrase.phrase.length === 0}
+              onClick={() => {
+                const { shortcut, phrase, weight } = newCustomPhrase
+                customPhraseState.addPhrase(shortcut, phrase, weight)
+                setNewCustomPhrase(initInput)
+              }}
+            >
+              添加
+            </Button>
+          </Space>
+        )}
 
-      {customPhraseState.enable && (
-        <div style={{ padding: "16px 16px", background: "white" }}>
-          <div style={itemStyle}>
-            <div>输入码</div>
-            <div>短语</div>
-            <div>优先级</div>
+        {customPhraseState.enable && (
+          <div style={{ padding: "16px 16px", background: "white" }}>
+            <div style={itemStyle}>
+              <div>输入码</div>
+              <div>短语</div>
+              <div>优先级</div>
+            </div>
+
+            {customPhraseState.phrases.map(({ phrase, shortcut, weight }) => {
+              return (
+                <div style={itemStyle} key={phrase + shortcut}>
+                  <div>{shortcut}</div>
+                  <div>{phrase}</div>
+                  <div>{weight === 3 ? "高" : weight === 2 ? "中" : "低"}</div>
+                </div>
+              )
+            })}
           </div>
-
-          {customPhraseState.phrases.map(({ phrase, shortcut, weight }) => {
-            return (
-              <div style={itemStyle} key={phrase + shortcut}>
-                <div>{shortcut}</div>
-                <div>{phrase}</div>
-                <div>{weight === 1000 ? "高" : weight === 100 ? "中" : "低"}</div>
-              </div>
-            )
-          })}
-        </div>
-      )}
+        )}
+      </div>
     </div>
   )
 }

@@ -48,68 +48,80 @@ const Punctuation: React.FC = () => {
   })
 
   return (
-    <>
-      <Checkbox
-        style={styles}
-        onChange={(e: CheckboxChangeEvent) => {
-          state.useAsciiStyle(e.target.checked)
+    <div style={{ textAlign: "center", maxHeight: "90vh" }}>
+      <div
+        style={{
+          height: "80vh",
+          backgroundColor: "white",
+          overflowY: "scroll",
+          display: "inline-block",
+          padding: "32px",
         }}
       >
-        {}
-        只用英文符号
-      </Checkbox>
-      {array.map((shape) => {
-        return (
-          <div style={styles} key={shape.name}>
-            <Tag style={{ width: "24px", textAlign: "center" }}>{shape.name}</Tag>
-            <Tag style={{ width: "24px", textAlign: "center" }}>
-              {shape.ascii_style["commit"] ? shape.ascii_style["commit"] : shape.name}
-            </Tag>
+        <Checkbox
+          style={styles}
+          onChange={(e: CheckboxChangeEvent) => {
+            state.useAsciiStyle(e.target.checked)
+          }}
+        >
+          {}
+          只用英文符号
+        </Checkbox>
+        <div style={{ display: "flex" }}>
+          <div style={{ width: "36px", textAlign: "center" }}>符号</div>
+          <div style={{ width: "400px", textAlign: "center", marginLeft: "6px" }}>半角符号</div>
+          <div style={{ width: "400px", textAlign: "center", marginLeft: "6px" }}>全角符号</div>
+        </div>
+        {array.map((shape) => {
+          return (
+            <div style={styles} key={shape.name}>
+              <Tag style={{ width: "24px", textAlign: "center", marginLeft: "6px" }}>{shape.name}</Tag>
 
-            <div style={{ width: "400px" }}>
-              {shape.half_shape !== null && (
-                <Tags
-                  shape={shape.half_shape}
-                  onDelete={(e: any) => {
-                    console.log(e, "half_shape", "shape.key = ", shape.name)
-                    state.changeShape("half_shape", shape.name, removeValue(e, shape.half_shape))
+              <div style={{ width: "400px" }}>
+                {shape.half_shape !== null && (
+                  <Tags
+                    shape={shape.half_shape}
+                    onDelete={(e: any) => {
+                      console.log(e, "half_shape", "shape.key = ", shape.name)
+                      state.changeShape("half_shape", shape.name, removeValue(e, shape.half_shape))
+                    }}
+                  />
+                )}
+
+                <AddTag
+                  onPunctuationAdded={(inputValue: string) => {
+                    const result = insertNewValue(inputValue, shape.half_shape)
+                    state.changeShape("half_shape", shape.name, result)
+                    console.log(inputValue, "result", result, "half_shape", "shape.key = ", shape.name)
                   }}
                 />
-              )}
+              </div>
 
-              <AddTag
-                onPunctuationAdded={(inputValue: string) => {
-                  const result = insertNewValue(inputValue, shape.half_shape)
-                  state.changeShape("half_shape", shape.name, result)
-                  console.log(inputValue, "result", result, "half_shape", "shape.key = ", shape.name)
-                }}
-              />
-            </div>
+              <div style={{ width: "400px" }}>
+                {shape.full_shape !== null && (
+                  <Tags
+                    shape={shape.full_shape}
+                    onDelete={(e: any) => {
+                      console.log(e, "full_shape", "shape.key = ", shape.name)
+                      state.changeShape("full_shape", shape.name, removeValue(e, shape.full_shape))
+                    }}
+                  />
+                )}
 
-            <div style={{ width: "400px" }}>
-              {shape.full_shape !== null && (
-                <Tags
-                  shape={shape.full_shape}
-                  onDelete={(e: any) => {
-                    console.log(e, "full_shape", "shape.key = ", shape.name)
-                    state.changeShape("full_shape", shape.name, removeValue(e, shape.full_shape))
+                <AddTag
+                  onPunctuationAdded={(inputValue: string) => {
+                    const result = insertNewValue(inputValue, shape.full_shape)
+                    state.changeShape("full_shape", shape.name, result)
+
+                    console.log(inputValue, "result", result, "half_shape", "shape.key = ", shape.name)
                   }}
                 />
-              )}
-
-              <AddTag
-                onPunctuationAdded={(inputValue: string) => {
-                  const result = insertNewValue(inputValue, shape.full_shape)
-                  state.changeShape("full_shape", shape.name, result)
-
-                  console.log(inputValue, "result", result, "half_shape", "shape.key = ", shape.name)
-                }}
-              />
+              </div>
             </div>
-          </div>
-        )
-      })}
-    </>
+          )
+        })}
+      </div>
+    </div>
   )
 }
 

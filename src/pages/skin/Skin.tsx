@@ -49,24 +49,32 @@ const Skin: React.FC = () => {
   return (
     <div
       style={{
-        backgroundColor: "#f3f3f3",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
+        height: "90vh",
+        overflowY: "scroll",
       }}
     >
-      <Button
-        style={{ width: "120px" }}
-        type="primary"
-        onClick={() => {
-          navigate("custom-skin")
+      <div
+        style={{
+          backgroundColor: "#f3f3f3",
+          display: "flex",
+
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
-        去自定义皮肤
-      </Button>
+        <Button
+          style={{ width: "120px" }}
+          type="primary"
+          onClick={() => {
+            navigate("custom-skin")
+          }}
+        >
+          去自定义皮肤
+        </Button>
 
-      <ImageRadioGroup images={names}></ImageRadioGroup>
+        <ImageRadioGroup images={names}></ImageRadioGroup>
+      </div>
     </div>
   )
 }

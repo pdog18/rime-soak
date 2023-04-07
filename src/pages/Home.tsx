@@ -26,12 +26,12 @@ const items = [
     children: <Punctuation />,
   },
   {
-    label: "其他",
-    children: <Other />,
-  },
-  {
     label: "自定义短语",
     children: <CustomPhrase />,
+  },
+  {
+    label: "其他",
+    children: <Other />,
   },
 ]
 
