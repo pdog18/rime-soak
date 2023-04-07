@@ -41,7 +41,7 @@ const Default: React.FC = () => {
       <RimeSettingItem icon={<MenuSizeIcon style={iconStyle} />} title="候选词数量">
         <IntegerStep
           size={defaultState.defaultCustom.patch["menu/page_size"]}
-          onChange={(value: number | null) => {
+          onChange={(value: number) => {
             defaultState.changePageSize(value!)
           }}
         />

@@ -1,20 +1,26 @@
 import { InputNumber, Row, Slider } from "antd"
 
-const IntegerSetop = (props: { size: number; onChange: (value: number | null) => void }) => {
+type IntegerSetopProps = {
+  size: number
+  onChange: (value: number) => void
+}
+
+const IntegerSetop = ({ size, onChange }: IntegerSetopProps) => {
+  const maxPageSize = navigator.userAgent.indexOf("Win") !== -1 ? 10 : 9
   return (
     <Row>
-      <Slider style={{ width: "20vw" }} min={4} max={10} onChange={props.onChange} value={props.size} />
+      <Slider style={{ width: "16vw" }} min={1} max={maxPageSize} onChange={onChange} value={size} />
 
       <InputNumber
-        min={4}
-        max={9}
+        min={1}
+        max={maxPageSize}
         style={{
           marginLeft: "16px",
           padding: "0px",
           width: "50px",
         }}
-        value={props.size}
-        onChange={props.onChange}
+        value={size}
+        onChange={(value) => onChange(value as number)}
       />
     </Row>
   )
