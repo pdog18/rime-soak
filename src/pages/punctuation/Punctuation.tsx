@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import { CSSProperties } from "react"
 
 import { Tag, Checkbox } from "antd"

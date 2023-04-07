@@ -1,6 +1,5 @@
 import React, { useState } from "react"
 import { Button, Card, Spin } from "antd"
-import { useDispatch, useSelector } from "react-redux"
 
 import { CheckCircleFilled } from "@ant-design/icons"
 import { useNavigate } from "react-router-dom"
