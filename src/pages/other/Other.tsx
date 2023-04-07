@@ -9,8 +9,6 @@ const Default: React.FC = () => {
   const schemaState = useSchemaState()
   const rimeLuaState = useRimeLuaState()
 
-  console.log(schemaState.schemaCustom.patch["engine/translators/+"])
-
   return (
     <div
       style={{

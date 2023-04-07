@@ -6,10 +6,34 @@ import Skin from "./skin/Skin"
 import Style from "./style/Style"
 import { useNavigate } from "react-router-dom"
 import Other from "./other/Other"
+import CustomPhrase from "./customPhrase/CustomPhrase"
 
-const labels: Array<string> = ["基本", "风格", "皮肤", "符号", "其他"]
-
-const children = [<Default />, <Style />, <Skin />, <Punctuation />, <Other />]
+const items = [
+  {
+    label: "基本",
+    children: <Default />,
+  },
+  {
+    label: "风格",
+    children: <Style />,
+  },
+  {
+    label: "皮肤",
+    children: <Skin />,
+  },
+  {
+    label: "符号",
+    children: <Punctuation />,
+  },
+  {
+    label: "其他",
+    children: <Other />,
+  },
+  {
+    label: "自定义短语",
+    children: <CustomPhrase />,
+  },
+]
 
 const Home = () => {
   const navigate = useNavigate()
@@ -19,11 +43,10 @@ const Home = () => {
       <Tabs
         centered={true}
         style={{ height: "100%", minHeight: "100vh", backgroundColor: "#f3f3f3" }}
-        items={labels.map((_, i) => {
+        items={items.map((item) => {
           return {
-            label: `${labels[i]}`,
-            key: String(i),
-            children: children[i],
+            ...item,
+            key: item.label,
           }
         })}
       />

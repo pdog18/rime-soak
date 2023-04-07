@@ -4,6 +4,7 @@ import useSchemaState from "../store/SchemaStore"
 import useDefaultState from "../store/DefaultStore"
 import useStyleState from "../store/StyleStore"
 import useRimeLuaState from "../store/RimeLuaStore"
+import useCustomPhrase from "../store/CustomPhraseStore"
 
 const Result: React.FC = () => {
   const defaultState = useDefaultState()
@@ -17,8 +18,10 @@ const Result: React.FC = () => {
   const schemaCustom = schemaState.generateYAML()
 
   const rimeLuaState = useRimeLuaState()
-
   const luaContent = rimeLuaState.generateRimeLua()
+
+  const customPhraseState = useCustomPhrase()
+  const phraseContent = customPhraseState.generateCustomPhrase()
 
   const [schema, setSchema] = useState<string>()
   const [dict, setDict] = useState<string>()
@@ -58,6 +61,7 @@ const Result: React.FC = () => {
       ),
     },
     { condition: luaContent, label: "rime.lua", key: "rime.lua", content: luaContent },
+    { condition: phraseContent, label: "custom_phrase.txt", key: "custom_phrase.txt", content: phraseContent },
   ]
   const items = candidates
     .filter((candidate) => candidate.condition)

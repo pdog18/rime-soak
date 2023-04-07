@@ -71,7 +71,6 @@ const useDefaultState = create<DefaultState>()((set, get) => ({
     }
 
     if (schemaName === "pinyin_simp") {
-      // schemaName === "pinyin_simp"
       return {
         url: `https://raw.githubusercontent.com/rime/rime-pinyin-simp/master/`,
         dictFileName: "pinyin_simp.dict.yaml",
