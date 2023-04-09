@@ -1,4 +1,4 @@
-import { Button, Tabs } from "antd"
+import { Button, Switch, Tabs } from "antd"
 import React, { useEffect, useState } from "react"
 import useSchemaState from "../store/SchemaStore"
 import useDefaultState from "../store/DefaultStore"
@@ -6,6 +6,40 @@ import useStyleState from "../store/StyleStore"
 import useRimeLuaState from "../store/RimeLuaStore"
 import useCustomPhrase from "../store/CustomPhraseStore"
 import { useNavigate } from "react-router-dom"
+
+import SyntaxHighlighter from "react-syntax-highlighter"
+import { monokaiSublime } from "react-syntax-highlighter/dist/esm/styles/hljs"
+
+interface SimpleDictProps {
+  content: string
+}
+
+const hlighter = (content: string, language: "yaml" | "lua" | "txt") => (
+  <SyntaxHighlighter language={language} style={monokaiSublime}>
+    {content}
+  </SyntaxHighlighter>
+)
+
+const SimpleDict: React.FC<SimpleDictProps> = ({ content = "" }) => {
+  const [displayAll, changeDisplay] = useState(false)
+
+  if (displayAll) {
+    return <>{content}</>
+  } else {
+    return (
+      <>
+        {hlighter(content.split("\n").slice(0, 200).join("\n"), "yaml")}
+        <Switch
+          unCheckedChildren="完全显示"
+          checkedChildren="完全显示"
+          onChange={(checked: boolean) => {
+            changeDisplay(checked)
+          }}
+        />
+      </>
+    )
+  }
+}
 
 const Result: React.FC = () => {
   const navigate = useNavigate()
@@ -48,37 +82,45 @@ const Result: React.FC = () => {
   // 拖入后，备份相关文件
 
   const candidates = [
-    { condition: defaultCustom, label: "default.custom.yaml", key: "defaultCustom", content: defaultCustom },
-    { condition: styleCustom, label: styleState.fileName, key: "styleCustom", content: styleCustom },
-    { condition: schemaCustom, label: schemaState.fileName, key: "schemaCustom", content: schemaCustom },
-    { condition: schemaFileName, label: schemaFileName, key: "schema", content: schema },
-    {
-      condition: dictFileName,
-      label: dictFileName,
-      key: "dict",
-      content: (
-        <details>
-          <summary>点击展开 dict</summary>
-          {dict}
-        </details>
-      ),
-    },
-    { condition: luaContent, label: "rime.lua", key: "rime.lua", content: luaContent },
-    { condition: phraseContent, label: "custom_phrase.txt", key: "custom_phrase.txt", content: phraseContent },
+    { condition: defaultCustom, filename: "default.custom.yaml", key: "defaultCustom", content: defaultCustom },
+    { condition: styleCustom, filename: styleState.fileName, key: "styleCustom", content: styleCustom },
+    { condition: schemaCustom, filename: schemaState.fileName, key: "schemaCustom", content: schemaCustom },
+    { condition: schemaFileName, filename: schemaFileName, key: "schema", content: schema },
+    { condition: dictFileName, filename: dictFileName, key: "dict", content: dict },
+    { condition: luaContent, filename: "rime.lua", key: "rime.lua", content: luaContent },
+    { condition: phraseContent, filename: "custom_phrase.txt", key: "custom_phrase.txt", content: phraseContent },
   ]
+
   const items = candidates
     .filter((candidate) => candidate.condition)
-    .map(({ label, key, content }) => {
+    .map(({ filename, key, content }) => {
+      const dict = key === "dict"
+      const yaml = !dict && filename?.endsWith(".yaml")
+      const lua = filename?.endsWith(".lua")
+      const txt = filename?.endsWith(".txt")
+
       return {
-        label,
+        filename,
+        key,
+        content: dict
+          ? SimpleDict({ content: content! })
+          : yaml
+          ? hlighter(content!, "yaml")
+          : lua
+          ? hlighter(content!, "lua")
+          : txt
+          ? hlighter(content!, "txt")
+          : content,
+      }
+    })
+    .map(({ filename, key, content }) => {
+      return {
+        label: filename,
         key,
         children: (
           <div
             style={{
-              padding: "16px 32px",
-              fontSize: "20px",
               wordSpacing: "6px",
-              whiteSpace: "pre-wrap",
               height: "80vh",
               overflowY: "auto",
             }}
