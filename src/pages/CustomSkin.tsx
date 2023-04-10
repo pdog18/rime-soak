@@ -1,116 +1,40 @@
-import { create } from "zustand"
+import { Select, Switch } from "antd"
+import { useEffect, useState } from "react"
+import { parse } from "yaml"
 
-const convertColor = (color: number | string) => {
-  if (typeof color === "number") {
-    const r = (color >> 16) & 0xff // 提取红色分量
-    const g = (color >> 8) & 0xff // 提取绿色分量
-    const b = color & 0xff // 提取蓝色分量
-    const bgrNumber = (b << 16) | (g << 8) | r
+import { convertColor } from "../utils/ColorUtils"
+import useCustomSkinState, { CustomSkinConfig, createCustomSkinState } from "../store/CustomSkinStore"
 
-    console.log("#" + bgrNumber.toString(16).padStart(6, "0"))
-
-    return "#" + bgrNumber.toString(16).padStart(6, "0")
-  } else {
-    const hexValue = color.replace("#", "").toLowerCase()
-    return parseInt(hexValue, 16)
-  }
-}
-
-type Candidate = {
+type ColorSchemeEntry = {
   label: string
-  candidate: string
-  comment: string
+  value: string
+  data: Partial<CustomSkinConfig>
 }
-
-const items: Candidate[] = [
-  { label: "1", candidate: "鼠须管", comment: "(shu)" },
-  { label: "2", candidate: "舒徐", comment: "" },
-  { label: "3", candidate: "书", comment: "" },
-  { label: "4", candidate: "数", comment: "" },
-  { label: "5", candidate: "树", comment: "(shu)" },
-  { label: "6", candidate: "属", comment: "" },
-  { label: "7", candidate: "输", comment: "" },
-  { label: "8", candidate: "熟", comment: "" },
-  { label: "9", candidate: "术", comment: "" },
-  { label: "0", candidate: "舒", comment: "" },
-]
-
-interface ParentProps {
-  children: React.ReactNode
-}
-const Center: React.FC<ParentProps> = ({ children }) => {
-  const parentStyle: React.CSSProperties = {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    height: "80vh", // 设置高度以确保子元素在垂直方向上居中
-  }
-
-  return <div style={parentStyle}>{children}</div>
-}
-
-interface CustomSkinState {
-  author: string
-  name: string
-  text_color: number
-  back_color: number
-  border_color: number
-  label_color: number
-
-  hilited_text_color: number
-  hilited_back_color: number
-  // hilited_label_color: number
-
-  candidate_text_color: number
-  comment_text_color: number
-  hilited_candidate_text_color: number
-  hilited_comment_text_color: number
-  hilited_candidate_back_color: number
-  hilited_candidate_label_color: number
-}
-
-const skype: CustomSkinState = {
-  name: "斯蓋普／Skype",
-  author: "Patricivs <ipatrickmac@me.com>",
-  text_color: 0xffffff,
-  back_color: 0xefad00,
-  border_color: 0xefad00,
-  label_color: 0xffffff,
-  hilited_text_color: 0xefad00,
-  hilited_back_color: 0xffffff,
-  // hilited_label_color: 0xefad00,
-  candidate_text_color: 0xffffff,
-  comment_text_color: 0xffffff,
-  hilited_candidate_text_color: 0xefad00,
-  hilited_comment_text_color: 0xefad00,
-  hilited_candidate_back_color: 0xffffff,
-  hilited_candidate_label_color: 0xefad00,
-}
-
-const useCustomSkinState = create<CustomSkinState>()((set, get) => skype)
 
 const CustomSkin = () => {
-  const skinState = useCustomSkinState()
+  const { colors, inline_preedit, items, pereditContent, changeSelectedTheme } = useCustomSkinState()
+  const { pereditText, pereditHilitedText, pereditCaret } = pereditContent
 
-  const border_color = `${convertColor(skinState.border_color)}`
-  const text_color = `${convertColor(skinState.text_color)}`
+  const convertedColors = Object.fromEntries(colors.map(([key, value]) => [key, convertColor(value)]))
 
-  const hilited_back_color = `${convertColor(skinState.hilited_back_color)}`
-  const hilited_text_color = `${convertColor(skinState.hilited_text_color)}`
+  const {
+    back_color,
+    border_color,
+    text_color,
+    hilited_back_color,
+    hilited_text_color,
+    label_color,
+    candidate_text_color,
+    comment_text_color,
+    hilited_label_color,
+    hilited_candidate_text_color,
+    hilited_candidate_back_color,
+    hilited_comment_text_color,
+  } = convertedColors
 
-  const back_color = `${convertColor(skinState.back_color)}`
-  const label_color = `${convertColor(skinState.label_color)}`
-  const candidate_text_color = `${convertColor(skinState.candidate_text_color)}`
-  const comment_text_color = `${convertColor(skinState.comment_text_color)}`
-
-  const hilited_candidate_label_color = `${convertColor(skinState.hilited_candidate_label_color)}`
-  const hilited_candidate_text_color = `${convertColor(skinState.hilited_candidate_text_color)}`
-  const hilited_candidate_back_color = `${convertColor(skinState.hilited_candidate_back_color)}`
-  const hilited_comment_text_color = `${convertColor(skinState.hilited_comment_text_color)}`
-  const colorDivs = Object.entries(skinState).map(([key, value]) => {
+  const colorDivs = colors.map(([key, value]) => {
     if (typeof value === "number") {
-      const cssColor = convertColor(value) as string
+      const cssColor = convertColor(value)
       return (
         <div style={{ width: "120px" }} key={key}>
           <div
@@ -129,61 +53,115 @@ const CustomSkin = () => {
     }
     return null
   })
-  return (
-    <Center>
-      <div
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "80px",
-          margin: "120px   240px",
-          justifyContent: "center",
-        }}
-      >
-        {colorDivs}
-      </div>
 
+  const [skins, setSkins] = useState<ColorSchemeEntry[]>([])
+  const [loading, setLoading] = useState(true)
+  const [isInlinePreedit, changeInlinePreedit] = useState(inline_preedit)
+
+  useEffect(() => {
+    async function fetchSkins() {
+      const url = `https://raw.githubusercontent.com/rime/weasel/master/output/data/weasel.yaml`
+
+      const dictData = await (await fetch(url)).text()
+
+      const schemes = parse(dictData).preset_color_schemes
+
+      const schemesArray = Object.entries(schemes).map((entry) => {
+        return {
+          label: entry[0],
+          value: entry[0],
+          data: createCustomSkinState(
+            entry[1] as Partial<CustomSkinConfig> & {
+              text_color: number
+              back_color: number
+            }
+          ),
+        }
+      })
+
+      setSkins(schemesArray)
+      setLoading(false)
+    }
+    fetchSkins()
+  }, [])
+
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        height: "90vh",
+      }}
+    >
       <div
         style={{
+          marginTop: `${isInlinePreedit ? 94 : 60}px`,
           display: "flex",
           flexDirection: "column",
           border: `3px solid ${border_color}`,
           backgroundColor: back_color,
         }}
       >
-        <div
-          style={{
-            display: "inline-flex",
-
-            paddingLeft: "7px",
-            paddingTop: "9px",
-          }}
-        >
+        {!isInlinePreedit && (
           <div
             style={{
-              display: "flex",
-              height: "34px",
-              textAlign: "center",
-              justifyContent: "center",
-              padding: "0px 2px",
-              alignItems: "center",
-              boxSizing: "border-box",
-              color: hilited_text_color,
-              backgroundColor: hilited_back_color,
-              lineHeight: "1",
-              borderRadius: "2px",
+              display: "inline-flex",
+              paddingLeft: "7px",
+              paddingTop: "7px",
             }}
           >
-            shu xu guan
+            <div
+              style={{
+                display: "flex",
+                height: "29px",
+                textAlign: "center",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <div
+                style={{
+                  color: `${text_color}`,
+                  fontSize: "20px",
+                  paddingRight: "2px",
+                }}
+              >
+                {pereditText}
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  fontSize: "20px",
+                  alignItems: "center",
+                  height: "29px",
+                  padding: "0 3px",
+                  borderRadius: "3px",
+                  color: `${hilited_text_color}`,
+                  backgroundColor: `${hilited_back_color}`,
+                }}
+              >
+                {pereditHilitedText}
+              </div>
+              <div
+                style={{
+                  color: `${text_color}`,
+                  fontSize: "20px",
+                  padding: "2px",
+                }}
+              >
+                {pereditCaret}
+              </div>
+            </div>
           </div>
-        </div>
+        )}
         <div
           style={{
             display: "inline-flex",
-            padding: "7px",
+            padding: `${isInlinePreedit ? 7 : 6}px 7px 7px 7px`,
           }}
         >
-          {items.map(({ label, candidate, comment }, index) => {
+          {items.map(({ label, suffix, candidate, comment }, index) => {
             const hilited = index === 0
 
             return (
@@ -191,24 +169,24 @@ const CustomSkin = () => {
                 <div
                   style={{
                     display: "flex",
-                    height: "34px",
+                    height: "29px",
                     textAlign: "center",
                     justifyContent: "center",
                     backgroundColor: hilited ? hilited_candidate_back_color : back_color,
                     alignItems: "center",
                     boxSizing: "border-box",
                     lineHeight: "1",
-                    borderRadius: "2px",
+                    borderRadius: "3px",
                   }}
                 >
-                  <div style={{ width: "2px" }}></div>
+                  <div style={{ width: "3px" }}></div>
                   <div
                     style={{
-                      color: hilited ? hilited_candidate_label_color : label_color,
+                      color: hilited ? hilited_label_color : label_color,
                       fontSize: "20px",
                     }}
                   >
-                    {label === undefined ? index + 1 : label}.
+                    {`${label}${suffix}`}
                   </div>
                   <div style={{ width: "5px" }}></div>
                   <div
@@ -219,15 +197,61 @@ const CustomSkin = () => {
                   <div style={{ color: hilited ? hilited_comment_text_color : comment_text_color, fontSize: "20px" }}>
                     {comment}
                   </div>
-                  <div style={{ width: "3px" }}></div>
+                  <div style={{ width: "7px" }}></div>
                 </div>
-                <div style={{ width: "5px" }}></div>
               </div>
             )
           })}
         </div>
       </div>
-    </Center>
+
+      <div
+        style={{
+          display: "inline-flex",
+          flexDirection: "column",
+          marginTop: "32px",
+          alignItems: "center",
+        }}
+      >
+        <div style={{ display: "inline-flex", columnGap: "80px", alignItems: "center" }}>
+          <div>
+            查看方案
+            <Select
+              defaultValue="ikun"
+              style={{ width: 120, marginLeft: "6px" }}
+              loading={loading}
+              options={skins}
+              onChange={(_, option) => {
+                const data = (option as ColorSchemeEntry).data as CustomSkinConfig
+                changeSelectedTheme(data)
+              }}
+            />
+          </div>
+
+          <div>
+            <Switch
+              defaultChecked={isInlinePreedit}
+              onChange={(checked: boolean) => {
+                changeInlinePreedit(checked)
+              }}
+            />
+            内嵌编辑区
+          </div>
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            columnGap: "80px",
+            margin: "10vh 8vw",
+            justifyContent: "center",
+          }}
+        >
+          {colorDivs}
+        </div>
+      </div>
+    </div>
   )
 }
 
