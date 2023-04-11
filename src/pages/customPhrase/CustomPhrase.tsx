@@ -3,8 +3,12 @@ import RimeSettingItem from "../../components/RimeSettingItem"
 import { ClusterOutlined as InputTypeIcon } from "@ant-design/icons"
 
 import useCustomPhrase from "../../store/CustomPhraseStore"
-import { Input, Button, Switch, Space, Select } from "antd"
+import { Input, Button, Switch, Space, Select, Tooltip } from "antd"
 import useSchemaState from "../../store/SchemaStore"
+
+function isAllLowerCase(input: string): boolean {
+  return /^[a-z]+$/.test(input)
+}
 
 const CustomPhrase: React.FC = () => {
   const customPhraseState = useCustomPhrase()
@@ -15,8 +19,14 @@ const CustomPhrase: React.FC = () => {
     phrase: "",
     weight: 3,
   }
+
   const [newCustomPhrase, setNewCustomPhrase] = useState(initInput)
 
+  const [shortcutHint, changeShortcutHint] = useState({
+    title: "空格已被删除",
+    show: false,
+  })
+  const [phraseHint, changePhraseHint] = useState(false)
   const itemStyle = {
     display: "grid",
     gridTemplateColumns: "200px 200px 60px",
@@ -49,27 +59,39 @@ const CustomPhrase: React.FC = () => {
         {customPhraseState.enable && (
           <Space wrap>
             输入码:
-            <Input
-              placeholder="例: msd"
-              value={newCustomPhrase.shortcut}
-              onChange={(event) => {
-                setNewCustomPhrase({
-                  ...newCustomPhrase,
-                  shortcut: event.target.value,
-                })
-              }}
-            />
+            <Tooltip trigger={[]} title={shortcutHint.title} open={shortcutHint.show}>
+              <Input
+                placeholder="例: msd"
+                value={newCustomPhrase.shortcut}
+                onChange={(event) => {
+                  const shortcut = event.target.value
+                  const show = shortcut.trim().length !== 0 && !isAllLowerCase(shortcut.trim())
+
+                  changeShortcutHint({
+                    title: "只能输入小写字母",
+                    show,
+                  })
+
+                  setNewCustomPhrase({
+                    ...newCustomPhrase,
+                    shortcut: event.target.value,
+                  })
+                }}
+              />
+            </Tooltip>
             短语:
-            <Input
-              placeholder="例: 马上到"
-              value={newCustomPhrase.phrase}
-              onChange={(event) => {
-                setNewCustomPhrase({
-                  ...newCustomPhrase,
-                  phrase: event.target.value,
-                })
-              }}
-            />
+            <Tooltip trigger={[]} title="空格已被删除" open={phraseHint}>
+              <Input
+                placeholder="例: 马上到"
+                value={newCustomPhrase.phrase}
+                onChange={(event) => {
+                  setNewCustomPhrase({
+                    ...newCustomPhrase,
+                    phrase: event.target.value,
+                  })
+                }}
+              />
+            </Tooltip>
             优先级:
             <Select
               defaultValue="3"
@@ -91,7 +113,14 @@ const CustomPhrase: React.FC = () => {
               disabled={newCustomPhrase.shortcut.length === 0 || newCustomPhrase.phrase.length === 0}
               onClick={() => {
                 const { shortcut, phrase, weight } = newCustomPhrase
-                customPhraseState.addPhrase(shortcut, phrase, weight)
+
+                changeShortcutHint({
+                  title: "空格已被移除",
+                  show: shortcut.trim().length !== shortcut.length,
+                })
+                changePhraseHint(phrase.trim().length !== phrase.length)
+
+                customPhraseState.addPhrase(shortcut.trim(), phrase.trim(), weight)
                 setNewCustomPhrase(initInput)
               }}
             >
