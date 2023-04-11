@@ -100,12 +100,15 @@ const CustomPhrase: React.FC = () => {
           </Space>
         )}
 
-        {customPhraseState.enable && (
+        {customPhraseState.enable && customPhraseState.phrases.length > 0 && (
           <div style={{ padding: "16px 16px", background: "white" }}>
             <div style={itemStyle}>
               <div>输入码</div>
               <div>短语</div>
               <div>优先级</div>
+            </div>
+            <div>
+              ---------------------------------------------------------------------------------------------------------------
             </div>
 
             {customPhraseState.phrases.map(({ phrase, shortcut, weight }) => {
