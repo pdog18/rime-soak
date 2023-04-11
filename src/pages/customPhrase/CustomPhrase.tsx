@@ -63,6 +63,7 @@ const CustomPhrase: React.FC = () => {
               <Input
                 placeholder="例: msd"
                 value={newCustomPhrase.shortcut}
+                style={{ width: "100px" }}
                 onChange={(event) => {
                   const shortcut = event.target.value
                   const show = shortcut.trim().length !== 0 && !isAllLowerCase(shortcut.trim())
@@ -83,6 +84,7 @@ const CustomPhrase: React.FC = () => {
             <Tooltip trigger={[]} title="空格已被删除" open={phraseHint}>
               <Input
                 placeholder="例: 马上到"
+                style={{ width: "120px" }}
                 value={newCustomPhrase.phrase}
                 onChange={(event) => {
                   setNewCustomPhrase({
@@ -131,13 +133,10 @@ const CustomPhrase: React.FC = () => {
 
         {customPhraseState.enable && customPhraseState.phrases.length > 0 && (
           <div style={{ padding: "16px 16px", background: "white" }}>
-            <div style={itemStyle}>
+            <div style={{ ...itemStyle, borderBottom: "0.05rem dashed " }}>
               <div>输入码</div>
               <div>短语</div>
               <div>优先级</div>
-            </div>
-            <div>
-              ---------------------------------------------------------------------------------------------------------------
             </div>
 
             {customPhraseState.phrases.map(({ phrase, shortcut, weight }) => {
