@@ -2,11 +2,12 @@ import { FloatButton, Tabs } from "antd"
 
 import Default from "./default/Default"
 import Punctuation from "./punctuation/Punctuation"
-import Skin from "./skin/Skin"
+
 import Style from "./style/Style"
 import { useNavigate } from "react-router-dom"
 import Other from "./other/Other"
 import CustomPhrase from "./customPhrase/CustomPhrase"
+import CustomSkin from "./CustomSkin"
 
 const items = [
   {
@@ -19,7 +20,7 @@ const items = [
   },
   {
     label: "皮肤",
-    children: <Skin />,
+    children: <CustomSkin />,
   },
   {
     label: "符号",

@@ -17,8 +17,6 @@ function RGB(r: number, g: number, b: number): Color {
 }
 
 function blendColors(front: Color, back: Color): Color {
-  console.log("front:", front, "  back:", back)
-
   return RGB(
     (getRValue(front) * 2 + getRValue(back)) / 3,
     (getGValue(front) * 2 + getGValue(back)) / 3,
@@ -38,7 +36,12 @@ function convertColor(color: number | string): string | number {
     return "#" + bgrNumber.toString(16).padStart(6, "0")
   } else {
     const hexValue = color.replace("#", "").toLowerCase()
-    return parseInt(hexValue, 16)
+    const rgbNumber = parseInt(hexValue, 16)
+    const r = (rgbNumber >> 16) & 0xff // 提取红色分量
+    const g = (rgbNumber >> 8) & 0xff // 提取绿色分量
+    const b = rgbNumber & 0xff // 提取蓝色分量
+    const bgrNumber = (b << 16) | (g << 8) | r
+    return bgrNumber
   }
 }
 

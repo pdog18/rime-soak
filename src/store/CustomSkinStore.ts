@@ -13,8 +13,8 @@ interface CustomSkinState {
   skin: CustomSkinConfig
   colors: [string, number][]
   items: Candidate[]
-  inline_preedit: boolean
   changeSelectedTheme: (skin: CustomSkinConfig) => void
+  changeColors: (colors: [string, number][]) => void
   pereditContent: typeof pereditContent
 }
 
@@ -112,7 +112,6 @@ const initSkin = createCustomSkinState({
 
 const useCustomSkinState = create<CustomSkinState>()((set, get) => ({
   skin: initSkin,
-  inline_preedit: true,
   items,
   pereditContent,
   colors: Object.entries(initSkin).filter(([_, value]) => typeof value === "number"),
@@ -121,6 +120,14 @@ const useCustomSkinState = create<CustomSkinState>()((set, get) => ({
       produce((state) => {
         state.skin = skin
         state.colors = Object.entries(skin).filter(([_, value]) => typeof value === "number")
+      })
+    )
+  },
+
+  changeColors(colors) {
+    set(
+      produce((state) => {
+        state.colors = colors
       })
     )
   },
