@@ -13,7 +13,7 @@ const CustomPhrase: React.FC = () => {
   const initInput = {
     shortcut: "",
     phrase: "",
-    weight: 1000,
+    weight: 3,
   }
   const [newCustomPhrase, setNewCustomPhrase] = useState(initInput)
 
