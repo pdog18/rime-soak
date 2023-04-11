@@ -10,11 +10,12 @@ import { HexColorInput } from "react-colorful"
 
 import RevealOnFocus from "../components/RevealOnFocus"
 import PlumpColorPicker from "../components/MyHexColorPicker"
+import useStyleState from "../store/StyleStore"
 
 type ColorSchemeEntry = {
   label: string
   value: string
-  data: Partial<CustomSkinConfig>
+  config: Partial<CustomSkinConfig>
 }
 
 const CustomSkin = () => {
@@ -27,7 +28,6 @@ const CustomSkin = () => {
   const [pageSize, changePageSize] = useState(6)
 
   const [showBackground, changeShowBackground] = useState(true)
-
   const convertedColors = Object.fromEntries(colors.map(([key, value]) => [key, convertColor(value)]))
 
   const filterColors = colors
@@ -41,6 +41,17 @@ const CustomSkin = () => {
     .map(([key, value]) => {
       return { name: key, color: convertColor(value) }
     })
+
+  const styleState = useStyleState()
+  function changeColor(newcolor: string, colorName: string) {
+    const config = { ...skin, [colorName]: convertColor(newcolor) }
+    changeSelectedTheme(config)
+    // skins.filter(({_,label,_}) =>{
+    //   config
+
+    // })
+    styleState.changeColorScheme("soak", config)
+  }
 
   const {
     back_color,
@@ -80,7 +91,7 @@ const CustomSkin = () => {
             }}
             color={color}
             onChange={(newcolor) => {
-              changeSelectedTheme({ ...skin, [name]: convertColor(newcolor) })
+              changeColor(newcolor, name)
             }}
           />
         </RevealOnFocus>
@@ -105,7 +116,7 @@ const CustomSkin = () => {
           }}
           color={color}
           onChange={(newcolor) => {
-            changeSelectedTheme({ ...skin, [name]: convertColor(newcolor) })
+            changeColor(newcolor, name)
           }}
           placeholder="Type a color"
           prefixed
@@ -124,7 +135,7 @@ const CustomSkin = () => {
         return {
           label: entry[0],
           value: entry[0],
-          data: createCustomSkinState(
+          config: createCustomSkinState(
             entry[1] as Partial<CustomSkinConfig> & {
               text_color: number
               back_color: number
@@ -314,9 +325,10 @@ const CustomSkin = () => {
               style={{ width: 120, marginLeft: "6px" }}
               loading={loading}
               options={skins}
-              onChange={(_, option) => {
-                const data = (option as ColorSchemeEntry).data as CustomSkinConfig
-                changeSelectedTheme(data)
+              onChange={(value, option) => {
+                const config = (option as ColorSchemeEntry).config as CustomSkinConfig
+                changeSelectedTheme(config)
+                styleState.changeColorScheme(value, config)
                 setFocus(false)
               }}
             />

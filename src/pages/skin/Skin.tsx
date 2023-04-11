@@ -156,7 +156,7 @@ const ImageRadioGroup: React.FC<ImageRadioGroupProps> = ({ images }) => {
               value={image}
               checked={colorScheme === image}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                styleState.changeColorScheme(trimStart(e.target.value, "color_scheme_"))
+                // styleState.changeColorScheme(trimStart(e.target.value, "color_scheme_"))
               }}
             />
           </Card>

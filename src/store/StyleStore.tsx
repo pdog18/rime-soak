@@ -1,6 +1,7 @@
 import { create } from "zustand"
 import produce from "immer"
 import { stringify } from "yaml"
+import { CustomSkinConfig } from "./CustomSkinStore"
 
 const rimeName = () => {
   const userAgent = navigator.userAgent
@@ -25,6 +26,9 @@ interface StylePatch {
   "style/inline_preedit": boolean
   "style/display_tray_icon": boolean
   "style/color_scheme": string
+  preset_color_schemes: {
+    [key: string]: CustomSkinConfig
+  }
   app_options: AppOptions
 }
 
@@ -33,10 +37,11 @@ interface StyleState {
   styleCustom: {
     patch: StylePatch
   }
-  changeColorScheme: (color_scheme: string) => void
+  changeColorScheme: (color_scheme: string, config: CustomSkinConfig) => void
   changeOrientation: (horizontal: boolean) => void
   changePreedit: (inline_preedit: boolean) => void
   changeDisplayTrayIcon: (display_tray_icon: boolean) => void
+
   changeAsciiModeApps: (appOptions: string[]) => void
   generateYAML: () => string | null
 }
@@ -59,6 +64,7 @@ const useStyleState = create<StyleState>()((set, get) => ({
       "style/inline_preedit": false,
       "style/display_tray_icon": false,
       "style/color_scheme": "aqua",
+      preset_color_schemes: {},
       app_options: {
         "cmd.exe": {
           ascii_mode: true,
@@ -84,8 +90,14 @@ const useStyleState = create<StyleState>()((set, get) => ({
       delete patch["style/display_tray_icon"]
     }
 
-    if (patch["style/color_scheme"] === "aqua") {
+    const color_scheme_name = patch["style/color_scheme"]
+    if (color_scheme_name === "aqua") {
       delete patch["style/color_scheme"]
+      delete patch.preset_color_schemes
+    } else if (patch.preset_color_schemes && color_scheme_name) {
+      patch.preset_color_schemes = {
+        [color_scheme_name]: patch.preset_color_schemes[color_scheme_name],
+      }
     }
 
     if (appOtionsOK(patch.app_options)) {
@@ -99,10 +111,13 @@ const useStyleState = create<StyleState>()((set, get) => ({
     return stringify({ patch: patch })
   },
 
-  changeColorScheme: (color_scheme) =>
+  changeColorScheme: (color_scheme_name, color_scheme) =>
     set(
       produce((state) => {
-        state.styleCustom.patch["style/color_scheme"] = color_scheme
+        console.log(color_scheme_name, color_scheme)
+
+        state.styleCustom.patch["style/color_scheme"] = color_scheme_name
+        state.styleCustom.patch.preset_color_schemes[color_scheme_name] = color_scheme
       })
     ),
 

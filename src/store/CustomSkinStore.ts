@@ -14,7 +14,7 @@ interface CustomSkinState {
   colors: [string, number][]
   items: Candidate[]
   changeSelectedTheme: (skin: CustomSkinConfig) => void
-  changeColors: (colors: [string, number][]) => void
+
   pereditContent: typeof pereditContent
 }
 
@@ -120,14 +120,6 @@ const useCustomSkinState = create<CustomSkinState>()((set, get) => ({
       produce((state) => {
         state.skin = skin
         state.colors = Object.entries(skin).filter(([_, value]) => typeof value === "number")
-      })
-    )
-  },
-
-  changeColors(colors) {
-    set(
-      produce((state) => {
-        state.colors = colors
       })
     )
   },
