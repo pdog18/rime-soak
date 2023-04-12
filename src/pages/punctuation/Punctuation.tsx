@@ -6,8 +6,13 @@ import AddTag from "./AddTag"
 import type { CheckboxChangeEvent } from "antd/es/checkbox"
 import useSchemaState from "../../store/SchemaStore"
 
-const insertNewValue = (inputValue: string, shape: any) => {
+const insertValueToShape = (inputValue: string, shape: any, pair: boolean) => {
   if (shape === null || Object.keys(shape).length === 0) {
+    if (pair) {
+      return {
+        pair: [inputValue[0], inputValue[1]],
+      }
+    }
     return inputValue
   } else if (Array.isArray(shape)) {
     // 如果是 array 直接追加
@@ -58,15 +63,27 @@ const Punctuation: React.FC = () => {
           padding: "32px",
         }}
       >
-        <Checkbox
-          style={styles}
-          onChange={(e: CheckboxChangeEvent) => {
-            state.useAsciiStyle(e.target.checked)
+        <div
+          style={{
+            display: "inline-flex",
+            flexDirection: "column",
+            textAlign: "center",
+            alignItems: "center",
+            gap: "16px",
           }}
         >
-          {}
-          只用英文符号
-        </Checkbox>
+          <div>[蓝 = 上屏]</div>
+          <div>[绿 = 成对 (空时可添加)]</div>
+
+          <Checkbox
+            onChange={(e: CheckboxChangeEvent) => {
+              state.useAsciiStyle(e.target.checked)
+            }}
+          >
+            只用英文符号
+          </Checkbox>
+        </div>
+
         <div style={{ display: "flex" }}>
           <div style={{ width: "36px", textAlign: "center" }}>符号</div>
           <div style={{ width: "400px", textAlign: "center", marginLeft: "6px" }}>半角符号</div>
@@ -88,8 +105,9 @@ const Punctuation: React.FC = () => {
                 )}
 
                 <AddTag
-                  onPunctuationAdded={(inputValue: string) => {
-                    const result = insertNewValue(inputValue, shape.half_shape)
+                  checkbox={shape.half_shape === null}
+                  onPunctuationAdded={(inputValue: string, pair: boolean) => {
+                    const result = insertValueToShape(inputValue, shape.half_shape, pair)
                     state.changeShape("half_shape", shape.name, result)
                   }}
                 />
@@ -106,8 +124,9 @@ const Punctuation: React.FC = () => {
                 )}
 
                 <AddTag
-                  onPunctuationAdded={(inputValue: string) => {
-                    const result = insertNewValue(inputValue, shape.full_shape)
+                  checkbox={shape.full_shape === null}
+                  onPunctuationAdded={(inputValue: string, pair: boolean) => {
+                    const result = insertValueToShape(inputValue, shape.full_shape, pair)
                     state.changeShape("full_shape", shape.name, result)
                   }}
                 />

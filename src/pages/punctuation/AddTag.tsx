@@ -1,16 +1,22 @@
-import { InputRef, Space, Input, Button, Tag } from "antd"
+import { InputRef, Space, Input, Button, Tag, Checkbox } from "antd"
 import { useState, useRef, useEffect } from "react"
-import { PlusCircleFilled as PlusIcon } from "@ant-design/icons"
+import { PlusCircleFilled as PlusIcon, CloseCircleFilled as CloseIcon } from "@ant-design/icons"
+import { CheckboxChangeEvent } from "antd/es/checkbox"
 
 interface AddTagProps {
-  onPunctuationAdded: (shape: string) => void
+  onPunctuationAdded: (shape: string, pair: boolean) => void
+  checkbox: boolean
 }
 
-export const AddTag = ({ onPunctuationAdded }: AddTagProps) => {
+export const AddTag = ({ onPunctuationAdded, checkbox }: AddTagProps) => {
   const [inputVisible, setInputVisible] = useState(false)
   const [inputValue, setInputValue] = useState("")
   const inputRef = useRef<InputRef>(null)
   const editInputRef = useRef<InputRef>(null)
+  const [pair, changePairState] = useState(false)
+  const changePair = (e: CheckboxChangeEvent) => {
+    changePairState(e.target.checked)
+  }
 
   useEffect(() => {
     if (inputVisible) {
@@ -23,7 +29,13 @@ export const AddTag = ({ onPunctuationAdded }: AddTagProps) => {
   }, [inputValue])
 
   const handleInputConfirm = () => {
-    onPunctuationAdded(inputValue)
+    if (inputValue.length === 0) {
+      console.log("length === 0 ")
+
+      return
+    }
+
+    onPunctuationAdded(inputValue, pair)
 
     setInputVisible(false)
     setInputValue("")
@@ -32,7 +44,7 @@ export const AddTag = ({ onPunctuationAdded }: AddTagProps) => {
   return (
     <Space size={[0, 8]} wrap>
       {inputVisible ? (
-        <Input.Group>
+        <Input.Group style={{ display: "inline-flex", border: "black dashed 1px" }}>
           <Input
             maxLength={2}
             ref={inputRef}
@@ -46,10 +58,20 @@ export const AddTag = ({ onPunctuationAdded }: AddTagProps) => {
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               setInputValue(e.target.value)
             }}
-            onBlur={handleInputConfirm}
             onPressEnter={handleInputConfirm}
           />
-          <Button icon={<PlusIcon style={{ color: "#7cc778" }} />} size="small" />
+          {checkbox && (
+            <div title="pair" style={{ margin: "0 8px" }}>
+              <Checkbox onChange={changePair} />
+            </div>
+          )}
+
+          <Button icon={<PlusIcon style={{ color: "#7cc778" }} />} size="small" onClick={handleInputConfirm} />
+          <Button
+            icon={<CloseIcon style={{ fontSize: "14px" }} />}
+            size="small"
+            onClick={() => setInputVisible(false)}
+          />
         </Input.Group>
       ) : (
         <Tag
