@@ -6,6 +6,8 @@ import AddTag from "./AddTag"
 import type { CheckboxChangeEvent } from "antd/es/checkbox"
 import useSchemaState from "../../store/SchemaStore"
 
+import { QuestionOutlined } from "@ant-design/icons"
+
 const insertValueToShape = (inputValue: string, shape: any, pair: boolean) => {
   if (shape === null || Object.keys(shape).length === 0) {
     if (pair) {
@@ -72,8 +74,14 @@ const Punctuation: React.FC = () => {
             gap: "16px",
           }}
         >
-          <div>[蓝 = 上屏]</div>
-          <div>[绿 = 成对 (空时可添加)]</div>
+          {/* <div>[蓝 = 上屏]</div> */}
+          <div
+            title="成对：同一个按键按两次是不同的符号， 例如 pair: ['1','2'] ,第一次按是 [1] ，第二次按是
+            [2],将对应的符号全部删除，此时可以勾选 checkbox 添加"
+          >
+            [绿 = pair]
+            <QuestionOutlined style={{ fontSize: "16px", color: "#A6E6EE", backgroundColor: "#aaaaaa" }} />
+          </div>
 
           <Checkbox
             onChange={(e: CheckboxChangeEvent) => {
