@@ -27,7 +27,7 @@ const CustomSkin = () => {
   const [inline_preedit, changeInlinePreedit] = useState(true)
   const [pageSize, changePageSize] = useState(6)
 
-  const [showBackground, changeShowBackground] = useState(true)
+  const [showBackground, changeShowBackground] = useState(false)
   const convertedColors = Object.fromEntries(colors.map(([key, value]) => [key, convertColor(value)]))
 
   const filterColors = colors
