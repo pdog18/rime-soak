@@ -309,9 +309,9 @@ const CustomSkin = () => {
       >
         <div style={{ display: "inline-flex", columnGap: "80px", alignItems: "center" }}>
           <div>
-            背景网格
+            辅助网格
             <Switch
-              defaultChecked={true}
+              defaultChecked={false}
               onChange={(checked: boolean) => {
                 changeShowBackground(checked)
               }}

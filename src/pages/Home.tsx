@@ -4,50 +4,61 @@ import Default from "./default/Default"
 import Punctuation from "./punctuation/Punctuation"
 
 import Style from "./style/Style"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import Other from "./other/Other"
 import CustomPhrase from "./customPhrase/CustomPhrase"
 import CustomSkin from "./CustomSkin"
-
 const items = [
   {
+    key: "/default",
     label: "基本",
     children: <Default />,
   },
   {
+    key: "/style",
     label: "风格",
     children: <Style />,
   },
   {
+    key: "/theme",
     label: "皮肤",
     children: <CustomSkin />,
   },
   {
+    key: "/punctuation",
     label: "符号",
     children: <Punctuation />,
   },
   {
+    key: "/custom-phrase",
     label: "自定义短语",
     children: <CustomPhrase />,
   },
   {
+    key: "/others",
     label: "其他",
     children: <Other />,
   },
 ]
 
 const Home = () => {
+  const location = useLocation()
   const navigate = useNavigate()
 
+  const needChangeDefaultActive = items.filter((item) => item.key === location.pathname).length === 1
+
+  const activeKey = needChangeDefaultActive ? location.pathname : "/default"
+  // todo 如果依旧处于 Home 界面，手动输入 pathName 时需要重新渲染，这是 Tabs#defaultActiveKey 的问题，可能需要替换该组件
   return (
     <>
       <Tabs
         centered={true}
+        defaultActiveKey={activeKey}
         style={{ height: "100%", minHeight: "100vh", backgroundColor: "#f3f3f3" }}
         items={items.map((item) => {
           return {
             ...item,
-            key: item.label,
+            key: item.key,
           }
         })}
       />

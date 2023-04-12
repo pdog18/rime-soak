@@ -11,6 +11,7 @@ const Soak = () => {
           <Route index element={<Home />} />
           <Route path="result" element={<Result />} />
           <Route path="custom-skin" element={<CustomSkin />} />
+          <Route path="*" element={<Home />} />
         </Route>
       </Routes>
     </HashRouter>
