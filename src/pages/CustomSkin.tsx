@@ -12,6 +12,7 @@ import RevealOnFocus from "../components/RevealOnFocus"
 import PlumpColorPicker from "../components/MyHexColorPicker"
 import useStyleState from "../store/StyleStore"
 import useDefaultState from "../store/DefaultStore"
+import { RadioChoice } from "../components/RimeSettingItem"
 
 type ColorSchemeEntry = {
   label: string
@@ -20,10 +21,21 @@ type ColorSchemeEntry = {
 }
 
 const CustomSkin = () => {
-  const pageSize = useDefaultState((state) => state.defaultCustom.patch["menu/page_size"])
-  const changePageSize = useDefaultState((state) => state.changePageSize)
-  const changeInlinePreedit = useStyleState((state) => state.changePreedit)
-  const inline_preedit = useStyleState((state) => state.styleCustom.patch["style/inline_preedit"])
+  const {
+    changePageSize,
+    defaultCustom: { patch: defaultPatch },
+  } = useDefaultState((state) => state)
+
+  const {
+    changePreedit: changeInlinePreedit,
+    changeOrientation,
+    changeColorScheme,
+    styleCustom: { patch: stylePatch },
+  } = useStyleState((state) => state)
+
+  const pageSize = defaultPatch["menu/page_size"]
+  const inline_preedit = stylePatch["style/inline_preedit"]
+  const horizontal = stylePatch["style/horizontal"]
 
   const { skin, colors, items, pereditContent, changeSelectedTheme } = useCustomSkinState()
   const { pereditText, pereditHilitedText, pereditCaret } = pereditContent
@@ -46,12 +58,11 @@ const CustomSkin = () => {
       return { name: key, color: convertColor(value) }
     })
 
-  const styleState = useStyleState()
   function changeColor(newcolor: string, colorName: string) {
     const config = { ...skin, [colorName]: convertColor(newcolor) }
     changeSelectedTheme(config)
 
-    styleState.changeColorScheme("soak", config)
+    changeColorScheme("soak", config)
   }
 
   const {
@@ -175,131 +186,8 @@ const CustomSkin = () => {
         width: "80vw",
         margin: "0vh 10vw",
         height: "auto",
-        // backgroundColor: "#3eb370",
       }}
     >
-      <div
-        style={{
-          marginTop: `${inline_preedit ? 55 : 20}px`,
-          display: "flex",
-          height: "auto",
-          flexDirection: "column",
-          alignItems: "stretch",
-          border: `3px solid ${border_color}`,
-          backgroundColor: back_color,
-          boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
-        }}
-      >
-        {!inline_preedit && (
-          <div
-            style={{
-              display: "inline-flex",
-              paddingLeft: "7px",
-              paddingTop: "7px",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                height: "29px",
-                textAlign: "center",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <div
-                style={{
-                  color: `${text_color}`,
-                  fontSize: "20px",
-                  paddingRight: "2px",
-                }}
-              >
-                {pereditText}
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  fontSize: "20px",
-                  alignItems: "center",
-                  height: "29px",
-                  padding: "0 3px",
-                  borderRadius: "3px",
-                  color: `${hilited_text_color}`,
-                  backgroundColor: `${hilited_back_color}`,
-                }}
-              >
-                {pereditHilitedText}
-              </div>
-              <div
-                style={{
-                  color: `${text_color}`,
-                  fontSize: "20px",
-                  padding: "2px",
-                }}
-              >
-                {pereditCaret}
-              </div>
-            </div>
-          </div>
-        )}
-        <div
-          style={{
-            display: "inline-flex",
-            padding: `${inline_preedit ? 7 : 6}px 7px 7px 7px`,
-          }}
-        >
-          {items.slice(0, pageSize).map(({ label, suffix, candidate, comment }, index) => {
-            const hilited = index === 0
-
-            return (
-              <div style={{ display: "flex" }} key={index}>
-                <div
-                  style={{
-                    display: "flex",
-                    height: "29px",
-                    textAlign: "center",
-                    justifyContent: "center",
-                    backgroundColor: hilited ? hilited_candidate_back_color : back_color,
-                    alignItems: "center",
-                    boxSizing: "border-box",
-                    lineHeight: "1",
-                    borderRadius: "3px",
-                  }}
-                >
-                  <div style={{ width: "3px" }}></div>
-                  <div
-                    style={{
-                      color: hilited ? hilited_label_color : label_color,
-                      fontSize: "20px",
-                    }}
-                  >
-                    {label}
-                  </div>
-                  <div
-                    style={{
-                      color: hilited ? hilited_label_color : label_color,
-                      fontSize: "20px",
-                    }}
-                  >
-                    {suffix}
-                  </div>
-                  <div style={{ width: "5px" }} />
-                  <div
-                    style={{ color: hilited ? hilited_candidate_text_color : candidate_text_color, fontSize: "20px" }}
-                  >
-                    {candidate}
-                  </div>
-                  <div style={{ color: hilited ? hilited_comment_text_color : comment_text_color, fontSize: "20px" }}>
-                    {comment}
-                  </div>
-                  <div style={{ width: "7px" }} />
-                </div>
-              </div>
-            )
-          })}
-        </div>
-      </div>
-
       <div
         style={{
           display: "inline-flex",
@@ -329,31 +217,170 @@ const CustomSkin = () => {
               onChange={(value, option) => {
                 const config = (option as ColorSchemeEntry).config as CustomSkinConfig
                 changeSelectedTheme(config)
-                styleState.changeColorScheme(value, config)
+                changeColorScheme(value, config)
                 setFocus(false)
               }}
             />
           </div>
 
           <div>
-            内嵌编辑区
-            <Switch
-              defaultChecked={inline_preedit}
-              onChange={(checked: boolean) => {
-                changeInlinePreedit(checked)
+            <RadioChoice
+              values={[true, false]}
+              defaultValue={horizontal}
+              names={["横屏", "竖屏"]}
+              onChange={(value: boolean) => {
+                changeOrientation(value)
+              }}
+            />
+          </div>
+
+          <div>
+            <RadioChoice
+              values={[true, false]}
+              defaultValue={inline_preedit}
+              names={["编码行内嵌", "面板"]}
+              onChange={(value: boolean) => {
+                changeInlinePreedit(value)
               }}
             />
           </div>
 
           <div style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
-            <IntegerStep
-              slierWidth="8vw"
-              size={pageSize}
-              onChange={(value: number) => {
-                changePageSize(value)
+            <div style={{ display: "inline-flex", alignItems: "center" }}>
+              候选词数量
+              <div style={{ width: "8px" }}></div>
+              <IntegerStep
+                slierWidth="8vw"
+                showSlider={false}
+                size={pageSize}
+                onChange={(value: number) => {
+                  changePageSize(value)
+                }}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div
+          style={{
+            marginTop: `${inline_preedit ? 55 : 20}px`,
+            display: "flex",
+            height: "auto",
+            flexDirection: "column",
+            alignItems: "stretch",
+            border: `3px solid ${border_color}`,
+            backgroundColor: back_color,
+            boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
+          }}
+        >
+          {!inline_preedit && (
+            <div
+              style={{
+                display: "inline-flex",
+                paddingLeft: "7px",
+                paddingTop: "7px",
               }}
-            />
-            候选词数量
+            >
+              <div
+                style={{
+                  display: "flex",
+                  height: "29px",
+                  textAlign: "center",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <div
+                  style={{
+                    color: `${text_color}`,
+                    fontSize: "20px",
+                    paddingRight: "2px",
+                  }}
+                >
+                  {pereditText}
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    fontSize: "20px",
+                    alignItems: "center",
+                    height: "29px",
+                    padding: "0 3px",
+                    borderRadius: "3px",
+                    color: `${hilited_text_color}`,
+                    backgroundColor: `${hilited_back_color}`,
+                  }}
+                >
+                  {pereditHilitedText}
+                </div>
+                <div
+                  style={{
+                    color: `${text_color}`,
+                    fontSize: "20px",
+                    padding: "2px",
+                  }}
+                >
+                  {pereditCaret}
+                </div>
+              </div>
+            </div>
+          )}
+          <div
+            style={{
+              display: "inline-flex",
+              flexDirection: `${horizontal ? "row" : "column"}`,
+              padding: `${inline_preedit ? 7 : 6}px 7px 7px 7px`,
+            }}
+          >
+            {items.slice(0, pageSize).map(({ label, suffix, candidate, comment }, index) => {
+              const hilited = index === 0
+
+              return (
+                <div style={{ display: "flex" }} key={index}>
+                  <div
+                    style={{
+                      display: "flex",
+                      height: "29px",
+                      textAlign: "center",
+                      justifyContent: "center",
+                      backgroundColor: hilited ? hilited_candidate_back_color : back_color,
+                      alignItems: "center",
+                      boxSizing: "border-box",
+                      lineHeight: "1",
+                      borderRadius: "3px",
+                    }}
+                  >
+                    <div style={{ width: "3px" }}></div>
+                    <div
+                      style={{
+                        color: hilited ? hilited_label_color : label_color,
+                        fontSize: "20px",
+                      }}
+                    >
+                      {label}
+                    </div>
+                    <div
+                      style={{
+                        color: hilited ? hilited_label_color : label_color,
+                        fontSize: "20px",
+                      }}
+                    >
+                      {suffix}
+                    </div>
+                    <div style={{ width: "5px" }} />
+                    <div
+                      style={{ color: hilited ? hilited_candidate_text_color : candidate_text_color, fontSize: "20px" }}
+                    >
+                      {candidate}
+                    </div>
+                    <div style={{ color: hilited ? hilited_comment_text_color : comment_text_color, fontSize: "20px" }}>
+                      {comment}
+                    </div>
+                    <div style={{ width: "7px" }} />
+                  </div>
+                </div>
+              )
+            })}
           </div>
         </div>
 

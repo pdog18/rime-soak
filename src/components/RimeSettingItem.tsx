@@ -24,7 +24,7 @@ export const RadioChoice = <T,>(props: RadioChoiceProps<T>) => (
     }}
   >
     {props.values.map((value, index) => (
-      <Radio.Button key={`${value}`} value={value}>
+      <Radio.Button key={`${value}`} value={value} checked={props.defaultValue === value}>
         {props.names[index]}
       </Radio.Button>
     ))}
