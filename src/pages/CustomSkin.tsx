@@ -11,6 +11,7 @@ import { HexColorInput } from "react-colorful"
 import RevealOnFocus from "../components/RevealOnFocus"
 import PlumpColorPicker from "../components/MyHexColorPicker"
 import useStyleState from "../store/StyleStore"
+import useDefaultState from "../store/DefaultStore"
 
 type ColorSchemeEntry = {
   label: string
@@ -19,13 +20,16 @@ type ColorSchemeEntry = {
 }
 
 const CustomSkin = () => {
+  const pageSize = useDefaultState((state) => state.defaultCustom.patch["menu/page_size"])
+  const changePageSize = useDefaultState((state) => state.changePageSize)
+  const changeInlinePreedit = useStyleState((state) => state.changePreedit)
+  const inline_preedit = useStyleState((state) => state.styleCustom.patch["style/inline_preedit"])
+
   const { skin, colors, items, pereditContent, changeSelectedTheme } = useCustomSkinState()
   const { pereditText, pereditHilitedText, pereditCaret } = pereditContent
 
   const [skins, setSkins] = useState<ColorSchemeEntry[]>([])
   const [loading, setLoading] = useState(true)
-  const [inline_preedit, changeInlinePreedit] = useState(true)
-  const [pageSize, changePageSize] = useState(6)
 
   const [showBackground, changeShowBackground] = useState(false)
   const convertedColors = Object.fromEntries(colors.map(([key, value]) => [key, convertColor(value)]))
@@ -46,10 +50,7 @@ const CustomSkin = () => {
   function changeColor(newcolor: string, colorName: string) {
     const config = { ...skin, [colorName]: convertColor(newcolor) }
     changeSelectedTheme(config)
-    // skins.filter(({_,label,_}) =>{
-    //   config
 
-    // })
     styleState.changeColorScheme("soak", config)
   }
 
@@ -346,6 +347,7 @@ const CustomSkin = () => {
 
           <div style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
             <IntegerStep
+              slierWidth="8vw"
               size={pageSize}
               onChange={(value: number) => {
                 changePageSize(value)
