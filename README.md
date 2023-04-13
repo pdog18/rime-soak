@@ -1,3 +1,5 @@
+[![GitHub Actions Status](https://github.com/pdog18/rime-soak/actions/workflows/deploy.yml/badge.svg)](https://github.com/pdog18/rime-soak/actions)
+
 # rime-soak 「润笔」
 
 「不起个好名，写码兴致索然。」 [——— by 山景答問](https://rime.im/blog/2016/04/14/qna-in-mtvu/)
