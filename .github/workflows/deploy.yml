@@ -25,9 +25,12 @@ jobs:
         run: |
           git config --global user.email "pdog@qq.com"
           git config --global user.name "pdog18"
+
       - name: Build and deploy
         run: |
           npm run build
           npm run deploy
+          npx gh-pages -d build --repo https://${{ secrets.GITHUB_TOKEN }}@github.com/pdog18/rime-soak.git --access-token ${{ secrets.GITHUB_TOKEN }}
+
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
