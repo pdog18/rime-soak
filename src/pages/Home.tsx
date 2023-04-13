@@ -7,7 +7,7 @@ import Style from "./style/Style"
 import { useLocation, useNavigate } from "react-router-dom"
 import Other from "./other/Other"
 import CustomPhrase from "./customPhrase/CustomPhrase"
-import CustomSkin from "./CustomSkin"
+import CustomSkin from "./skin/CustomSkin"
 const items = [
   {
     key: "/default",

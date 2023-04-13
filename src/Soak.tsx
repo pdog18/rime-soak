@@ -1,5 +1,5 @@
 import { HashRouter, Routes, Route } from "react-router-dom"
-import CustomSkin from "./pages/CustomSkin"
+import CustomSkin from "./pages/skin/CustomSkin"
 import Home from "./pages/Home"
 import Result from "./pages/Result"
 

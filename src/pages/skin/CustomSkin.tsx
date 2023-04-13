@@ -2,17 +2,17 @@ import { Select, Switch } from "antd"
 import { useEffect, useState } from "react"
 import { parse } from "yaml"
 
-import { convertColor } from "../utils/ColorUtils"
-import useCustomSkinState, { CustomSkinConfig, createCustomSkinState } from "../store/CustomSkinStore"
-import IntegerStep from "../components/IntegerStep"
+import { convertColor } from "../../utils/ColorUtils"
+import useCustomSkinState, { CustomSkinConfig, createCustomSkinState } from "../../store/CustomSkinStore"
+import IntegerStep from "../../components/IntegerStep"
 
 import { HexColorInput } from "react-colorful"
 
-import RevealOnFocus from "../components/RevealOnFocus"
-import PlumpColorPicker from "../components/MyHexColorPicker"
-import useStyleState from "../store/StyleStore"
-import useDefaultState from "../store/DefaultStore"
-import { RadioChoice } from "../components/RimeSettingItem"
+import RevealOnFocus from "../../components/RevealOnFocus"
+import PlumpColorPicker from "../../components/MyHexColorPicker"
+import useStyleState from "../../store/StyleStore"
+import useDefaultState from "../../store/DefaultStore"
+import { RadioChoice } from "../../components/RimeSettingItem"
 
 type ColorSchemeEntry = {
   label: string
