@@ -26,11 +26,10 @@ jobs:
           git config --global user.email "pdog@qq.com"
           git config --global user.name "pdog18"
 
-      - name: Build and deploy
-        run: |
-          npm run build
-          npm run deploy
-          npx gh-pages -d build --repo https://${{ secrets.GITHUB_TOKEN }}@github.com/pdog18/rime-soak.git --access-token ${{ secrets.GITHUB_TOKEN }}
-
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build page
+        run: npm run build
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build
