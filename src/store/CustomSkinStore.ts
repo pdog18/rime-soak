@@ -79,25 +79,6 @@ function createCustomSkinState(
     hilited_label_color = blendColors(hilited_candidate_text_color, hilited_candidate_back_color),
   } = style
 
-  console.log("createCustomSkinState >>>>>> ", {
-    name: style.name ?? "rime-soak",
-    author: style.author ?? "create by soak",
-    text_color,
-    back_color,
-    border_color,
-
-    label_color,
-    hilited_text_color,
-    hilited_back_color,
-
-    candidate_text_color,
-    comment_text_color,
-    hilited_candidate_text_color,
-    hilited_comment_text_color: style.hilited_comment_text_color ?? comment_text_color,
-    hilited_candidate_back_color,
-    hilited_label_color,
-  })
-
   return {
     name: style.name ?? "rime-soak",
     author: style.author ?? "create by soak",
