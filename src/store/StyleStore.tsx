@@ -26,6 +26,7 @@ interface StylePatch {
   "style/inline_preedit": boolean
   "style/display_tray_icon": boolean
   "style/color_scheme": string
+  "style/font_point": number
   preset_color_schemes: {
     [key: string]: CustomSkinConfig
   }
@@ -41,6 +42,7 @@ interface StyleState {
   changeOrientation: (horizontal: boolean) => void
   changePreedit: (inline_preedit: boolean) => void
   changeDisplayTrayIcon: (display_tray_icon: boolean) => void
+  changeFontSize: (fontSize: number) => void
 
   changeAsciiModeApps: (appOptions: string[]) => void
   generateYAML: () => string | null
@@ -64,6 +66,8 @@ const useStyleState = create<StyleState>()((set, get) => ({
       "style/inline_preedit": false,
       "style/display_tray_icon": false,
       "style/color_scheme": "aqua",
+      "style/font_point": 14,
+
       preset_color_schemes: {},
       app_options: {
         "cmd.exe": {
@@ -114,10 +118,15 @@ const useStyleState = create<StyleState>()((set, get) => ({
   changeColorScheme: (color_scheme_name, color_scheme) =>
     set(
       produce((state) => {
-        console.log(color_scheme_name, color_scheme)
-
         state.styleCustom.patch["style/color_scheme"] = color_scheme_name
         state.styleCustom.patch.preset_color_schemes[color_scheme_name] = color_scheme
+      })
+    ),
+
+  changeFontSize: (fontSize) =>
+    set(
+      produce((state) => {
+        state.styleCustom.patch["style/font_point"] = fontSize
       })
     ),
 

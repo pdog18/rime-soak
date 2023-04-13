@@ -4,6 +4,7 @@ interface SkinProps {
   inlinePreedit: boolean
   horizontal: boolean
   pageSize: number
+  fontSize: number
   items: Candidate[]
   pereditContent: {
     [k: string]: string
@@ -13,10 +14,17 @@ interface SkinProps {
   }
 }
 
+const calculateRem = (size: number) => {
+  const baseFontSize = 16 // 默认字体大小，通常为16px
+  const pixels = (size * 96) / 72 // 将点数转换为像素
+  return pixels / baseFontSize
+}
+
 export default function CustomSkinPreview({
   inlinePreedit,
   horizontal,
   pageSize,
+  fontSize,
   items,
   pereditContent,
   convertedColors,
@@ -36,6 +44,8 @@ export default function CustomSkinPreview({
     hilited_candidate_back_color,
     hilited_comment_text_color,
   } = convertedColors
+
+  const convertedFontSize = `${calculateRem(fontSize)}rem`
 
   return (
     <div
@@ -60,8 +70,8 @@ export default function CustomSkinPreview({
         >
           <div
             style={{
+              fontSize: convertedFontSize,
               display: "flex",
-              height: "29px",
               textAlign: "center",
               justifyContent: "center",
               alignItems: "center",
@@ -70,7 +80,6 @@ export default function CustomSkinPreview({
             <div
               style={{
                 color: `${text_color}`,
-                fontSize: "20px",
                 paddingRight: "2px",
               }}
             >
@@ -79,9 +88,7 @@ export default function CustomSkinPreview({
             <div
               style={{
                 display: "flex",
-                fontSize: "20px",
                 alignItems: "center",
-                height: "29px",
                 padding: "0 3px",
                 borderRadius: "3px",
                 color: `${hilited_text_color}`,
@@ -93,7 +100,6 @@ export default function CustomSkinPreview({
             <div
               style={{
                 color: `${text_color}`,
-                fontSize: "20px",
                 padding: "2px",
               }}
             >
@@ -116,22 +122,20 @@ export default function CustomSkinPreview({
             <div style={{ display: "flex" }} key={index}>
               <div
                 style={{
+                  fontSize: convertedFontSize,
                   display: "flex",
-                  height: "29px",
                   textAlign: "center",
                   justifyContent: "center",
                   backgroundColor: hilited ? hilited_candidate_back_color : back_color,
                   alignItems: "center",
                   boxSizing: "border-box",
-                  lineHeight: "1",
                   borderRadius: "3px",
                 }}
               >
-                <div style={{ width: "3px" }}></div>
+                <div style={{ width: "3px" }} />
                 <div
                   style={{
                     color: hilited ? hilited_label_color : label_color,
-                    fontSize: "20px",
                   }}
                 >
                   {label}
@@ -139,18 +143,13 @@ export default function CustomSkinPreview({
                 <div
                   style={{
                     color: hilited ? hilited_label_color : label_color,
-                    fontSize: "20px",
                   }}
                 >
                   {suffix}
                 </div>
                 <div style={{ width: "5px" }} />
-                <div style={{ color: hilited ? hilited_candidate_text_color : candidate_text_color, fontSize: "20px" }}>
-                  {candidate}
-                </div>
-                <div style={{ color: hilited ? hilited_comment_text_color : comment_text_color, fontSize: "20px" }}>
-                  {comment}
-                </div>
+                <div style={{ color: hilited ? hilited_candidate_text_color : candidate_text_color }}>{candidate}</div>
+                <div style={{ color: hilited ? hilited_comment_text_color : comment_text_color }}>{comment}</div>
                 <div style={{ width: "7px" }} />
               </div>
             </div>

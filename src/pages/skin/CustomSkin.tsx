@@ -28,19 +28,20 @@ const CustomSkin = () => {
     changePreedit: changeInlinePreedit,
     changeOrientation,
     changeColorScheme,
+    changeFontSize,
     styleCustom: { patch: stylePatch },
   } = useStyleState((state) => state)
 
   const pageSize = defaultPatch["menu/page_size"]
   const inline_preedit = stylePatch["style/inline_preedit"]
   const horizontal = stylePatch["style/horizontal"]
+  const fontSize = stylePatch["style/font_point"]
 
   const { skin, colors, items, pereditContent, changeSelectedTheme } = useCustomSkinState()
 
   const [skins, setSkins] = useState<ColorSchemeEntry[]>([])
   const [focus, setFocus] = useState(false)
   const [loading, setLoading] = useState(true)
-  const [showBackground, changeShowBackground] = useState(false)
 
   const convertedColors = Object.fromEntries(colors.map(([key, value]) => [key, convertColor(value)]))
 
@@ -75,23 +76,9 @@ const CustomSkin = () => {
     fetchSkins()
   }, [])
 
-  const maskStyle: React.CSSProperties = {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    width: "100%",
-    height: "100%",
-    backgroundColor: "rgba(0, 0, 0, 0.1)",
-    zIndex: 0,
-    backgroundImage:
-      "linear-gradient(0deg, rgba(0, 0, 0, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 0, 0, 0.1) 1px, transparent 1px)",
-    backgroundSize: "20px 20px",
-  }
-
   return (
     <div
       style={{
-        ...(showBackground ? maskStyle : {}),
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -101,73 +88,74 @@ const CustomSkin = () => {
         height: "auto",
       }}
     >
-      <div
-        style={{
-          display: "inline-flex",
-          flexDirection: "column",
-          marginTop: "32px",
-          alignItems: "center",
-        }}
-      >
-        <div style={{ display: "inline-flex", columnGap: "80px", alignItems: "center" }}>
-          <div>
-            辅助网格
-            <Switch defaultChecked={false} onChange={changeShowBackground} />
-          </div>
-
-          <div>
-            查看方案
-            <Select
-              defaultValue="ikun"
-              style={{ width: 120, marginLeft: "6px" }}
-              loading={loading}
-              options={skins}
-              onChange={(value, option) => {
-                const config = (option as ColorSchemeEntry).config as CustomSkinConfig
-                changeSelectedTheme(config)
-                changeColorScheme(value, config)
-                setFocus(false)
-              }}
-            />
-          </div>
-
-          <RadioChoice
-            values={[true, false]}
-            defaultValue={horizontal}
-            names={["横屏", "竖屏"]}
-            onChange={changeOrientation}
+      <div style={{ display: "inline-flex", columnGap: "80px", alignItems: "center" }}>
+        <div>
+          查看方案
+          <Select
+            defaultValue="ikun"
+            style={{ width: 120, marginLeft: "6px" }}
+            loading={loading}
+            options={skins}
+            onChange={(value, option) => {
+              const config = (option as ColorSchemeEntry).config as CustomSkinConfig
+              changeSelectedTheme(config)
+              changeColorScheme(value, config)
+              setFocus(false)
+            }}
           />
-
-          <RadioChoice
-            values={[true, false]}
-            defaultValue={inline_preedit}
-            names={["编码行内嵌", "面板"]}
-            onChange={changeInlinePreedit}
-          />
-
-          <div style={{ display: "inline-flex", alignItems: "center" }}>
-            候选词数量
-            <div style={{ width: "8px" }} />
-            <IntegerStep slierWidth="8vw" showSlider={false} size={pageSize} onChange={changePageSize} />
-          </div>
         </div>
-        <CustomSkinPreview
-          inlinePreedit={inline_preedit}
-          horizontal={horizontal}
-          pageSize={pageSize}
-          pereditContent={pereditContent}
-          items={items}
-          convertedColors={convertedColors}
+
+        <div>
+          字体大小
+          <Select
+            defaultValue={fontSize}
+            style={{ width: 60, marginLeft: "6px" }}
+            loading={loading}
+            options={Array.from({ length: 15 }, (_, index) => 10 + index * 2).map((size) => ({
+              label: size.toString(),
+              value: size,
+            }))}
+            onChange={changeFontSize}
+          />
+        </div>
+
+        <RadioChoice
+          values={[true, false]}
+          defaultValue={horizontal}
+          names={["横屏", "竖屏"]}
+          onChange={changeOrientation}
         />
 
-        <ColorPickers
-          inline_preedit={inline_preedit}
-          colors={colors}
-          changeColor={changeColor}
-          focus={focus}
-          changeFocus={setFocus}
+        <RadioChoice
+          values={[true, false]}
+          defaultValue={inline_preedit}
+          names={["编码行内嵌", "面板"]}
+          onChange={changeInlinePreedit}
         />
+
+        <div style={{ display: "inline-flex", alignItems: "center" }}>
+          候选词数量
+          <div style={{ width: "8px" }} />
+          <IntegerStep slierWidth="8vw" showSlider={false} size={pageSize} onChange={changePageSize} />
+        </div>
       </div>
+      <CustomSkinPreview
+        inlinePreedit={inline_preedit}
+        horizontal={horizontal}
+        pageSize={pageSize}
+        fontSize={fontSize}
+        pereditContent={pereditContent}
+        items={items}
+        convertedColors={convertedColors}
+      />
+
+      <ColorPickers
+        inline_preedit={inline_preedit}
+        colors={colors}
+        changeColor={changeColor}
+        focus={focus}
+        changeFocus={setFocus}
+      />
     </div>
   )
 }
