@@ -10,9 +10,7 @@ import { useNavigate } from "react-router-dom"
 import SyntaxHighlighter from "react-syntax-highlighter"
 import { monokaiSublime } from "react-syntax-highlighter/dist/esm/styles/hljs"
 
-interface SimpleDictProps {
-  content: string
-}
+import download from "../utils/DownloadUtils"
 
 const hlighter = (content: string, language: "yaml" | "lua" | "txt") => (
   <SyntaxHighlighter language={language} style={monokaiSublime}>
@@ -20,6 +18,9 @@ const hlighter = (content: string, language: "yaml" | "lua" | "txt") => (
   </SyntaxHighlighter>
 )
 
+interface SimpleDictProps {
+  content: string
+}
 const SimpleDict: React.FC<SimpleDictProps> = ({ content = "" }) => {
   const [displayAll, changeDisplay] = useState(false)
 
@@ -78,9 +79,6 @@ const Result: React.FC = () => {
     fetchSchema()
   }, [url, dictFileName, schemaFileName])
 
-  // todo 袖珍拼音/双拼／五笔等方案，Rime 未自带，需要额外安装，拖入 Rime 文件夹直接安装
-  // 拖入后，备份相关文件
-
   const candidates = [
     { condition: defaultCustom, filename: "default.custom.yaml", key: "defaultCustom", content: defaultCustom },
     { condition: styleCustom, filename: styleState.fileName, key: "styleCustom", content: styleCustom },
@@ -131,7 +129,31 @@ const Result: React.FC = () => {
       }
     })
 
-  let content = <Tabs style={{ padding: "0vh 10vw" }} type="card" items={items} />
+  let content = (
+    <Tabs
+      style={{ padding: "0vh 10vw" }}
+      type="card"
+      items={items}
+      tabBarExtraContent={{
+        right: (
+          <Button
+            type="primary"
+            onClick={() => {
+              const files = candidates
+                .filter((candidate) => candidate.condition)
+                .map(({ filename, content }) => ({
+                  filename: filename as string,
+                  content: content as string,
+                }))
+              download(files)
+            }}
+          >
+            Download
+          </Button>
+        ),
+      }}
+    />
+  )
 
   if (items.length === 0) {
     content = (
@@ -161,7 +183,7 @@ const Result: React.FC = () => {
       }}
     >
       <Button
-        style={{ alignSelf: "center" }}
+        style={{ alignSelf: "start", margin: "0 10vw" }}
         type="primary"
         onClick={() => {
           navigate("/")
@@ -169,6 +191,7 @@ const Result: React.FC = () => {
       >
         返回
       </Button>
+
       {content}
     </div>
   )
