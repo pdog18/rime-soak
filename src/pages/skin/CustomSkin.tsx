@@ -58,6 +58,8 @@ const CustomSkin = () => {
 
       const schemes = parse(dictData).preset_color_schemes
       const schemesArray = Object.entries(schemes).map((entry) => {
+        console.log("from network")
+
         return {
           label: entry[0],
           value: entry[0],
@@ -71,6 +73,9 @@ const CustomSkin = () => {
       })
 
       setSkins(schemesArray)
+      changeSelectedTheme(schemesArray[0].config)
+      console.log(schemesArray[0].config)
+
       setLoading(false)
     }
     fetchSkins()

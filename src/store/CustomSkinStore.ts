@@ -79,6 +79,25 @@ function createCustomSkinState(
     hilited_label_color = blendColors(hilited_candidate_text_color, hilited_candidate_back_color),
   } = style
 
+  console.log("createCustomSkinState >>>>>> ", {
+    name: style.name ?? "rime-soak",
+    author: style.author ?? "create by soak",
+    text_color,
+    back_color,
+    border_color,
+
+    label_color,
+    hilited_text_color,
+    hilited_back_color,
+
+    candidate_text_color,
+    comment_text_color,
+    hilited_candidate_text_color,
+    hilited_comment_text_color: style.hilited_comment_text_color ?? comment_text_color,
+    hilited_candidate_back_color,
+    hilited_label_color,
+  })
+
   return {
     name: style.name ?? "rime-soak",
     author: style.author ?? "create by soak",
@@ -100,14 +119,14 @@ function createCustomSkinState(
 }
 
 const initSkin = createCustomSkinState({
-  text_color: 0xffffff,
-  back_color: 0x70b33e,
-  border_color: 0x70b33e,
+  text_color: 0x000000,
+  back_color: 0xeceeee,
+  border_color: 0xe0e0e0,
 
-  hilited_back_color: 0xffffff,
-  hilited_comment_text_color: 0x70b33e,
-  hilited_text_color: 0x70b33e,
-  label_color: 0xffffff,
+  hilited_text_color: 0x000000,
+  hilited_back_color: 0xd4d4d4,
+  hilited_candidate_text_color: 0xffffff,
+  hilited_candidate_back_color: 0xfa3a0a,
 })
 
 const useCustomSkinState = create<CustomSkinState>()((set, get) => ({
