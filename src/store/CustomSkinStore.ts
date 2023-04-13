@@ -126,5 +126,5 @@ const useCustomSkinState = create<CustomSkinState>()((set, get) => ({
 }))
 
 export { createCustomSkinState }
-export type { CustomSkinConfig }
+export type { CustomSkinConfig, Candidate }
 export default useCustomSkinState
