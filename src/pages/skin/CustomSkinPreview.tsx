@@ -14,6 +14,7 @@ interface SkinProps {
   spacing: number
   candidate_spacing: number
   round_corner: number
+  hilite_spacing: number
   hilite_padding: number
 
   items: Candidate[]
@@ -44,6 +45,7 @@ export default function CustomSkinPreview({
   spacing,
   candidate_spacing,
   round_corner,
+  hilite_spacing,
   hilite_padding,
   items,
   preeditContent,
@@ -160,19 +162,35 @@ export default function CustomSkinPreview({
                 key={index}
                 style={{
                   alignSelf: "stretch",
-                  backgroundColor: hilited ? hilited_candidate_back_color : "transparent",
-                  borderRadius: `${round_corner}px`,
+                  backgroundColor: "transparent",
                   fontSize: convertedFontSize,
                   display: "flex",
                   textAlign: "center",
                   justifyContent: "start",
                   alignItems: "center",
+                  position: "relative",
                 }}
               >
+                {hilited && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      backgroundColor: "green",
+                      borderRadius: `${round_corner}px`,
+                      padding: `${hilite_padding}px`,
+                      zIndex: -1,
+                    }}
+                  />
+                )}
+
                 <div style={{ width: "3px" }} />
                 <div style={{ color: hilited ? hilited_label_color : label_color }}>{label}</div>
                 <div style={{ color: hilited ? hilited_label_color : label_color }}>{suffix}</div>
-                <div style={{ width: `${hilite_padding}px` }} />
+                <div style={{ width: `${hilite_spacing}px` }} />
                 <div
                   style={{
                     color: hilited ? hilited_candidate_text_color : candidate_text_color,

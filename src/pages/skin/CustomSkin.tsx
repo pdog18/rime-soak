@@ -42,6 +42,7 @@ const CustomSkin = () => {
   const margin_y = stylePatch["style/layout/margin_y"]
   const spacing = stylePatch["style/layout/spacing"]
   const candidate_spacing = stylePatch["style/layout/candidate_spacing"]
+  const hilite_spacing = stylePatch["style/layout/hilite_spacing"]
   const hilite_padding = stylePatch["style/layout/hilite_padding"]
   const round_corner = stylePatch["style/layout/round_corner"]
 
@@ -232,6 +233,16 @@ const CustomSkin = () => {
           />
         </div>
         <div>
+          hilite_spacing
+          <NumericInput
+            style={{ width: "60px", marginLeft: "6px" }}
+            value={hilite_spacing}
+            maxLength={2}
+            onChange={(number) => updateStyleCustom("style/layout/hilite_spacing", number)}
+            defaultValue={hilite_spacing}
+          />
+        </div>
+        <div>
           hilite_padding
           <NumericInput
             style={{ width: "60px", marginLeft: "6px" }}
@@ -245,6 +256,7 @@ const CustomSkin = () => {
       <CustomSkinPreview
         hilite_padding={hilite_padding}
         inlinePreedit={inline_preedit}
+        hilite_spacing={hilite_spacing}
         candidate_spacing={candidate_spacing}
         horizontal={horizontal}
         round_corner={round_corner}
