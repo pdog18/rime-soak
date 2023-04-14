@@ -158,7 +158,7 @@ const CustomSkin = () => {
         </div>
 
         <div>
-          最小宽度
+          最小高度
           <NumericInput
             style={{ width: "60px", marginLeft: "6px" }}
             value={min_height}
@@ -201,7 +201,7 @@ const CustomSkin = () => {
       </div>
       <div style={{ display: "inline-flex", columnGap: "80px", alignItems: "center" }}>
         <div>
-          间距
+          词码间距
           <NumericInput
             style={{ width: "60px", marginLeft: "6px" }}
             disabled={inline_preedit}
@@ -213,7 +213,7 @@ const CustomSkin = () => {
         </div>
 
         <div>
-          候选词间距
+          候选间距
           <NumericInput
             style={{ width: "60px", marginLeft: "6px" }}
             value={candidate_spacing}
@@ -233,7 +233,7 @@ const CustomSkin = () => {
           />
         </div>
         <div>
-          hilite_spacing
+          序词间距
           <NumericInput
             style={{ width: "60px", marginLeft: "6px" }}
             value={hilite_spacing}
@@ -243,7 +243,7 @@ const CustomSkin = () => {
           />
         </div>
         <div>
-          hilite_padding
+          高亮填充
           <NumericInput
             style={{ width: "60px", marginLeft: "6px" }}
             value={hilite_padding}

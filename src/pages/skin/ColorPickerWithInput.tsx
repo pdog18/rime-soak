@@ -29,7 +29,7 @@ export default function ColorPickerWithInput({ name, color, onColorChanged }: Pi
         changeFocus(false)
       }}
     >
-      <RevealOnFocus focus={focus} color={color} name={name.replace("_color", "")}>
+      <RevealOnFocus focus={focus} color={color} name={name.replace("_color", "")} onClick={() => changeFocus(true)}>
         <PlumpColorPicker
           style={{
             width: "80px",

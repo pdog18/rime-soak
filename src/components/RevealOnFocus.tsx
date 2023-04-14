@@ -6,11 +6,12 @@ interface RevealOnClickProps {
   focus: boolean
   color: string
   name: string
+  onClick: () => void
 }
 
-const RevealOnFocus: React.FC<RevealOnClickProps> = ({ children, focus, color, name }) => {
+const RevealOnFocus: React.FC<RevealOnClickProps> = ({ children, focus, color, name, onClick }) => {
   return (
-    <div className="wrapper">
+    <div className="wrapper" onClick={onClick} style={{ padding: "1px" }}>
       <div
         className={`content ${focus ? "fadeOut" : "fadeIn"}`}
         style={{

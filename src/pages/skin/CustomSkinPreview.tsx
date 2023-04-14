@@ -179,7 +179,7 @@ export default function CustomSkinPreview({
                       left: 0,
                       right: 0,
                       bottom: 0,
-                      backgroundColor: "green",
+                      backgroundColor: hilited_candidate_back_color,
                       borderRadius: `${round_corner}px`,
                       padding: `${hilite_padding}px`,
                       zIndex: -1,
