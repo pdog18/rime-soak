@@ -38,17 +38,18 @@ const CustomSkin = () => {
   const fontSize = stylePatch["style/font_point"]
 
   const { skin, colors, items, pereditContent, changeSelectedTheme } = useCustomSkinState()
-
   const [skins, setSkins] = useState<ColorSchemeEntry[]>([])
-  const [focus, setFocus] = useState(false)
   const [loading, setLoading] = useState(true)
-
   const convertedColors = Object.fromEntries(colors.map(([key, value]) => [key, convertColor(value)]))
 
-  function changeColor(newcolor: string, colorName: string) {
+  function onColorChanged(newcolor: string, colorName: string) {
     const config = { ...skin, [colorName]: convertColor(newcolor) }
     changeSelectedTheme(config)
     changeColorScheme("soak", config)
+  }
+
+  function onFocusChanged(focus: boolean, name: string) {
+    console.log(focus, name)
   }
 
   useEffect(() => {
@@ -101,7 +102,6 @@ const CustomSkin = () => {
               const config = (option as ColorSchemeEntry).config as CustomSkinConfig
               changeSelectedTheme(config)
               changeColorScheme(value, config)
-              setFocus(false)
             }}
           />
         </div>
@@ -151,11 +151,17 @@ const CustomSkin = () => {
       />
 
       <ColorPickers
-        inline_preedit={inline_preedit}
-        colors={colors}
-        changeColor={changeColor}
-        focus={focus}
-        changeFocus={setFocus}
+        filterColors={colors
+          .filter(([key, _]) => {
+            if (!inline_preedit) {
+              return true
+            }
+            const excludedKeys = ["text_color", "hilited_back_color", "hilited_text_color"]
+            return !excludedKeys.includes(key)
+          })
+          .map(([key, value]) => [key, convertColor(value)])}
+        onColorChanged={onColorChanged}
+        onFocusChanged={onFocusChanged}
       />
     </div>
   )

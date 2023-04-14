@@ -7,6 +7,9 @@
 
 .content {
   position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   z-index: 999;
   border-radius: 18px;
   top: 0;
@@ -19,10 +22,14 @@
   transition: opacity 1s;
 }
 
-.focus {
-  /* opacity: 0; */
+.fadeOut {
   pointer-events: none;
   animation: fadeOut 1s forwards;
+}
+
+.fadeIn {
+  pointer-events: auto;
+  animation: fadeIn 1s forwards;
 }
 
 @keyframes fadeOut {
@@ -31,6 +38,15 @@
   }
   100% {
     clip-path: circle(0% at 0% 0%);
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    clip-path: circle(0% at 0% 0%);
+  }
+  100% {
+    clip-path: circle(150% at 0% 0%);
   }
 }
 
