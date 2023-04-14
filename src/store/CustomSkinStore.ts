@@ -15,13 +15,13 @@ interface CustomSkinState {
   items: Candidate[]
   changeSelectedTheme: (skin: CustomSkinConfig) => void
 
-  pereditContent: typeof pereditContent
+  preeditContent: typeof preeditContent
 }
 
-const pereditContent = {
-  pereditText: "输入法",
-  pereditHilitedText: "shu ru fa",
-  pereditCaret: "‸",
+const preeditContent = {
+  preeditText: "输入法",
+  preeditHilitedText: "输   入法",
+  preeditCaret: "‸",
 }
 
 const items: Candidate[] = [
@@ -113,7 +113,7 @@ const initSkin = createCustomSkinState({
 const useCustomSkinState = create<CustomSkinState>()((set, get) => ({
   skin: initSkin,
   items,
-  pereditContent,
+  preeditContent,
   colors: Object.entries(initSkin).filter(([_, value]) => typeof value === "number"),
   changeSelectedTheme(skin) {
     set(

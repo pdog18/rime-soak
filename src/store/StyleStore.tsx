@@ -29,6 +29,10 @@ interface StylePatch {
   "style/font_point": number
   "style/layout/min_width": number
   "style/layout/min_height": number
+  "style/layout/border_width": number
+  "style/layout/margin_x": number
+  "style/layout/margin_y": number
+
   preset_color_schemes: {
     [key: string]: CustomSkinConfig
   }
@@ -47,6 +51,9 @@ interface StyleState {
   changeFontSize: (fontSize: number) => void
   changeMinWidth: (min_width: number) => void
   changeMinHeight: (min_height: number) => void
+  changeBorderWidth: (border_width: number) => void
+  changeMarginX: (margin_x: number) => void
+  changeMarginY: (margin_y: number) => void
 
   changeAsciiModeApps: (appOptions: string[]) => void
   generateYAML: () => string | null
@@ -73,6 +80,9 @@ const useStyleState = create<StyleState>()((set, get) => ({
       "style/font_point": 14,
       "style/layout/min_width": 160,
       "style/layout/min_height": 0,
+      "style/layout/border_width": 3,
+      "style/layout/margin_x": 12,
+      "style/layout/margin_y": 12,
 
       preset_color_schemes: {},
       app_options: {
@@ -142,11 +152,29 @@ const useStyleState = create<StyleState>()((set, get) => ({
         state.styleCustom.patch["style/layout/min_width"] = min_width
       })
     ),
-
   changeMinHeight: (min_height) =>
     set(
       produce((state) => {
         state.styleCustom.patch["style/layout/min_height"] = min_height
+      })
+    ),
+
+  changeBorderWidth: (border_width) =>
+    set(
+      produce((state) => {
+        state.styleCustom.patch["style/layout/border_width"] = border_width
+      })
+    ),
+  changeMarginX: (margin_x) =>
+    set(
+      produce((state) => {
+        state.styleCustom.patch["style/layout/margin_x"] = margin_x
+      })
+    ),
+  changeMarginY: (margin_y) =>
+    set(
+      produce((state) => {
+        state.styleCustom.patch["style/layout/margin_y"] = margin_y
       })
     ),
 

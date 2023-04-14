@@ -1,4 +1,5 @@
 import { Candidate } from "../../store/CustomSkinStore"
+// import "./preview.css"
 
 interface SkinProps {
   inlinePreedit: boolean
@@ -7,8 +8,12 @@ interface SkinProps {
   fontSize: number
   min_width: number
   min_height: number
+  border_width: number
+  margin_x: number
+  margin_y: number
+
   items: Candidate[]
-  pereditContent: {
+  preeditContent: {
     [k: string]: string
   }
   convertedColors: {
@@ -29,11 +34,14 @@ export default function CustomSkinPreview({
   fontSize,
   min_width,
   min_height,
+  border_width,
+  margin_x,
+  margin_y,
   items,
-  pereditContent,
+  preeditContent,
   convertedColors,
 }: SkinProps) {
-  const { pereditText, pereditHilitedText, pereditCaret } = pereditContent
+  const { preeditText, preeditHilitedText, preeditCaret } = preeditContent
   const {
     back_color,
     border_color,
@@ -55,41 +63,55 @@ export default function CustomSkinPreview({
     <div
       style={{
         marginTop: `${inlinePreedit ? 55 : 20}px`,
+        backgroundColor: back_color,
         minWidth: `${min_width}px`,
         minHeight: `${min_height}px`,
-        display: "flex",
-        height: "auto",
+        position: "relative",
+        display: " inline-flex",
         flexDirection: "column",
-        alignItems: "stretch",
-        border: `3px solid ${border_color}`,
-        backgroundColor: back_color,
+        padding: "10px",
         boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
       }}
     >
-      {!inlinePreedit && (
-        <div
-          style={{
-            display: "inline-flex",
-            paddingLeft: "7px",
-            paddingTop: "7px",
-          }}
-        >
+      <div
+        style={{
+          position: "absolute",
+          zIndex: 1,
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          border: `${border_width}px solid ${border_color}`,
+          boxSizing: "border-box",
+        }}
+      />
+      <div
+        style={{
+          position: "relative",
+          zIndex: 2,
+          display: "inline-flex",
+          height: "auto",
+          flexDirection: "column",
+          alignItems: "stretch",
+        }}
+      >
+        {!inlinePreedit && (
           <div
             style={{
+              display: "inline-flex",
               fontSize: convertedFontSize,
-              display: "flex",
               textAlign: "center",
-              justifyContent: "center",
+              justifyContent: "start",
               alignItems: "center",
             }}
           >
             <div
               style={{
                 color: `${text_color}`,
-                paddingRight: "2px",
+                paddingRight: `${preeditText.length === 0 ? 0 : 2}px`,
               }}
             >
-              {pereditText}
+              {preeditText}
             </div>
             <div
               style={{
@@ -101,54 +123,59 @@ export default function CustomSkinPreview({
                 backgroundColor: `${hilited_back_color}`,
               }}
             >
-              {pereditHilitedText}
+              {preeditHilitedText}
             </div>
             <div
               style={{
                 color: `${text_color}`,
-                padding: "2px",
+                padding: "0 2px",
               }}
             >
-              {pereditCaret}
+              {preeditCaret}
             </div>
           </div>
-        </div>
-      )}
-      <div
-        style={{
-          display: "inline-flex",
-          flexDirection: `${horizontal ? "row" : "column"}`,
-          padding: `${inlinePreedit ? 7 : 6}px 7px 7px 7px`,
-        }}
-      >
-        {items.slice(0, pageSize).map(({ label, suffix, candidate, comment }, index) => {
-          const hilited = index === 0
+        )}
 
-          return (
-            <div style={{ display: "flex" }} key={index}>
+        {!inlinePreedit && <div style={{ backgroundColor: "transparent", height: "6px" }}></div>}
+        <div
+          style={{
+            display: "inline-flex",
+            flexDirection: `${horizontal ? "row" : "column"}`,
+          }}
+        >
+          {items.slice(0, pageSize).map(({ label, suffix, candidate, comment }, index) => {
+            const hilited = index === 0
+            return (
               <div
+                key={index}
                 style={{
+                  alignSelf: "stretch",
+                  backgroundColor: hilited ? hilited_candidate_back_color : "transparent",
+                  borderRadius: "3px",
                   fontSize: convertedFontSize,
                   display: "flex",
                   textAlign: "center",
-                  justifyContent: "center",
-                  backgroundColor: hilited ? hilited_candidate_back_color : back_color,
+                  justifyContent: "start",
                   alignItems: "center",
-                  boxSizing: "border-box",
-                  borderRadius: "3px",
                 }}
               >
                 <div style={{ width: "3px" }} />
                 <div style={{ color: hilited ? hilited_label_color : label_color }}>{label}</div>
                 <div style={{ color: hilited ? hilited_label_color : label_color }}>{suffix}</div>
                 <div style={{ width: "5px" }} />
-                <div style={{ color: hilited ? hilited_candidate_text_color : candidate_text_color }}>{candidate}</div>
+                <div
+                  style={{
+                    color: hilited ? hilited_candidate_text_color : candidate_text_color,
+                  }}
+                >
+                  {candidate}
+                </div>
                 <div style={{ color: hilited ? hilited_comment_text_color : comment_text_color }}>{comment}</div>
                 <div style={{ width: "7px" }} />
               </div>
-            </div>
-          )
-        })}
+            )
+          })}
+        </div>
       </div>
     </div>
   )

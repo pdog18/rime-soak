@@ -32,6 +32,9 @@ const CustomSkin = () => {
     changeFontSize,
     changeMinWidth,
     changeMinHeight,
+    changeBorderWidth,
+    changeMarginX,
+    changeMarginY,
     styleCustom: { patch: stylePatch },
   } = useStyleState((state) => state)
 
@@ -41,8 +44,11 @@ const CustomSkin = () => {
   const fontSize = stylePatch["style/font_point"]
   const min_width = stylePatch["style/layout/min_width"]
   const min_height = stylePatch["style/layout/min_height"]
+  const border_width = stylePatch["style/layout/border_width"]
+  const margin_x = stylePatch["style/layout/margin_x"]
+  const margin_y = stylePatch["style/layout/margin_y"]
 
-  const { skin, colors, items, pereditContent, changeSelectedTheme } = useCustomSkinState()
+  const { skin, colors, items, preeditContent, changeSelectedTheme } = useCustomSkinState()
   const [skins, setSkins] = useState<ColorSchemeEntry[]>([])
   const [loading, setLoading] = useState(true)
   const convertedColors = Object.fromEntries(colors.map(([key, value]) => [key, convertColor(value)]))
@@ -84,6 +90,7 @@ const CustomSkin = () => {
       style={{
         display: "flex",
         flexDirection: "column",
+        backgroundColor: "black",
         alignItems: "center",
         justifySelf: "center",
         width: "80vw",
@@ -141,7 +148,6 @@ const CustomSkin = () => {
           <IntegerStep slierWidth="8vw" showSlider={false} size={pageSize} onChange={changePageSize} />
         </div>
       </div>
-
       <div style={{ display: "inline-flex", columnGap: "80px", alignItems: "center" }}>
         <div>
           最小宽度
@@ -164,19 +170,56 @@ const CustomSkin = () => {
             defaultValue={min_height}
           />
         </div>
+
+        <div>
+          边框宽度
+          <NumericInput
+            style={{ width: "60px", marginLeft: "6px" }}
+            value={border_width}
+            maxLength={2}
+            onChange={changeBorderWidth}
+            defaultValue={border_width}
+          />
+        </div>
+        <div>
+          水平边距
+          <NumericInput
+            style={{ width: "60px", marginLeft: "6px" }}
+            value={margin_x}
+            maxLength={3}
+            onChange={(value) => {
+              console.log("margin_x", value)
+            }}
+            defaultValue={margin_x}
+          />
+        </div>
+        <div>
+          垂直边距
+          <NumericInput
+            style={{ width: "60px", marginLeft: "6px" }}
+            value={margin_y}
+            maxLength={3}
+            onChange={(value) => {
+              console.log("margin_y", value)
+            }}
+            defaultValue={margin_y}
+          />
+        </div>
       </div>
       <CustomSkinPreview
-        min_width={min_width}
-        min_height={min_height}
         inlinePreedit={inline_preedit}
         horizontal={horizontal}
-        pageSize={pageSize}
         fontSize={fontSize}
-        pereditContent={pereditContent}
+        min_width={min_width}
+        min_height={min_height}
+        pageSize={pageSize}
+        border_width={border_width}
+        margin_x={margin_x}
+        margin_y={margin_y}
         items={items}
+        preeditContent={preeditContent}
         convertedColors={convertedColors}
       />
-
       {/* <input type="text" style={{ alignSelf: "start", marginLeft: "265px" }} /> */}
 
       <ColorPickers
