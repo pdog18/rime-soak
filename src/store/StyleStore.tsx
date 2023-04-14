@@ -71,7 +71,7 @@ const useStyleState = create<StyleState>()((set, get) => ({
       "style/display_tray_icon": false,
       "style/color_scheme": "aqua",
       "style/font_point": 14,
-      "style/layout/min_width": 0,
+      "style/layout/min_width": 160,
       "style/layout/min_height": 0,
 
       preset_color_schemes: {},
