@@ -8,6 +8,7 @@ interface NumericInputProps {
   onChange: (value: number) => void
   placeholder?: string
   defaultValue?: number
+  disabled?: boolean
 }
 
 export default function NumericInput({
@@ -17,6 +18,7 @@ export default function NumericInput({
   onChange,
   placeholder,
   defaultValue,
+  disabled,
 }: NumericInputProps) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value: inputValue } = e.target
@@ -38,6 +40,7 @@ export default function NumericInput({
 
   return (
     <Input
+      disabled={disabled}
       style={style}
       onChange={handleChange}
       onBlur={handleBlur}

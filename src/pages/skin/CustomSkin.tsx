@@ -197,18 +197,17 @@ const CustomSkin = () => {
         </div>
       </div>
       <div style={{ display: "inline-flex", columnGap: "80px", alignItems: "center" }}>
-        {!inline_preedit && (
-          <div>
-            间距
-            <NumericInput
-              style={{ width: "60px", marginLeft: "6px" }}
-              value={spacing}
-              maxLength={2}
-              onChange={(number) => updateStyleCustom("style/layout/spacing", number)}
-              defaultValue={spacing}
-            />
-          </div>
-        )}
+        <div>
+          间距
+          <NumericInput
+            style={{ width: "60px", marginLeft: "6px" }}
+            disabled={inline_preedit}
+            value={spacing}
+            maxLength={2}
+            onChange={(number) => updateStyleCustom("style/layout/spacing", number)}
+            defaultValue={spacing}
+          />
+        </div>
 
         <div>
           候选词间距
