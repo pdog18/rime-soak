@@ -33,8 +33,8 @@ const CustomSkin = () => {
     changeMinWidth,
     changeMinHeight,
     changeBorderWidth,
-    changeMarginX,
-    changeMarginY,
+    // changeMarginX,
+    // changeMarginY,
     styleCustom: { patch: stylePatch },
   } = useStyleState((state) => state)
 
