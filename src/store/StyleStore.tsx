@@ -39,21 +39,25 @@ interface StylePatch {
   app_options: AppOptions
 }
 
+type StyleCustomPath =
+  | "style/font_point"
+  | "style/layout/min_width"
+  | "style/layout/min_height"
+  | "style/layout/border_width"
+  | "style/layout/margin_x"
+  | "style/layout/margin_y"
+  | "style/horizontal"
+  | "style/inline_preedit"
+  | "style/display_tray_icon"
+
 interface StyleState {
   fileName: string
   styleCustom: {
     patch: StylePatch
   }
   changeColorScheme: (color_scheme: string, config: CustomSkinConfig) => void
-  changeOrientation: (horizontal: boolean) => void
-  changePreedit: (inline_preedit: boolean) => void
-  changeDisplayTrayIcon: (display_tray_icon: boolean) => void
-  changeFontSize: (fontSize: number) => void
-  changeMinWidth: (min_width: number) => void
-  changeMinHeight: (min_height: number) => void
-  changeBorderWidth: (border_width: number) => void
-  changeMarginX: (margin_x: number) => void
-  changeMarginY: (margin_y: number) => void
+
+  updateStyleCustom: (path: StyleCustomPath, value: string | number | boolean) => void
 
   changeAsciiModeApps: (appOptions: string[]) => void
   generateYAML: () => string | null
@@ -131,6 +135,13 @@ const useStyleState = create<StyleState>()((set, get) => ({
     return stringify({ patch: patch })
   },
 
+  updateStyleCustom: (path, value) =>
+    set(
+      produce((state: StyleState) => {
+        ;(state.styleCustom.patch as any)[path] = value
+      })
+    ),
+
   changeColorScheme: (color_scheme_name, color_scheme) =>
     set(
       produce((state) => {
@@ -139,63 +150,6 @@ const useStyleState = create<StyleState>()((set, get) => ({
       })
     ),
 
-  changeFontSize: (fontSize) =>
-    set(
-      produce((state) => {
-        state.styleCustom.patch["style/font_point"] = fontSize
-      })
-    ),
-
-  changeMinWidth: (min_width) =>
-    set(
-      produce((state) => {
-        state.styleCustom.patch["style/layout/min_width"] = min_width
-      })
-    ),
-  changeMinHeight: (min_height) =>
-    set(
-      produce((state) => {
-        state.styleCustom.patch["style/layout/min_height"] = min_height
-      })
-    ),
-
-  changeBorderWidth: (border_width) =>
-    set(
-      produce((state) => {
-        state.styleCustom.patch["style/layout/border_width"] = border_width
-      })
-    ),
-  changeMarginX: (margin_x) =>
-    set(
-      produce((state) => {
-        state.styleCustom.patch["style/layout/margin_x"] = margin_x
-      })
-    ),
-  changeMarginY: (margin_y) =>
-    set(
-      produce((state) => {
-        state.styleCustom.patch["style/layout/margin_y"] = margin_y
-      })
-    ),
-
-  changeOrientation: (horizontal) =>
-    set(
-      produce((state) => {
-        state.styleCustom.patch["style/horizontal"] = horizontal
-      })
-    ),
-  changePreedit: (inline_preedit) =>
-    set(
-      produce((state) => {
-        state.styleCustom.patch["style/inline_preedit"] = inline_preedit
-      })
-    ),
-  changeDisplayTrayIcon: (display_tray_icon) =>
-    set(
-      produce((state) => {
-        state.styleCustom.patch["style/display_tray_icon"] = display_tray_icon
-      })
-    ),
   changeAsciiModeApps: (appOptions) =>
     set(
       produce((state) => {

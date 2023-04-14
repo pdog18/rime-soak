@@ -2,11 +2,15 @@ import React from "react"
 import { PicRightOutlined as InputTypeIcon, DragOutlined } from "@ant-design/icons"
 import RimeSettingItem, { RadioChoice } from "../../components/RimeSettingItem"
 import AppOptions from "../../components/AppOptions"
-import useStyleState, { StyleState } from "../../store/StyleStore"
+import useStyleState from "../../store/StyleStore"
 
 const Style: React.FC = () => {
-  const styleState = useStyleState<StyleState>((state) => state)
-  const stylePatch = styleState.styleCustom.patch
+  const {
+    changeAsciiModeApps,
+    updateStyleCustom,
+
+    styleCustom: { patch: stylePatch },
+  } = useStyleState((state) => state)
 
   return (
     <div
@@ -24,9 +28,7 @@ const Style: React.FC = () => {
           values={[true, false]}
           defaultValue={stylePatch["style/horizontal"]}
           names={["水平排列", "垂直排列"]}
-          onChange={(value: boolean) => {
-            styleState.changeOrientation(value)
-          }}
+          onChange={(value) => updateStyleCustom("style/horizontal", value)}
         />
       </RimeSettingItem>
 
@@ -35,9 +37,7 @@ const Style: React.FC = () => {
           values={[true, false]}
           defaultValue={stylePatch["style/inline_preedit"]}
           names={["光标处内嵌", "候选词上方"]}
-          onChange={(value: boolean) => {
-            styleState.changePreedit(value)
-          }}
+          onChange={(value) => updateStyleCustom("style/inline_preedit", value)}
         />
       </RimeSettingItem>
 
@@ -46,9 +46,7 @@ const Style: React.FC = () => {
           values={[true, false]}
           defaultValue={stylePatch["style/display_tray_icon"]}
           names={["显示", "隐藏"]}
-          onChange={(value: boolean) => {
-            styleState.changeDisplayTrayIcon(value)
-          }}
+          onChange={(value) => updateStyleCustom("style/display_tray_icon", value)}
         />
       </RimeSettingItem>
 
@@ -56,7 +54,7 @@ const Style: React.FC = () => {
         <AppOptions
           tags={Object.keys(stylePatch.app_options)}
           onChange={(input: string[]) => {
-            styleState.changeAsciiModeApps(input)
+            changeAsciiModeApps(input)
           }}
         />
       </RimeSettingItem>

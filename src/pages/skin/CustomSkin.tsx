@@ -26,15 +26,8 @@ const CustomSkin = () => {
   } = useDefaultState((state) => state)
 
   const {
-    changePreedit: changeInlinePreedit,
-    changeOrientation,
     changeColorScheme,
-    changeFontSize,
-    changeMinWidth,
-    changeMinHeight,
-    changeBorderWidth,
-    // changeMarginX,
-    // changeMarginY,
+    updateStyleCustom,
     styleCustom: { patch: stylePatch },
   } = useStyleState((state) => state)
 
@@ -90,7 +83,6 @@ const CustomSkin = () => {
       style={{
         display: "flex",
         flexDirection: "column",
-        backgroundColor: "black",
         alignItems: "center",
         justifySelf: "center",
         width: "80vw",
@@ -124,7 +116,7 @@ const CustomSkin = () => {
               label: size.toString(),
               value: size,
             }))}
-            onChange={changeFontSize}
+            onChange={(value) => updateStyleCustom("style/font_point", value)}
           />
         </div>
 
@@ -132,14 +124,14 @@ const CustomSkin = () => {
           values={[true, false]}
           defaultValue={horizontal}
           names={["横屏", "竖屏"]}
-          onChange={changeOrientation}
+          onChange={(value) => updateStyleCustom("style/horizontal", value)}
         />
 
         <RadioChoice
           values={[true, false]}
           defaultValue={inline_preedit}
           names={["编码行内嵌", "面板"]}
-          onChange={changeInlinePreedit}
+          onChange={(value) => updateStyleCustom("style/inline_preedit", value)}
         />
 
         <div style={{ display: "inline-flex", alignItems: "center" }}>
@@ -155,7 +147,7 @@ const CustomSkin = () => {
             style={{ width: "60px", marginLeft: "6px" }}
             value={min_width}
             maxLength={4}
-            onChange={changeMinWidth}
+            onChange={(number) => updateStyleCustom("style/layout/min_width", number)}
             defaultValue={min_width}
           />
         </div>
@@ -166,7 +158,7 @@ const CustomSkin = () => {
             style={{ width: "60px", marginLeft: "6px" }}
             value={min_height}
             maxLength={4}
-            onChange={changeMinHeight}
+            onChange={(number) => updateStyleCustom("style/layout/min_height", number)}
             defaultValue={min_height}
           />
         </div>
@@ -177,7 +169,7 @@ const CustomSkin = () => {
             style={{ width: "60px", marginLeft: "6px" }}
             value={border_width}
             maxLength={2}
-            onChange={changeBorderWidth}
+            onChange={(number) => updateStyleCustom("style/layout/border_width", number)}
             defaultValue={border_width}
           />
         </div>
@@ -186,10 +178,8 @@ const CustomSkin = () => {
           <NumericInput
             style={{ width: "60px", marginLeft: "6px" }}
             value={margin_x}
-            maxLength={3}
-            onChange={(value) => {
-              console.log("margin_x", value)
-            }}
+            maxLength={2}
+            onChange={(number) => updateStyleCustom("style/layout/margin_x", number)}
             defaultValue={margin_x}
           />
         </div>
@@ -198,10 +188,8 @@ const CustomSkin = () => {
           <NumericInput
             style={{ width: "60px", marginLeft: "6px" }}
             value={margin_y}
-            maxLength={3}
-            onChange={(value) => {
-              console.log("margin_y", value)
-            }}
+            maxLength={2}
+            onChange={(number) => updateStyleCustom("style/layout/margin_y", number)}
             defaultValue={margin_y}
           />
         </div>
@@ -220,7 +208,7 @@ const CustomSkin = () => {
         preeditContent={preeditContent}
         convertedColors={convertedColors}
       />
-      {/* <input type="text" style={{ alignSelf: "start", marginLeft: "265px" }} /> */}
+      {/* <input type="text" style={{ alignSelf: "start", marginLeft: "30vw" }} /> */}
 
       <ColorPickers
         filterColors={colors
