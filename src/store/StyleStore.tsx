@@ -27,6 +27,8 @@ interface StylePatch {
   "style/display_tray_icon": boolean
   "style/color_scheme": string
   "style/font_point": number
+  "style/layout/min_width": number
+  "style/layout/min_height": number
   preset_color_schemes: {
     [key: string]: CustomSkinConfig
   }
@@ -43,6 +45,8 @@ interface StyleState {
   changePreedit: (inline_preedit: boolean) => void
   changeDisplayTrayIcon: (display_tray_icon: boolean) => void
   changeFontSize: (fontSize: number) => void
+  changeMinWidth: (min_width: number) => void
+  changeMinHeight: (min_height: number) => void
 
   changeAsciiModeApps: (appOptions: string[]) => void
   generateYAML: () => string | null
@@ -67,6 +71,8 @@ const useStyleState = create<StyleState>()((set, get) => ({
       "style/display_tray_icon": false,
       "style/color_scheme": "aqua",
       "style/font_point": 14,
+      "style/layout/min_width": 0,
+      "style/layout/min_height": 0,
 
       preset_color_schemes: {},
       app_options: {
@@ -127,6 +133,20 @@ const useStyleState = create<StyleState>()((set, get) => ({
     set(
       produce((state) => {
         state.styleCustom.patch["style/font_point"] = fontSize
+      })
+    ),
+
+  changeMinWidth: (min_width) =>
+    set(
+      produce((state) => {
+        state.styleCustom.patch["style/layout/min_width"] = min_width
+      })
+    ),
+
+  changeMinHeight: (min_height) =>
+    set(
+      produce((state) => {
+        state.styleCustom.patch["style/layout/min_height"] = min_height
       })
     ),
 

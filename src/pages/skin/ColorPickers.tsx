@@ -3,10 +3,9 @@ import ColorPickerWithInput from "./ColorPickerWithInput"
 interface ColorPickersProps {
   filterColors: [string, string][]
   onColorChanged: (newcolor: string, name: string) => void
-  onFocusChanged: (focus: boolean, name: string) => void
 }
 
-export default function ColorPickers({ filterColors, onColorChanged, onFocusChanged }: ColorPickersProps) {
+export default function ColorPickers({ filterColors, onColorChanged }: ColorPickersProps) {
   return (
     <div
       style={{
@@ -19,15 +18,7 @@ export default function ColorPickers({ filterColors, onColorChanged, onFocusChan
       }}
     >
       {filterColors.map(([name, color]) => {
-        return (
-          <ColorPickerWithInput
-            key={name}
-            name={name}
-            color={color}
-            onColorChanged={onColorChanged}
-            onFocusChanged={onFocusChanged}
-          />
-        )
+        return <ColorPickerWithInput key={name} name={name} color={color} onColorChanged={onColorChanged} />
       })}
     </div>
   )

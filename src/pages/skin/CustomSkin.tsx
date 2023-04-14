@@ -9,6 +9,7 @@ import IntegerStep from "../../components/IntegerStep"
 import useStyleState from "../../store/StyleStore"
 import useDefaultState from "../../store/DefaultStore"
 import { RadioChoice } from "../../components/RimeSettingItem"
+import NumericInput from "../../components/NumericInput"
 import CustomSkinPreview from "./CustomSkinPreview"
 import ColorPickers from "./ColorPickers"
 
@@ -29,6 +30,8 @@ const CustomSkin = () => {
     changeOrientation,
     changeColorScheme,
     changeFontSize,
+    changeMinWidth,
+    changeMinHeight,
     styleCustom: { patch: stylePatch },
   } = useStyleState((state) => state)
 
@@ -36,6 +39,8 @@ const CustomSkin = () => {
   const inline_preedit = stylePatch["style/inline_preedit"]
   const horizontal = stylePatch["style/horizontal"]
   const fontSize = stylePatch["style/font_point"]
+  const min_width = stylePatch["style/layout/min_width"]
+  const min_height = stylePatch["style/layout/min_height"]
 
   const { skin, colors, items, pereditContent, changeSelectedTheme } = useCustomSkinState()
   const [skins, setSkins] = useState<ColorSchemeEntry[]>([])
@@ -46,10 +51,6 @@ const CustomSkin = () => {
     const config = { ...skin, [colorName]: convertColor(newcolor) }
     changeSelectedTheme(config)
     changeColorScheme("soak", config)
-  }
-
-  function onFocusChanged(focus: boolean, name: string) {
-    console.log(focus, name)
   }
 
   useEffect(() => {
@@ -140,7 +141,33 @@ const CustomSkin = () => {
           <IntegerStep slierWidth="8vw" showSlider={false} size={pageSize} onChange={changePageSize} />
         </div>
       </div>
+
+      <div style={{ display: "inline-flex", columnGap: "80px", alignItems: "center" }}>
+        <div>
+          最小宽度
+          <NumericInput
+            style={{ width: "60px", marginLeft: "6px" }}
+            value={min_width}
+            maxLength={4}
+            onChange={changeMinWidth}
+            defaultValue={min_width}
+          />
+        </div>
+
+        <div>
+          最小宽度
+          <NumericInput
+            style={{ width: "60px", marginLeft: "6px" }}
+            value={min_height}
+            maxLength={4}
+            onChange={changeMinHeight}
+            defaultValue={min_height}
+          />
+        </div>
+      </div>
       <CustomSkinPreview
+        min_width={min_width}
+        min_height={min_height}
         inlinePreedit={inline_preedit}
         horizontal={horizontal}
         pageSize={pageSize}
@@ -149,6 +176,8 @@ const CustomSkin = () => {
         items={items}
         convertedColors={convertedColors}
       />
+
+      {/* <input type="text" style={{ alignSelf: "start", marginLeft: "265px" }} /> */}
 
       <ColorPickers
         filterColors={colors
@@ -161,7 +190,6 @@ const CustomSkin = () => {
           })
           .map(([key, value]) => [key, convertColor(value)])}
         onColorChanged={onColorChanged}
-        onFocusChanged={onFocusChanged}
       />
     </div>
   )

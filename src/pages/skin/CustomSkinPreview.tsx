@@ -5,6 +5,8 @@ interface SkinProps {
   horizontal: boolean
   pageSize: number
   fontSize: number
+  min_width: number
+  min_height: number
   items: Candidate[]
   pereditContent: {
     [k: string]: string
@@ -25,6 +27,8 @@ export default function CustomSkinPreview({
   horizontal,
   pageSize,
   fontSize,
+  min_width,
+  min_height,
   items,
   pereditContent,
   convertedColors,
@@ -51,6 +55,8 @@ export default function CustomSkinPreview({
     <div
       style={{
         marginTop: `${inlinePreedit ? 55 : 20}px`,
+        minWidth: `${min_width}px`,
+        minHeight: `${min_height}px`,
         display: "flex",
         height: "auto",
         flexDirection: "column",
@@ -133,20 +139,8 @@ export default function CustomSkinPreview({
                 }}
               >
                 <div style={{ width: "3px" }} />
-                <div
-                  style={{
-                    color: hilited ? hilited_label_color : label_color,
-                  }}
-                >
-                  {label}
-                </div>
-                <div
-                  style={{
-                    color: hilited ? hilited_label_color : label_color,
-                  }}
-                >
-                  {suffix}
-                </div>
+                <div style={{ color: hilited ? hilited_label_color : label_color }}>{label}</div>
+                <div style={{ color: hilited ? hilited_label_color : label_color }}>{suffix}</div>
                 <div style={{ width: "5px" }} />
                 <div style={{ color: hilited ? hilited_candidate_text_color : candidate_text_color }}>{candidate}</div>
                 <div style={{ color: hilited ? hilited_comment_text_color : comment_text_color }}>{comment}</div>

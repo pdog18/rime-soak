@@ -7,10 +7,9 @@ interface PickerWithInputProps {
   name: string
   color: string
   onColorChanged: (newcolor: string, name: string) => void
-  onFocusChanged: (focus: boolean, name: string) => void
 }
 
-export default function ColorPickerWithInput({ name, color, onColorChanged, onFocusChanged }: PickerWithInputProps) {
+export default function ColorPickerWithInput({ name, color, onColorChanged }: PickerWithInputProps) {
   const [focus, changeFocus] = useState(false)
 
   return (
@@ -25,11 +24,9 @@ export default function ColorPickerWithInput({ name, color, onColorChanged, onFo
       }}
       onFocusCapture={() => {
         changeFocus(true)
-        onFocusChanged(true, name)
       }}
       onBlurCapture={() => {
         changeFocus(false)
-        onFocusChanged(false, name)
       }}
     >
       <RevealOnFocus focus={focus} color={color} name={name.replace("_color", "")}>
