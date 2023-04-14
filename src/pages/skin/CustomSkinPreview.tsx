@@ -13,6 +13,8 @@ interface SkinProps {
   margin_y: number
   spacing: number
   candidate_spacing: number
+  round_corner: number
+  hilite_padding: number
 
   items: Candidate[]
   preeditContent: {
@@ -41,6 +43,8 @@ export default function CustomSkinPreview({
   margin_y,
   spacing,
   candidate_spacing,
+  round_corner,
+  hilite_padding,
   items,
   preeditContent,
   convertedColors,
@@ -123,7 +127,7 @@ export default function CustomSkinPreview({
                 display: "flex",
                 alignItems: "center",
                 padding: "0 3px",
-                borderRadius: "3px",
+                borderRadius: `${round_corner}px`,
                 color: `${hilited_text_color}`,
                 backgroundColor: `${hilited_back_color}`,
               }}
@@ -157,7 +161,7 @@ export default function CustomSkinPreview({
                 style={{
                   alignSelf: "stretch",
                   backgroundColor: hilited ? hilited_candidate_back_color : "transparent",
-                  borderRadius: "3px",
+                  borderRadius: `${round_corner}px`,
                   fontSize: convertedFontSize,
                   display: "flex",
                   textAlign: "center",
@@ -168,7 +172,7 @@ export default function CustomSkinPreview({
                 <div style={{ width: "3px" }} />
                 <div style={{ color: hilited ? hilited_label_color : label_color }}>{label}</div>
                 <div style={{ color: hilited ? hilited_label_color : label_color }}>{suffix}</div>
-                <div style={{ width: "5px" }} />
+                <div style={{ width: `${hilite_padding}px` }} />
                 <div
                   style={{
                     color: hilited ? hilited_candidate_text_color : candidate_text_color,

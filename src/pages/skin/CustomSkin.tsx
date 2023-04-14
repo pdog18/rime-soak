@@ -42,6 +42,8 @@ const CustomSkin = () => {
   const margin_y = stylePatch["style/layout/margin_y"]
   const spacing = stylePatch["style/layout/spacing"]
   const candidate_spacing = stylePatch["style/layout/candidate_spacing"]
+  const hilite_padding = stylePatch["style/layout/hilite_padding"]
+  const round_corner = stylePatch["style/layout/round_corner"]
 
   const { skin, colors, items, preeditContent, changeSelectedTheme } = useCustomSkinState()
   const [skins, setSkins] = useState<ColorSchemeEntry[]>([])
@@ -219,11 +221,33 @@ const CustomSkin = () => {
             defaultValue={candidate_spacing}
           />
         </div>
+        <div>
+          高亮圆角
+          <NumericInput
+            style={{ width: "60px", marginLeft: "6px" }}
+            value={round_corner}
+            maxLength={2}
+            onChange={(number) => updateStyleCustom("style/layout/round_corner", number)}
+            defaultValue={round_corner}
+          />
+        </div>
+        <div>
+          hilite_padding
+          <NumericInput
+            style={{ width: "60px", marginLeft: "6px" }}
+            value={hilite_padding}
+            maxLength={2}
+            onChange={(number) => updateStyleCustom("style/layout/hilite_padding", number)}
+            defaultValue={hilite_padding}
+          />
+        </div>
       </div>
       <CustomSkinPreview
+        hilite_padding={hilite_padding}
         inlinePreedit={inline_preedit}
         candidate_spacing={candidate_spacing}
         horizontal={horizontal}
+        round_corner={round_corner}
         spacing={spacing}
         fontSize={fontSize}
         min_width={min_width}

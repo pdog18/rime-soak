@@ -34,6 +34,9 @@ interface StylePatch {
   "style/layout/margin_y": number
   "style/layout/spacing": number
   "style/layout/candidate_spacing": number
+  "style/layout/hilite_spacing": number
+  "style/layout/hilite_padding": number
+  "style/layout/round_corner": number
 
   preset_color_schemes: {
     [key: string]: CustomSkinConfig
@@ -53,6 +56,9 @@ type StyleCustomPath =
   | "style/layout/margin_y"
   | "style/layout/spacing"
   | "style/layout/candidate_spacing"
+  | "style/layout/hilite_spacing"
+  | "style/layout/hilite_padding"
+  | "style/layout/round_corner"
 
 interface StyleState {
   fileName: string
@@ -93,6 +99,9 @@ const useStyleState = create<StyleState>()((set, get) => ({
       "style/layout/margin_y": 12,
       "style/layout/spacing": 10,
       "style/layout/candidate_spacing": 5,
+      "style/layout/hilite_spacing": 4,
+      "style/layout/hilite_padding": 2,
+      "style/layout/round_corner": 4,
 
       preset_color_schemes: {},
       app_options: {
