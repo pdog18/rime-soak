@@ -40,6 +40,8 @@ const CustomSkin = () => {
   const border_width = stylePatch["style/layout/border_width"]
   const margin_x = stylePatch["style/layout/margin_x"]
   const margin_y = stylePatch["style/layout/margin_y"]
+  const spacing = stylePatch["style/layout/spacing"]
+  const candidate_spacing = stylePatch["style/layout/candidate_spacing"]
 
   const { skin, colors, items, preeditContent, changeSelectedTheme } = useCustomSkinState()
   const [skins, setSkins] = useState<ColorSchemeEntry[]>([])
@@ -194,9 +196,36 @@ const CustomSkin = () => {
           />
         </div>
       </div>
+      <div style={{ display: "inline-flex", columnGap: "80px", alignItems: "center" }}>
+        {!inline_preedit && (
+          <div>
+            间距
+            <NumericInput
+              style={{ width: "60px", marginLeft: "6px" }}
+              value={spacing}
+              maxLength={2}
+              onChange={(number) => updateStyleCustom("style/layout/spacing", number)}
+              defaultValue={spacing}
+            />
+          </div>
+        )}
+
+        <div>
+          候选词间距
+          <NumericInput
+            style={{ width: "60px", marginLeft: "6px" }}
+            value={candidate_spacing}
+            maxLength={2}
+            onChange={(number) => updateStyleCustom("style/layout/candidate_spacing", number)}
+            defaultValue={candidate_spacing}
+          />
+        </div>
+      </div>
       <CustomSkinPreview
         inlinePreedit={inline_preedit}
+        candidate_spacing={candidate_spacing}
         horizontal={horizontal}
+        spacing={spacing}
         fontSize={fontSize}
         min_width={min_width}
         min_height={min_height}

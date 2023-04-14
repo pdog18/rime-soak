@@ -11,6 +11,8 @@ interface SkinProps {
   border_width: number
   margin_x: number
   margin_y: number
+  spacing: number
+  candidate_spacing: number
 
   items: Candidate[]
   preeditContent: {
@@ -37,6 +39,8 @@ export default function CustomSkinPreview({
   border_width,
   margin_x,
   margin_y,
+  spacing,
+  candidate_spacing,
   items,
   preeditContent,
   convertedColors,
@@ -137,11 +141,12 @@ export default function CustomSkinPreview({
           </div>
         )}
 
-        {!inlinePreedit && <div style={{ backgroundColor: "transparent", height: "6px" }}></div>}
+        {!inlinePreedit && <div style={{ backgroundColor: "transparent", height: `${spacing}px` }} />}
         <div
           style={{
             display: "inline-flex",
             flexDirection: `${horizontal ? "row" : "column"}`,
+            gap: `${candidate_spacing}px`,
           }}
         >
           {items.slice(0, pageSize).map(({ label, suffix, candidate, comment }, index) => {

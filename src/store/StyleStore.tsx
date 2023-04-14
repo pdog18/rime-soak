@@ -32,6 +32,8 @@ interface StylePatch {
   "style/layout/border_width": number
   "style/layout/margin_x": number
   "style/layout/margin_y": number
+  "style/layout/spacing": number
+  "style/layout/candidate_spacing": number
 
   preset_color_schemes: {
     [key: string]: CustomSkinConfig
@@ -41,14 +43,16 @@ interface StylePatch {
 
 type StyleCustomPath =
   | "style/font_point"
+  | "style/horizontal"
+  | "style/inline_preedit"
+  | "style/display_tray_icon"
   | "style/layout/min_width"
   | "style/layout/min_height"
   | "style/layout/border_width"
   | "style/layout/margin_x"
   | "style/layout/margin_y"
-  | "style/horizontal"
-  | "style/inline_preedit"
-  | "style/display_tray_icon"
+  | "style/layout/spacing"
+  | "style/layout/candidate_spacing"
 
 interface StyleState {
   fileName: string
@@ -87,6 +91,8 @@ const useStyleState = create<StyleState>()((set, get) => ({
       "style/layout/border_width": 3,
       "style/layout/margin_x": 12,
       "style/layout/margin_y": 12,
+      "style/layout/spacing": 10,
+      "style/layout/candidate_spacing": 5,
 
       preset_color_schemes: {},
       app_options: {

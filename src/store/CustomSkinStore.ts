@@ -20,7 +20,7 @@ interface CustomSkinState {
 
 const preeditContent = {
   preeditText: "输入法",
-  preeditHilitedText: "输   入法",
+  preeditHilitedText: "shu ru fa",
   preeditCaret: "‸",
 }
 
