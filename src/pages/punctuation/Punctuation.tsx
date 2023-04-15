@@ -76,11 +76,21 @@ const Punctuation: React.FC = () => {
         >
           {/* <div>[蓝 = 上屏]</div> */}
           <div
+            style={{ fontSize: "16px" }}
             title="成对：同一个按键按两次是不同的符号， 例如 pair: ['1','2'] ,第一次按是 [1] ，第二次按是
             [2],将对应的符号全部删除，此时可以勾选 checkbox 添加"
           >
-            [绿 = pair]
-            <QuestionOutlined style={{ fontSize: "16px", color: "#A6E6EE", backgroundColor: "#aaaaaa" }} />
+            [绿 = 成对]
+            <QuestionOutlined
+              style={{
+                marginLeft: "8px",
+                fontSize: "16px",
+                color: "white",
+                backgroundColor: "green",
+                padding: "4px",
+                borderRadius: "16px",
+              }}
+            />
           </div>
 
           <Checkbox

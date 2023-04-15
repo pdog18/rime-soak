@@ -99,7 +99,7 @@ const CustomSkin = () => {
         <div>
           查看方案
           <Select
-            defaultValue="ikun"
+            defaultValue="aqua"
             style={{ width: 120, marginLeft: "6px" }}
             loading={loading}
             options={skins}
@@ -272,7 +272,6 @@ const CustomSkin = () => {
         preeditContent={preeditContent}
         convertedColors={convertedColors}
       />
-      {/* <input type="text" style={{ alignSelf: "start", marginLeft: "30vw" }} /> */}
 
       <ColorPickers
         filterColors={colors

@@ -9,6 +9,8 @@ const Default: React.FC = () => {
   const schemaState = useSchemaState()
   const rimeLuaState = useRimeLuaState()
 
+  const iconStyle = { fontSize: "24px", margin: "0px 16px" }
+
   return (
     <div
       style={{
@@ -20,7 +22,7 @@ const Default: React.FC = () => {
         gap: "16px",
       }}
     >
-      <RimeSettingItem icon={<InputTypeIcon />} title="快速输入时间">
+      <RimeSettingItem icon={<InputTypeIcon style={iconStyle} />} title="快速输入时间">
         <Switch
           checked={rimeLuaState.time}
           onChange={(checked) => {
@@ -29,7 +31,7 @@ const Default: React.FC = () => {
           }}
         />
       </RimeSettingItem>
-      <RimeSettingItem icon={<InputTypeIcon />} title="快速输入日期">
+      <RimeSettingItem icon={<InputTypeIcon style={iconStyle} />} title="快速输入日期">
         <Switch
           checked={rimeLuaState.date}
           onChange={(checked) => {
@@ -38,7 +40,7 @@ const Default: React.FC = () => {
           }}
         />
       </RimeSettingItem>
-      <RimeSettingItem icon={<InputTypeIcon />} title="快速输入星期">
+      <RimeSettingItem icon={<InputTypeIcon style={iconStyle} />} title="快速输入星期">
         <Switch
           checked={rimeLuaState.week}
           onChange={(checked) => {
