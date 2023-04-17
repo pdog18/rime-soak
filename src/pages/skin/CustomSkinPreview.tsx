@@ -1,4 +1,7 @@
+import { useContext } from "react"
 import { Candidate } from "../../store/CustomSkinStore"
+import CustomSkinContext from "./CustomSkinContext"
+import "./animation.css"
 
 interface SkinProps {
   inlinePreedit: boolean
@@ -31,6 +34,22 @@ const calculateRem = (size: number) => {
   return pixels / baseFontSize
 }
 
+const getAnimClassName = (animationColorName: string, expectedColorName: string) => {
+  if (animationColorName !== expectedColorName) {
+    return ""
+  }
+
+  if (expectedColorName.includes("border")) {
+    return "animatedBorder"
+  }
+
+  if (expectedColorName.includes("back")) {
+    return "animatedBackground"
+  }
+
+  return "animatedText"
+}
+
 export default function CustomSkinPreview({
   inlinePreedit,
   horizontal,
@@ -50,7 +69,9 @@ export default function CustomSkinPreview({
   preeditContent,
   convertedColors,
 }: SkinProps) {
+  const convertedFontSize = `${calculateRem(fontSize)}rem`
   const { preeditText, preeditHilitedText, preeditCaret } = preeditContent
+
   const {
     back_color,
     border_color,
@@ -66,10 +87,24 @@ export default function CustomSkinPreview({
     hilited_comment_text_color,
   } = convertedColors
 
-  const convertedFontSize = `${calculateRem(fontSize)}rem`
+  const { animationColorName: animName } = useContext(CustomSkinContext)
+
+  const animation_back_color = getAnimClassName(animName, "back_color")
+  const animation_hilited_back_color = getAnimClassName(animName, "hilited_back_color")
+  const animation_hilited_candidate_back_color = getAnimClassName(animName, "hilited_candidate_back_color")
+  const animation_text_color = getAnimClassName(animName, "text_color")
+  const animation_border_color = getAnimClassName(animName, "border_color")
+  const animation_label_color = getAnimClassName(animName, "label_color")
+  const animation_hilited_label_color = getAnimClassName(animName, "hilited_label_color")
+  const animation_hilited_text_color = getAnimClassName(animName, "hilited_text_color")
+  const animation_candidate_text_color = getAnimClassName(animName, "candidate_text_color")
+  const animation_comment_text_color = getAnimClassName(animName, "comment_text_color")
+  const animation_hilited_candidate_text_color = getAnimClassName(animName, "hilited_candidate_text_color")
+  const animation_hilited_comment_text_color = getAnimClassName(animName, "hilited_comment_text_color")
 
   return (
     <div
+      className={animation_back_color}
       style={{
         marginTop: `${inlinePreedit ? 55 : 20}px`,
         padding: `${margin_y}px ${margin_x}px`,
@@ -83,6 +118,7 @@ export default function CustomSkinPreview({
       }}
     >
       <div
+        className={animation_border_color}
         style={{
           position: "absolute",
           zIndex: 1,
@@ -115,6 +151,7 @@ export default function CustomSkinPreview({
             }}
           >
             <div
+              className={animation_text_color}
               style={{
                 color: `${text_color}`,
                 paddingRight: `${preeditText.length === 0 ? 0 : 2}px`,
@@ -123,6 +160,7 @@ export default function CustomSkinPreview({
               {preeditText}
             </div>
             <div
+              className={animation_hilited_back_color + animation_hilited_text_color}
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -135,6 +173,7 @@ export default function CustomSkinPreview({
               {preeditHilitedText}
             </div>
             <div
+              className={animation_text_color}
               style={{
                 color: `${text_color}`,
                 padding: "0 2px",
@@ -171,6 +210,7 @@ export default function CustomSkinPreview({
               >
                 {hilited && (
                   <div
+                    className={animation_hilited_candidate_back_color}
                     style={{
                       position: "absolute",
                       top: 0,
@@ -186,17 +226,35 @@ export default function CustomSkinPreview({
                 )}
 
                 <div style={{ width: "3px" }} />
-                <div style={{ color: hilited ? hilited_label_color : label_color }}>{label}</div>
-                <div style={{ color: hilited ? hilited_label_color : label_color }}>{suffix}</div>
+                <div
+                  className={hilited ? animation_hilited_label_color : animation_label_color}
+                  style={{
+                    color: hilited ? hilited_label_color : label_color,
+                  }}
+                >
+                  {label}
+                </div>
+                <div
+                  className={hilited ? animation_hilited_label_color : animation_label_color}
+                  style={{ color: hilited ? hilited_label_color : label_color }}
+                >
+                  {suffix}
+                </div>
                 <div style={{ width: `${hilite_spacing}px` }} />
                 <div
+                  className={hilited ? animation_hilited_candidate_text_color : animation_candidate_text_color}
                   style={{
                     color: hilited ? hilited_candidate_text_color : candidate_text_color,
                   }}
                 >
                   {candidate}
                 </div>
-                <div style={{ color: hilited ? hilited_comment_text_color : comment_text_color }}>{comment}</div>
+                <div
+                  className={hilited ? animation_hilited_comment_text_color : animation_comment_text_color}
+                  style={{ color: hilited ? hilited_comment_text_color : comment_text_color }}
+                >
+                  {comment}
+                </div>
                 <div style={{ width: "7px" }} />
               </div>
             )

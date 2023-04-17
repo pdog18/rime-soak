@@ -1,7 +1,8 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { HexColorInput } from "react-colorful"
 import PlumpColorPicker from "../../components/MyHexColorPicker"
 import RevealOnFocus from "../../components/RevealOnFocus"
+import CustomSkinContext from "./CustomSkinContext"
 
 interface PickerWithInputProps {
   name: string
@@ -12,6 +13,7 @@ interface PickerWithInputProps {
 export default function ColorPickerWithInput({ name, color, onColorChanged }: PickerWithInputProps) {
   const [focus, changeFocus] = useState(false)
 
+  const { changeAnimationColorName } = useContext(CustomSkinContext)
   return (
     <div
       title={name}
@@ -22,14 +24,21 @@ export default function ColorPickerWithInput({ name, color, onColorChanged }: Pi
         alignItems: "center",
         gap: "12px",
       }}
-      onFocusCapture={() => {
-        changeFocus(true)
-      }}
-      onBlurCapture={() => {
-        changeFocus(false)
-      }}
+      onFocusCapture={() => changeFocus(true)}
+      onBlurCapture={() => changeFocus(false)}
     >
-      <RevealOnFocus focus={focus} color={color} name={name.replace("_color", "")} onClick={() => changeFocus(true)}>
+      <RevealOnFocus
+        focus={focus}
+        color={color}
+        name={name.replace("_color", "")}
+        onClick={() => changeFocus(true)}
+        onMouseEnter={() => {
+          changeAnimationColorName(name)
+        }}
+        onMouseLeave={() => {
+          changeAnimationColorName("")
+        }}
+      >
         <PlumpColorPicker
           style={{
             width: "80px",

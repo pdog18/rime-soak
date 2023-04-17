@@ -1,0 +1,56 @@
+@keyframes attentionBackgroundColorChange {
+  0% {
+    background-color: initial;
+  }
+
+  50% {
+    background-color: burlywood;
+  }
+
+  100% {
+    background-color: initial;
+  }
+}
+
+@keyframes attentionBorderColorChange {
+  0% {
+    border: initial initial initial;
+  }
+
+  50% {
+    border: 12px solid burlywood;
+  }
+
+  100% {
+    border: initial initial initial;
+  }
+}
+
+@keyframes attentionMixColorChange {
+  0% {
+    color: initial;
+    background-color: burlywood;
+  }
+
+  50% {
+    color: wheat;
+    background-color: burlywood;
+  }
+
+  100% {
+    color: initial;
+    background-color: burlywood;
+  }
+}
+
+.animatedBackground {
+  animation: attentionBackgroundColorChange 1s 2;
+}
+
+.animatedBorder {
+  animation: attentionBorderColorChange 1s 2;
+}
+
+.animatedText {
+  animation: attentionMixColorChange 1s 2;
+}

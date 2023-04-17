@@ -1,18 +1,27 @@
 import React from "react"
 import "./Reveal.css"
 
-interface RevealOnClickProps {
+interface RevealOnClickProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode
   focus: boolean
   color: string
   name: string
-  onClick: () => void
 }
 
-const RevealOnFocus: React.FC<RevealOnClickProps> = ({ children, focus, color, name, onClick }) => {
+const RevealOnFocus: React.FC<RevealOnClickProps> = ({
+  children,
+  focus,
+  color,
+  name,
+  onClick,
+  onMouseEnter,
+  onMouseLeave,
+}) => {
   return (
     <div className="wrapper" onClick={onClick} style={{ padding: "1px" }}>
       <div
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
         className={`content ${focus ? "fadeOut" : "fadeIn"}`}
         style={{
           backgroundColor: color,
