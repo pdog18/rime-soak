@@ -106,7 +106,7 @@ export default function CustomSkinPreview({
     <div
       className={animation_back_color}
       style={{
-        marginTop: `${inlinePreedit ? 55 : 20}px`,
+        marginTop: `4vh`,
         padding: `${margin_y}px ${margin_x}px`,
         backgroundColor: back_color,
         minWidth: `${min_width}px`,
@@ -141,50 +141,52 @@ export default function CustomSkinPreview({
         }}
       >
         {!inlinePreedit && (
-          <div
-            style={{
-              display: "inline-flex",
-              fontSize: convertedFontSize,
-              textAlign: "center",
-              justifyContent: "start",
-              alignItems: "center",
-            }}
-          >
+          <div>
             <div
-              className={animation_text_color}
               style={{
-                color: `${text_color}`,
-                paddingRight: `${preeditText.length === 0 ? 0 : 2}px`,
-              }}
-            >
-              {preeditText}
-            </div>
-            <div
-              className={animation_hilited_back_color + animation_hilited_text_color}
-              style={{
-                display: "flex",
+                display: "inline-flex",
+                fontSize: convertedFontSize,
+                textAlign: "center",
+                justifyContent: "start",
                 alignItems: "center",
-                padding: "0 3px",
-                borderRadius: `${round_corner}px`,
-                color: `${hilited_text_color}`,
-                backgroundColor: `${hilited_back_color}`,
               }}
             >
-              {preeditHilitedText}
+              <div
+                className={animation_text_color}
+                style={{
+                  color: `${text_color}`,
+                  paddingRight: `${preeditText.length === 0 ? 0 : 2}px`,
+                }}
+              >
+                {preeditText}
+              </div>
+              <div
+                className={animation_hilited_back_color + animation_hilited_text_color}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  padding: "0 3px",
+                  borderRadius: `${round_corner}px`,
+                  color: `${hilited_text_color}`,
+                  backgroundColor: `${hilited_back_color}`,
+                }}
+              >
+                {preeditHilitedText}
+              </div>
+              <div
+                className={animation_text_color}
+                style={{
+                  color: `${text_color}`,
+                  padding: "0 2px",
+                }}
+              >
+                {preeditCaret}
+              </div>
             </div>
-            <div
-              className={animation_text_color}
-              style={{
-                color: `${text_color}`,
-                padding: "0 2px",
-              }}
-            >
-              {preeditCaret}
-            </div>
+            <div style={{ backgroundColor: "transparent", height: `${spacing}px` }} />
           </div>
         )}
 
-        {!inlinePreedit && <div style={{ backgroundColor: "transparent", height: `${spacing}px` }} />}
         <div
           style={{
             display: "inline-flex",

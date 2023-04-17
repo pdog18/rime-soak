@@ -13,7 +13,7 @@ export default function ColorPickers({ filterColors, onColorChanged }: ColorPick
         flexWrap: "wrap",
         columnGap: `${filterColors.length > 9 ? "8vw" : "2vw"}`,
         rowGap: "2vh",
-        margin: "10vh 0vw",
+        margin: "4vh 0vw",
         justifyContent: "center",
       }}
     >
