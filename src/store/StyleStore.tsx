@@ -128,6 +128,39 @@ const useStyleState = create<StyleState>()((set, get) => ({
     if (!patch["style/display_tray_icon"]) {
       delete patch["style/display_tray_icon"]
     }
+    if (patch["style/font_point"] === 14) {
+      delete patch["style/font_point"]
+    }
+    if (patch["style/layout/min_width"] === 160) {
+      delete patch["style/layout/min_width"]
+    }
+    if (patch["style/layout/min_height"] === 0) {
+      delete patch["style/layout/min_height"]
+    }
+    if (patch["style/layout/border_width"] === 3) {
+      delete patch["style/layout/border_width"]
+    }
+    if (patch["style/layout/margin_x"] === 12) {
+      delete patch["style/layout/margin_x"]
+    }
+    if (patch["style/layout/margin_y"] === 12) {
+      delete patch["style/layout/margin_y"]
+    }
+    if (patch["style/layout/spacing"] === 10) {
+      delete patch["style/layout/spacing"]
+    }
+    if (patch["style/layout/candidate_spacing"] === 5) {
+      delete patch["style/layout/candidate_spacing"]
+    }
+    if (patch["style/layout/hilite_spacing"] === 4) {
+      delete patch["style/layout/hilite_spacing"]
+    }
+    if (patch["style/layout/hilite_padding"] === 2) {
+      delete patch["style/layout/hilite_padding"]
+    }
+    if (patch["style/layout/round_corner"] === 4) {
+      delete patch["style/layout/round_corner"]
+    }
 
     const color_scheme_name = patch["style/color_scheme"]
     if (color_scheme_name === "aqua") {
