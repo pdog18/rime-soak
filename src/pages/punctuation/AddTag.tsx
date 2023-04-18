@@ -31,7 +31,6 @@ export const AddTag = ({ onPunctuationAdded, checkbox }: AddTagProps) => {
   const handleInputConfirm = () => {
     if (inputValue.length === 0) {
       console.log("length === 0 ")
-
       return
     }
 

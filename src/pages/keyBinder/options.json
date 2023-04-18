@@ -1,0 +1,531 @@
+[
+  {
+    "value": "send",
+    "label": "映射",
+    "children": [
+      {
+        "value": "BackSpace",
+        "label": "退格"
+      },
+      {
+        "value": "Shift+Delete",
+        "label": "删除候选词"
+      },
+      {
+        "value": "Tab",
+        "label": "水平定位符"
+      },
+      {
+        "value": "Linefeed",
+        "label": "换行"
+      },
+      {
+        "value": "Clear",
+        "label": "清除"
+      },
+      {
+        "value": "Return",
+        "label": "回车"
+      },
+      {
+        "value": "Pause",
+        "label": "暂停"
+      },
+      {
+        "value": "Sys_Req",
+        "label": "印屏"
+      },
+      {
+        "value": "Escape",
+        "label": "退出"
+      },
+      {
+        "value": "Delete",
+        "label": "删除"
+      },
+      {
+        "value": "Home",
+        "label": "原位"
+      },
+      {
+        "value": "Left",
+        "label": "左箭头"
+      },
+      {
+        "value": "Up",
+        "label": "上箭头"
+      },
+      {
+        "value": "Right",
+        "label": "右箭头"
+      },
+      {
+        "value": "Down",
+        "label": "下箭头"
+      },
+      {
+        "value": "Prior、Page_Up",
+        "label": "上翻"
+      },
+      {
+        "value": "Next、Page_Down",
+        "label": "下翻"
+      },
+      {
+        "value": "End",
+        "label": "末位"
+      },
+      {
+        "value": "Begin",
+        "label": "始位"
+      },
+      {
+        "value": "Shift_L",
+        "label": "左Shift"
+      },
+      {
+        "value": "Shift_R",
+        "label": "右Shift"
+      },
+      {
+        "value": "Control_L",
+        "label": "左Ctrl"
+      },
+      {
+        "value": "Control_R",
+        "label": "右Ctrl"
+      },
+      {
+        "value": "Meta_L",
+        "label": "左Meta"
+      },
+      {
+        "value": "Meta_R",
+        "label": "右Meta"
+      },
+      {
+        "value": "Alt_L",
+        "label": "左Alt"
+      },
+      {
+        "value": "Alt_R",
+        "label": "右Alt"
+      },
+      {
+        "value": "Super_L",
+        "label": "左Super"
+      },
+      {
+        "value": "Super_R",
+        "label": "右Super"
+      },
+      {
+        "value": "Hyper_L",
+        "label": "左Hyper"
+      },
+      {
+        "value": "Hyper_R",
+        "label": "右Hyper"
+      },
+      {
+        "value": "Caps_Lock",
+        "label": "大写锁定"
+      },
+      {
+        "value": "Shift_Lock",
+        "label": "上档锁"
+      },
+      {
+        "value": "Scroll_Lock",
+        "label": "滚动锁"
+      },
+      {
+        "value": "Num_Lock",
+        "label": "小键盘锁"
+      },
+      {
+        "value": "Select",
+        "label": "选定"
+      },
+      {
+        "value": "Print",
+        "label": "打印"
+      },
+      {
+        "value": "Execute",
+        "label": "执行"
+      },
+      {
+        "value": "Insert",
+        "label": "插入"
+      },
+      {
+        "value": "Undo",
+        "label": "还原"
+      },
+      {
+        "value": "Redo",
+        "label": "取消还原"
+      },
+      {
+        "value": "Menu",
+        "label": "菜单"
+      },
+      {
+        "value": "Find",
+        "label": "查找"
+      },
+      {
+        "value": "Cancel",
+        "label": "取消"
+      },
+      {
+        "value": "Help",
+        "label": "帮助"
+      },
+      {
+        "value": "Break",
+        "label": "中断"
+      },
+      {
+        "value": "space",
+        "label": "空格"
+      },
+      {
+        "value": "exclam",
+        "label": "!"
+      },
+      {
+        "value": "quotedbl",
+        "label": "\""
+      },
+      {
+        "value": "numbersign",
+        "label": "#"
+      },
+      {
+        "value": "dollar",
+        "label": "$"
+      },
+      {
+        "value": "percent",
+        "label": "%"
+      },
+      {
+        "value": "ampersand",
+        "label": "&"
+      },
+      {
+        "value": "apostrophe",
+        "label": "'"
+      },
+      {
+        "value": "parenleft",
+        "label": "("
+      },
+      {
+        "value": "parenright",
+        "label": ")"
+      },
+      {
+        "value": "asterisk",
+        "label": "*"
+      },
+      {
+        "value": "plus",
+        "label": "+"
+      },
+      {
+        "value": "comma",
+        "label": ","
+      },
+      {
+        "value": "minus",
+        "label": "-"
+      },
+      {
+        "value": "period",
+        "label": "."
+      },
+      {
+        "value": "slash",
+        "label": "/"
+      },
+      {
+        "value": "colon",
+        "label": ":"
+      },
+      {
+        "value": "semicolon",
+        "label": ";"
+      },
+      {
+        "value": "less",
+        "label": "<"
+      },
+      {
+        "value": "equal",
+        "label": "="
+      },
+      {
+        "value": "greater",
+        "label": ">"
+      },
+      {
+        "value": "question",
+        "label": "?"
+      },
+      {
+        "value": "at",
+        "label": "@"
+      },
+      {
+        "value": "bracketleft",
+        "label": "["
+      },
+      {
+        "value": "backslash",
+        "label": ""
+      },
+      {
+        "value": "bracketright",
+        "label": "]"
+      },
+      {
+        "value": "asciicircum",
+        "label": "^"
+      },
+      {
+        "value": "underscore",
+        "label": "_"
+      },
+      {
+        "value": "grave",
+        "label": "`"
+      },
+      {
+        "value": "braceleft",
+        "label": "{"
+      },
+      {
+        "value": "bar",
+        "label": "|"
+      },
+      {
+        "value": "braceright",
+        "label": "}"
+      },
+      {
+        "value": "asciitilde",
+        "label": "~"
+      },
+      {
+        "value": "KP_Space",
+        "label": "小鍵板空格"
+      },
+      {
+        "value": "KP_Tab",
+        "label": "小鍵板水平定位符"
+      },
+      {
+        "value": "KP_Enter",
+        "label": "小鍵板回車"
+      },
+      {
+        "value": "KP_Delete",
+        "label": "小鍵板刪除"
+      },
+      {
+        "value": "KP_Home",
+        "label": "小鍵板原位"
+      },
+      {
+        "value": "KP_Left",
+        "label": "小鍵板左箭頭"
+      },
+      {
+        "value": "KP_Up",
+        "label": "小鍵板上箭頭"
+      },
+      {
+        "value": "KP_Right",
+        "label": "小鍵板右箭頭"
+      },
+      {
+        "value": "KP_Down",
+        "label": "小鍵板下箭頭"
+      },
+      {
+        "value": "KP_Prior、KP_Page_Up",
+        "label": "小鍵板上翻"
+      },
+      {
+        "value": "KP_Next、KP_Page_Down",
+        "label": "小鍵板下翻"
+      },
+      {
+        "value": "KP_End",
+        "label": "小鍵板末位"
+      },
+      {
+        "value": "KP_Begin",
+        "label": "小鍵板始位"
+      },
+      {
+        "value": "KP_Insert",
+        "label": "小鍵板插入"
+      },
+      {
+        "value": "KP_Equal",
+        "label": "小鍵板等於"
+      },
+      {
+        "value": "KP_Multiply",
+        "label": "小鍵板乘號"
+      },
+      {
+        "value": "KP_Add",
+        "label": "小鍵板加號"
+      },
+      {
+        "value": "KP_Subtract",
+        "label": "小鍵板減號"
+      },
+      {
+        "value": "KP_Divide",
+        "label": "小鍵板除號"
+      },
+      {
+        "value": "KP_Decimal",
+        "label": "小鍵板小數點"
+      },
+      {
+        "value": "KP_0",
+        "label": "小鍵板0"
+      },
+      {
+        "value": "KP_1",
+        "label": "小鍵板1"
+      },
+      {
+        "value": "KP_2",
+        "label": "小鍵板2"
+      },
+      {
+        "value": "KP_3",
+        "label": "小鍵板3"
+      },
+      {
+        "value": "KP_4",
+        "label": "小鍵板4"
+      },
+      {
+        "value": "KP_5",
+        "label": "小鍵板5"
+      },
+      {
+        "value": "KP_6",
+        "label": "小鍵板6"
+      },
+      {
+        "value": "KP_7",
+        "label": "小鍵板7"
+      },
+      {
+        "value": "KP_8",
+        "label": "小鍵板8"
+      },
+      {
+        "value": "KP_9",
+        "label": "小鍵板9"
+      }
+    ]
+  },
+  {
+    "value": "toggle",
+    "label": "切换",
+    "children": [
+      {
+        "value": "ascii_mode",
+        "label": "中文/英文"
+      },
+      {
+        "value": "ascii_punct",
+        "label": "中文标点/英文标点"
+      },
+      {
+        "value": "full_shape",
+        "label": "半角/全角"
+      },
+      {
+        "value": "simplification",
+        "label": "简体/繁體"
+      },
+      {
+        "value": "extended_charset",
+        "label": "基本字符集/全字符集"
+      }
+    ]
+  },
+  {
+    "value": "select",
+    "label": "选词",
+    "children": [
+      {
+        "value": 1,
+        "label": "1"
+      },
+      {
+        "value": 2,
+        "label": "2"
+      },
+      {
+        "value": 4,
+        "label": "4"
+      },
+      {
+        "value": 5,
+        "label": "5"
+      },
+      {
+        "value": 6,
+        "label": "6"
+      },
+      {
+        "value": 7,
+        "label": "7"
+      },
+      {
+        "value": 8,
+        "label": "8"
+      },
+      {
+        "value": 9,
+        "label": "9"
+      },
+      {
+        "value": 0,
+        "label": "10"
+      },
+      {
+        "value": ".next",
+        "label": ".next"
+      }
+    ]
+  },
+  {
+    "value": "send_sequence",
+    "label": "send_sequence",
+    "disabled": true
+  },
+  {
+    "value": "set_option",
+    "label": "set_option",
+    "disabled": true
+  },
+  {
+    "value": "unset_option",
+    "label": "unset_option",
+    "disabled": true
+  }
+]

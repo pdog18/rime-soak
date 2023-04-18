@@ -1,11 +1,22 @@
 import { create } from "zustand"
 import produce from "immer"
 import { stringify } from "yaml"
+import KeyBinderJson from "./KeyBinder.json"
+
+interface BinderRuler {
+  when: string
+  accept: string
+  enable?: boolean
+  send?: string
+  toggle?: string
+  select?: string
+}
 
 interface DefaultPatch {
   "menu/page_size": number
   schema_list: [{ schema: string }]
   "switcher/hotkeys": string[]
+  "key_binder/bindings": BinderRuler[]
 }
 interface DownloadObject {
   url: string | null
@@ -20,6 +31,7 @@ interface DefaultState {
   changePageSize: (page_size: number) => void
   changeTargetSchema: (targetSchema: string) => void
   changeSwitcherHotkeys: (hotkeys: string[]) => void
+  changeKeyBinder: (bindings: BinderRuler[]) => void
   generateYAML: () => string | null
   needDownload: () => DownloadObject
 }
@@ -30,6 +42,7 @@ const useDefaultState = create<DefaultState>()((set, get) => ({
       "menu/page_size": 5,
       schema_list: [{ schema: "luna_pinyin" }],
       "switcher/hotkeys": ["Control+grave", "Control+Shift+grave", "F4"],
+      "key_binder/bindings": KeyBinderJson,
     },
   },
 
@@ -49,6 +62,21 @@ const useDefaultState = create<DefaultState>()((set, get) => ({
 
     if (patch.schema_list?.length === 1 && patch.schema_list[0].schema === "luna_pinyin") {
       delete patch.schema_list
+    }
+
+    const filter = patch["key_binder/bindings"]!.filter((binder) => {
+      return binder.enable !== undefined
+    })
+
+    if (filter.length === 0) {
+      delete patch["key_binder/bindings"]
+    } else {
+      patch["key_binder/bindings"] = patch["key_binder/bindings"]!.filter(
+        (binder) => binder.enable || binder.enable === undefined
+      ).map((binder) => {
+        const { enable, ...rest } = binder
+        return rest
+      })
     }
 
     if (Object.keys(patch).length === 0) {
@@ -87,7 +115,6 @@ const useDefaultState = create<DefaultState>()((set, get) => ({
   changePageSize: (page_size) =>
     set(
       produce((state) => {
-        console.log("changePageSize")
         state.defaultCustom.patch["menu/page_size"] = page_size
       })
     ),
@@ -95,19 +122,22 @@ const useDefaultState = create<DefaultState>()((set, get) => ({
   changeTargetSchema: (targetSchema) =>
     set(
       produce((state) => {
-        console.log("changeTargetSchema")
-
         state.defaultCustom.patch.schema_list = [{ schema: targetSchema }]
       })
     ),
   changeSwitcherHotkeys: (hotkeys) =>
     set(
       produce((state) => {
-        console.log("changeSwitcherHotkeys")
         state.defaultCustom.patch["switcher/hotkeys"] = hotkeys
+      })
+    ),
+  changeKeyBinder: (bindings) =>
+    set(
+      produce((state) => {
+        state.defaultCustom.patch["key_binder/bindings"] = bindings
       })
     ),
 }))
 
-export type { DefaultState }
+export type { DefaultState, BinderRuler }
 export default useDefaultState

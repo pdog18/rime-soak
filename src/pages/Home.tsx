@@ -8,6 +8,7 @@ import { useLocation, useNavigate } from "react-router-dom"
 import Other from "./other/Other"
 import CustomPhrase from "./customPhrase/CustomPhrase"
 import CustomSkin from "./skin/CustomSkin"
+import KeyBinder from "./keyBinder/KeyBinder"
 const items = [
   {
     key: "/default",
@@ -33,6 +34,11 @@ const items = [
     key: "/custom-phrase",
     label: "自定义短语",
     children: <CustomPhrase />,
+  },
+  {
+    key: "/key-binder",
+    label: "按键",
+    children: <KeyBinder />,
   },
   {
     key: "/others",
