@@ -12,11 +12,14 @@ interface BinderRuler {
   select?: string
 }
 
+type SwitchKeyType = "commit_code" | "commit_text" | "inline_ascii" | "noop" | "clear"
 interface DefaultPatch {
   "menu/page_size": number
   schema_list: [{ schema: string }]
   "switcher/hotkeys": string[]
   "key_binder/bindings": BinderRuler[]
+  "ascii_composer/good_old_caps_lock": boolean
+  "ascii_composer/switch_key/Caps_Lock": SwitchKeyType
 }
 interface DownloadObject {
   url: string | null
@@ -34,6 +37,7 @@ interface DefaultState {
   changeKeyBinder: (bindings: BinderRuler[]) => void
   generateYAML: () => string | null
   needDownload: () => DownloadObject
+  changeCapsLock: (enalbe: boolean) => void
 }
 
 const useDefaultState = create<DefaultState>()((set, get) => ({
@@ -43,6 +47,8 @@ const useDefaultState = create<DefaultState>()((set, get) => ({
       schema_list: [{ schema: "luna_pinyin" }],
       "switcher/hotkeys": ["Control+grave", "Control+Shift+grave", "F4"],
       "key_binder/bindings": KeyBinderJson,
+      "ascii_composer/good_old_caps_lock": true,
+      "ascii_composer/switch_key/Caps_Lock": "clear",
     },
   },
 
@@ -77,6 +83,17 @@ const useDefaultState = create<DefaultState>()((set, get) => ({
         const { enable, ...rest } = binder
         return rest
       })
+    }
+
+    console.log(patch["ascii_composer/good_old_caps_lock"])
+    console.log(patch["ascii_composer/switch_key/Caps_Lock"])
+
+    if (patch["ascii_composer/good_old_caps_lock"] === true) {
+      delete patch["ascii_composer/good_old_caps_lock"]
+    }
+
+    if (patch["ascii_composer/switch_key/Caps_Lock"] === "clear") {
+      delete patch["ascii_composer/switch_key/Caps_Lock"]
     }
 
     if (Object.keys(patch).length === 0) {
@@ -135,6 +152,14 @@ const useDefaultState = create<DefaultState>()((set, get) => ({
     set(
       produce((state) => {
         state.defaultCustom.patch["key_binder/bindings"] = bindings
+      })
+    ),
+
+  changeCapsLock: (enable) =>
+    set(
+      produce((state) => {
+        state.defaultCustom.patch["ascii_composer/good_old_caps_lock"] = enable
+        state.defaultCustom.patch["ascii_composer/switch_key/Caps_Lock"] = enable ? "clear" : "commit_code"
       })
     ),
 }))

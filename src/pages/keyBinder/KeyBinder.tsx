@@ -133,10 +133,25 @@ const BinderRulerItem = ({ ruler, index, onRulerChanged }: BinderRulerItemProps)
 const KeyBinder: React.FC = () => {
   const state = useDefaultState()
   const bindings = state.defaultCustom.patch["key_binder/bindings"]
+  const capsLockEnable = state.defaultCustom.patch["ascii_composer/good_old_caps_lock"]
+  const changeCapsLock = state.changeCapsLock
+
   const changeKeyBinder = state.changeKeyBinder
 
   return (
     <div style={{ margin: "0 5vw", display: "flex", flexDirection: "column", alignItems: "center" }}>
+      <div style={{ display: "inline-flex", alignItems: "center", marginBottom: "2vh", gap: "16px" }}>
+        <input
+          type="checkbox"
+          style={{ zoom: "160%", fontSize: "18px" }}
+          checked={!capsLockEnable}
+          onChange={(e) => {
+            console.log(e.target.checked)
+            changeCapsLock(!e.target.checked)
+          }}
+        />
+        <div>使用CapsLock 切换中英文</div>
+      </div>
       <div
         style={{
           display: "flex",
