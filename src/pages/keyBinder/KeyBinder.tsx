@@ -135,23 +135,63 @@ const KeyBinder: React.FC = () => {
   const bindings = state.defaultCustom.patch["key_binder/bindings"]
   const capsLockEnable = state.defaultCustom.patch["ascii_composer/good_old_caps_lock"]
   const changeCapsLock = state.changeCapsLock
-
+  const changeHotkeys = state.changeHotkeys
   const changeKeyBinder = state.changeKeyBinder
+
+  const keyNames = ["Caps_Lock", "Control_L", "Control_R", "Shift_L", "Shift_R", "Eisu_toggle"]
+  const actions = ["commit_code", "commit_text", "inline_ascii", "noop", "clear"]
+  const actionToDesc = (action: string) => {
+    switch (action) {
+      case "commit_code":
+        return "编码字符上屏，并切换到英文"
+      case "commit_text":
+        return "候选词上屏，并切换到英文"
+      case "inline_ascii":
+        return "编辑区内联，保持中文输入"
+      case "clear":
+        return "清除输入内容，并切换到英文"
+      case "noop":
+        return "屏蔽按键"
+    }
+  }
 
   return (
     <div style={{ margin: "0 5vw", display: "flex", flexDirection: "column", alignItems: "center" }}>
       <div style={{ display: "inline-flex", alignItems: "center", marginBottom: "2vh", gap: "16px" }}>
+        <div>使用CapsLock 切换中英文</div>
         <input
           type="checkbox"
           style={{ zoom: "160%", fontSize: "18px" }}
           checked={!capsLockEnable}
           onChange={(e) => {
-            console.log(e.target.checked)
             changeCapsLock(!e.target.checked)
           }}
         />
-        <div>使用CapsLock 切换中英文</div>
       </div>
+
+      <div>鼠鬚管不能區分左、右，因此只有對 Shift_L, Control_L 的設定起作用</div>
+      {keyNames.map((keyName) => {
+        return (
+          <div key={keyName} style={{ display: "inline-flex", alignItems: "center", marginBottom: "2vh", gap: "16px" }}>
+            <div style={{ width: "120px" }}>{keyName}</div>
+            <select
+              name="pets"
+              disabled={keyName === "Caps_Lock" && !capsLockEnable}
+              value={(state.defaultCustom.patch as any)[`ascii_composer/switch_key/${keyName}`]}
+              onChange={(value) => {
+                changeHotkeys(keyName, value.target.value)
+              }}
+            >
+              {actions.map((op) => (
+                <option key={op} value={op}>
+                  {actionToDesc(op)}
+                </option>
+              ))}
+            </select>
+          </div>
+        )
+      })}
+
       <div
         style={{
           display: "flex",

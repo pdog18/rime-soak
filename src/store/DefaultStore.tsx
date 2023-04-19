@@ -20,7 +20,13 @@ interface DefaultPatch {
   "key_binder/bindings": BinderRuler[]
   "ascii_composer/good_old_caps_lock": boolean
   "ascii_composer/switch_key/Caps_Lock": SwitchKeyType
+  "ascii_composer/switch_key/Control_L": SwitchKeyType
+  "ascii_composer/switch_key/Control_R": SwitchKeyType
+  "ascii_composer/switch_key/Shift_L": SwitchKeyType
+  "ascii_composer/switch_key/Shift_R": SwitchKeyType
+  "ascii_composer/switch_key/Eisu_toggle": SwitchKeyType
 }
+
 interface DownloadObject {
   url: string | null
   dictFileName: string | null
@@ -38,6 +44,7 @@ interface DefaultState {
   generateYAML: () => string | null
   needDownload: () => DownloadObject
   changeCapsLock: (enalbe: boolean) => void
+  changeHotkeys: (keyname: string, action: string) => void
 }
 
 const useDefaultState = create<DefaultState>()((set, get) => ({
@@ -49,6 +56,11 @@ const useDefaultState = create<DefaultState>()((set, get) => ({
       "key_binder/bindings": KeyBinderJson,
       "ascii_composer/good_old_caps_lock": true,
       "ascii_composer/switch_key/Caps_Lock": "clear",
+      "ascii_composer/switch_key/Control_L": "noop",
+      "ascii_composer/switch_key/Control_R": "noop",
+      "ascii_composer/switch_key/Shift_L": "inline_ascii",
+      "ascii_composer/switch_key/Shift_R": "commit_text",
+      "ascii_composer/switch_key/Eisu_toggle": "clear",
     },
   },
 
@@ -160,6 +172,12 @@ const useDefaultState = create<DefaultState>()((set, get) => ({
       produce((state) => {
         state.defaultCustom.patch["ascii_composer/good_old_caps_lock"] = enable
         state.defaultCustom.patch["ascii_composer/switch_key/Caps_Lock"] = enable ? "clear" : "commit_code"
+      })
+    ),
+  changeHotkeys: (keyname, value) =>
+    set(
+      produce((state) => {
+        state.defaultCustom.patch[`ascii_composer/switch_key/${keyname}`] = value
       })
     ),
 }))
