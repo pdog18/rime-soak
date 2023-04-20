@@ -86,6 +86,8 @@ const CustomSkin = () => {
 
   const [animationColorName, changeAnimationColorName] = useState<string>("")
 
+  const [notifyTargetArea, ChangeNotifyTarget] = useState<boolean>(false)
+
   return (
     <CustomSkinContext.Provider value={{ animationColorName, changeAnimationColorName }}>
       <div
@@ -112,6 +114,15 @@ const CustomSkin = () => {
                 changeSelectedTheme(config)
                 changeColorScheme(value, config)
               }}
+            />
+          </div>
+
+          <div style={{ display: "inline-flex" }}>
+            <div>修改颜色时，提示目标区域</div>
+            <input
+              type="checkbox"
+              checked={notifyTargetArea}
+              onChange={(value) => ChangeNotifyTarget(value.target.checked)}
             />
           </div>
 
@@ -275,6 +286,7 @@ const CustomSkin = () => {
           items={items}
           preeditContent={preeditContent}
           convertedColors={convertedColors}
+          notifyTargetArea={notifyTargetArea}
         />
 
         <ColorPickers

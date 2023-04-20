@@ -1,4 +1,4 @@
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import { Candidate } from "../../store/CustomSkinStore"
 import CustomSkinContext from "./CustomSkinContext"
 import "./animation.css"
@@ -26,28 +26,13 @@ interface SkinProps {
   convertedColors: {
     [k: string]: string
   }
+  notifyTargetArea: boolean
 }
 
 const calculateRem = (size: number) => {
   const baseFontSize = 16 // 默认字体大小，通常为16px
   const pixels = (size * 96) / 72 // 将点数转换为像素
   return pixels / baseFontSize
-}
-
-const getAnimClassName = (animationColorName: string, expectedColorName: string) => {
-  if (animationColorName !== expectedColorName) {
-    return ""
-  }
-
-  if (expectedColorName.includes("border")) {
-    return "animatedBorder"
-  }
-
-  if (expectedColorName.includes("back")) {
-    return "animatedBackground"
-  }
-
-  return "animatedText"
 }
 
 export default function CustomSkinPreview({
@@ -68,6 +53,7 @@ export default function CustomSkinPreview({
   items,
   preeditContent,
   convertedColors,
+  notifyTargetArea,
 }: SkinProps) {
   const convertedFontSize = `${calculateRem(fontSize)}rem`
   const { preeditText, preeditHilitedText, preeditCaret } = preeditContent
@@ -88,6 +74,26 @@ export default function CustomSkinPreview({
   } = convertedColors
 
   const { animationColorName: animName } = useContext(CustomSkinContext)
+
+  const getAnimClassName = (animationColorName: string, expectedColorName: string) => {
+    if (!notifyTargetArea) {
+      return ""
+    }
+
+    if (animationColorName !== expectedColorName) {
+      return ""
+    }
+
+    if (expectedColorName.includes("border")) {
+      return "animatedBorder"
+    }
+
+    if (expectedColorName.includes("back")) {
+      return "animatedBackground"
+    }
+
+    return "animatedText"
+  }
 
   const animation_back_color = getAnimClassName(animName, "back_color")
   const animation_hilited_back_color = getAnimClassName(animName, "hilited_back_color")
