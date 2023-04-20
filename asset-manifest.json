@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/rime-soak/static/css/main.2b670c7b.css",
-    "main.js": "/rime-soak/static/js/main.ff182d85.js",
+    "main.css": "/rime-soak/static/css/main.37bcf29e.css",
+    "main.js": "/rime-soak/static/js/main.3fc02455.js",
     "static/js/787.52b2410e.chunk.js": "/rime-soak/static/js/787.52b2410e.chunk.js",
     "index.html": "/rime-soak/index.html",
-    "main.2b670c7b.css.map": "/rime-soak/static/css/main.2b670c7b.css.map",
-    "main.ff182d85.js.map": "/rime-soak/static/js/main.ff182d85.js.map",
+    "main.37bcf29e.css.map": "/rime-soak/static/css/main.37bcf29e.css.map",
+    "main.3fc02455.js.map": "/rime-soak/static/js/main.3fc02455.js.map",
     "787.52b2410e.chunk.js.map": "/rime-soak/static/js/787.52b2410e.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.2b670c7b.css",
-    "static/js/main.ff182d85.js"
+    "static/css/main.37bcf29e.css",
+    "static/js/main.3fc02455.js"
   ]
 }
