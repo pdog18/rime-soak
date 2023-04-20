@@ -55,12 +55,10 @@ const Punctuation: React.FC = () => {
   })
 
   return (
-    <div style={{ textAlign: "center", maxHeight: "90vh" }}>
+    <div style={{ textAlign: "center" }}>
       <div
         style={{
-          height: "80vh",
           backgroundColor: "white",
-          overflowY: "scroll",
           display: "inline-block",
           padding: "32px",
         }}

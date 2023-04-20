@@ -156,75 +156,95 @@ const KeyBinder: React.FC = () => {
   }
 
   return (
-    <div style={{ margin: "0 5vw", display: "flex", flexDirection: "column", alignItems: "center" }}>
-      <div style={{ display: "inline-flex", alignItems: "center", marginBottom: "2vh", gap: "16px" }}>
-        <div>使用CapsLock 切换中英文</div>
-        <input
-          type="checkbox"
-          style={{ zoom: "160%", fontSize: "18px" }}
-          checked={!capsLockEnable}
-          onChange={(e) => {
-            changeCapsLock(!e.target.checked)
-          }}
-        />
-      </div>
-
-      <div>鼠鬚管不能區分左、右，因此只有對 Shift_L, Control_L 的設定起作用</div>
-      {keyNames.map((keyName) => {
-        return (
-          <div key={keyName} style={{ display: "inline-flex", alignItems: "center", marginBottom: "2vh", gap: "16px" }}>
-            <div style={{ width: "120px" }}>{keyName}</div>
-            <select
-              name="pets"
-              disabled={keyName === "Caps_Lock" && !capsLockEnable}
-              value={(state.defaultCustom.patch as any)[`ascii_composer/switch_key/${keyName}`]}
-              onChange={(value) => {
-                changeHotkeys(keyName, value.target.value)
-              }}
-            >
-              {actions.map((op) => (
-                <option key={op} value={op}>
-                  {actionToDesc(op)}
-                </option>
-              ))}
-            </select>
-          </div>
-        )
-      })}
-
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <div
         style={{
           display: "flex",
-          justifyContent: "center",
+          padding: "0 2vw",
+          flexDirection: "column",
+          backgroundColor: "white",
           alignItems: "center",
-          width: "fit-content",
-          gap: "10px",
+          justifyContent: "center",
         }}
       >
-        <div style={{ width: "110px" }}>何时有效</div>
-        <div style={{ width: "250px" }}>输入按键</div>
-        <div style={{ width: "230px" }}>期望行为</div>
-        <div>启用</div>
-      </div>
-      <div>
-        {bindings.map((item, index) => (
-          <BinderRulerItem
-            key={index}
-            ruler={item}
-            index={index}
-            onRulerChanged={(changedIndex, newRuler) => {
-              changeKeyBinder(
-                bindings.map((v, index) => {
-                  if (index === changedIndex) {
-                    return newRuler
-                  } else {
-                    return v
-                  }
-                })
-              )
+        <div style={{ display: "inline-flex", alignItems: "center", marginBottom: "2vh", gap: "16px" }}>
+          <div>使用CapsLock 切换中英文</div>
+          <input
+            type="checkbox"
+            style={{ zoom: "160%", fontSize: "18px" }}
+            checked={!capsLockEnable}
+            onChange={(e) => {
+              changeCapsLock(!e.target.checked)
             }}
           />
-        ))}
+        </div>
+
+        <div>鼠鬚管不能區分左、右，因此只有對 Shift_L, Control_L 的設定起作用</div>
+        {keyNames.map((keyName) => {
+          return (
+            <div
+              key={keyName}
+              style={{ display: "inline-flex", alignItems: "center", marginBottom: "2vh", gap: "16px" }}
+            >
+              <div style={{ width: "120px" }}>{keyName}</div>
+              <select
+                name="pets"
+                disabled={keyName === "Caps_Lock" && !capsLockEnable}
+                value={(state.defaultCustom.patch as any)[`ascii_composer/switch_key/${keyName}`]}
+                onChange={(value) => {
+                  changeHotkeys(keyName, value.target.value)
+                }}
+              >
+                {actions.map((op) => (
+                  <option key={op} value={op}>
+                    {actionToDesc(op)}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )
+        })}
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            width: "fit-content",
+            gap: "10px",
+          }}
+        >
+          <div style={{ width: "110px" }}>何时有效</div>
+          <div style={{ width: "250px" }}>输入按键</div>
+          <div style={{ width: "230px" }}>期望行为</div>
+          <div>启用</div>
+        </div>
+        <div>
+          {bindings.map((item, index) => (
+            <BinderRulerItem
+              key={index}
+              ruler={item}
+              index={index}
+              onRulerChanged={(changedIndex, newRuler) => {
+                changeKeyBinder(
+                  bindings.map((v, index) => {
+                    if (index === changedIndex) {
+                      return newRuler
+                    } else {
+                      return v
+                    }
+                  })
+                )
+              }}
+            />
+          ))}
+        </div>
       </div>
     </div>
   )

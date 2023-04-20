@@ -18,7 +18,6 @@ const Default: React.FC = () => {
   return (
     <div
       style={{
-        margin: "4vh 4vw",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",

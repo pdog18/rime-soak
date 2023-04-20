@@ -17,7 +17,6 @@ const Style: React.FC = () => {
       style={{
         display: "flex",
         gap: "16px",
-        margin: "4vh 4vw",
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
