@@ -97,15 +97,26 @@ const useDefaultState = create<DefaultState>()((set, get) => ({
       })
     }
 
-    console.log(patch["ascii_composer/good_old_caps_lock"])
-    console.log(patch["ascii_composer/switch_key/Caps_Lock"])
-
     if (patch["ascii_composer/good_old_caps_lock"] === true) {
       delete patch["ascii_composer/good_old_caps_lock"]
     }
-
     if (patch["ascii_composer/switch_key/Caps_Lock"] === "clear") {
       delete patch["ascii_composer/switch_key/Caps_Lock"]
+    }
+    if (patch["ascii_composer/switch_key/Control_L"] === "noop") {
+      delete patch["ascii_composer/switch_key/Control_L"]
+    }
+    if (patch["ascii_composer/switch_key/Control_R"] === "noop") {
+      delete patch["ascii_composer/switch_key/Control_R"]
+    }
+    if (patch["ascii_composer/switch_key/Shift_L"] === "inline_ascii") {
+      delete patch["ascii_composer/switch_key/Shift_L"]
+    }
+    if (patch["ascii_composer/switch_key/Shift_R"] === "commit_text") {
+      delete patch["ascii_composer/switch_key/Shift_R"]
+    }
+    if (patch["ascii_composer/switch_key/Eisu_toggle"] === "clear") {
+      delete patch["ascii_composer/switch_key/Eisu_toggle"]
     }
 
     if (Object.keys(patch).length === 0) {
