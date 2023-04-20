@@ -1,4 +1,4 @@
-import { useContext, useState } from "react"
+import { useContext } from "react"
 import { Candidate } from "../../store/CustomSkinStore"
 import CustomSkinContext from "./CustomSkinContext"
 import "./animation.css"
