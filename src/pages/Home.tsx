@@ -9,6 +9,7 @@ import Other from "./other/Other"
 import CustomPhrase from "./customPhrase/CustomPhrase"
 import CustomSkin from "./skin/CustomSkin"
 import KeyBinder from "./keyBinder/KeyBinder"
+import SquirrelCustomTheme from "./skin/SquirrelCustomTheme"
 const items = [
   {
     key: "/default",
@@ -23,7 +24,7 @@ const items = [
   {
     key: "/theme",
     label: "皮肤",
-    children: <CustomSkin />,
+    children: navigator.userAgent.indexOf("Win") !== -1 ? <CustomSkin /> : <SquirrelCustomTheme />,
   },
   {
     key: "/punctuation",
@@ -48,6 +49,8 @@ const items = [
 ]
 
 const Home = () => {
+  console.log("custom skin > ", navigator.userAgent.indexOf("Win"))
+
   const location = useLocation()
   const navigate = useNavigate()
 
