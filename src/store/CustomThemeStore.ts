@@ -9,11 +9,11 @@ type Candidate = {
   comment: string
 }
 
-interface CustomSkinState {
-  skin: CustomSkinConfig
+interface CustomThemeState {
+  skin: WeaselThemeConfig
   colors: [string, number][]
   items: Candidate[]
-  changeSelectedTheme: (skin: CustomSkinConfig) => void
+  changeSelectedTheme: (skin: WeaselThemeConfig) => void
 
   preeditContent: typeof preeditContent
 }
@@ -37,7 +37,7 @@ const items: Candidate[] = [
   { label: "0", suffix: ".", candidate: "舒", comment: "" },
 ]
 
-interface CustomSkinConfig {
+interface WeaselThemeConfig {
   author: string
   name: string
 
@@ -59,12 +59,12 @@ interface CustomSkinConfig {
   hilited_back_color: number
 }
 
-function createCustomSkinState(
-  style: Partial<CustomSkinConfig> & {
+function createCustomWeaselState(
+  style: Partial<WeaselThemeConfig> & {
     text_color: number
     back_color: number
   }
-): CustomSkinConfig {
+): WeaselThemeConfig {
   const {
     text_color,
     back_color,
@@ -99,7 +99,7 @@ function createCustomSkinState(
   }
 }
 
-const initSkin = createCustomSkinState({
+const initTheme = createCustomWeaselState({
   text_color: 0x000000,
   back_color: 0xeceeee,
   border_color: 0xe0e0e0,
@@ -110,11 +110,11 @@ const initSkin = createCustomSkinState({
   hilited_candidate_back_color: 0xfa3a0a,
 })
 
-const useCustomSkinState = create<CustomSkinState>()((set, get) => ({
-  skin: initSkin,
+const useCustomWeaselState = create<CustomThemeState>()((set, get) => ({
+  skin: initTheme,
   items,
   preeditContent,
-  colors: Object.entries(initSkin).filter(([_, value]) => typeof value === "number"),
+  colors: Object.entries(initTheme).filter(([_, value]) => typeof value === "number"),
   changeSelectedTheme(skin) {
     set(
       produce((state) => {
@@ -125,6 +125,6 @@ const useCustomSkinState = create<CustomSkinState>()((set, get) => ({
   },
 }))
 
-export { createCustomSkinState }
-export type { CustomSkinConfig, Candidate }
-export default useCustomSkinState
+export { createCustomWeaselState }
+export type { WeaselThemeConfig, Candidate }
+export default useCustomWeaselState

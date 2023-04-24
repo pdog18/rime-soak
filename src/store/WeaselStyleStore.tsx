@@ -1,7 +1,7 @@
 import { create } from "zustand"
 import produce from "immer"
 import { stringify } from "yaml"
-import { CustomSkinConfig } from "./CustomSkinStore"
+import { WeaselThemeConfig } from "./CustomThemeStore"
 
 const rimeName = () => {
   const userAgent = navigator.userAgent
@@ -39,7 +39,7 @@ interface StylePatch {
   "style/layout/round_corner": number
 
   preset_color_schemes: {
-    [key: string]: CustomSkinConfig
+    [key: string]: WeaselThemeConfig
   }
   app_options: AppOptions
 }
@@ -65,7 +65,7 @@ interface StyleState {
   styleCustom: {
     patch: StylePatch
   }
-  changeColorScheme: (color_scheme: string, config: CustomSkinConfig) => void
+  changeColorScheme: (color_scheme: string, config: WeaselThemeConfig) => void
 
   updateStyleCustom: (path: StyleCustomPath, value: string | number | boolean) => void
 

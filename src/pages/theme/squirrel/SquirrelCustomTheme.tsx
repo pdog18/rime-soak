@@ -1,11 +1,12 @@
 import { useState } from "react"
-import CustomSelect from "../../components/CustomSelect"
-import { useCheckBox } from "../../hooks/useCheckBox"
-import { useNumberInput } from "../../hooks/useNumberInput"
-import { useSelectInput } from "../../hooks/useSelectInput"
-import { useTextInput } from "../../hooks/useTextInput"
+
 import SquirrelPreview, { Colors } from "./SquirrelPreview"
 import colors from "./squirrel.json"
+import { useTextInput } from "../../../hooks/useTextInput"
+import CustomSelect from "../../../components/CustomSelect"
+import { useCheckBox } from "../../../hooks/useCheckBox"
+import { useNumberInput } from "../../../hooks/useNumberInput"
+import { useSelectInput } from "../../../hooks/useSelectInput"
 
 const SquirrelCustomTheme = () => {
   const themes = Object.entries(colors.preset_color_schemes)
@@ -19,7 +20,7 @@ const SquirrelCustomTheme = () => {
 
   const inlinePreedit = useCheckBox(true)
   const cornerRadius = useNumberInput(10)
-  const hilited_corner_radius = useNumberInput(10)
+  const hilited_corner_radius = useNumberInput(0)
   const borderWidth = useNumberInput(0)
   const borderHeight = useNumberInput(0)
   const preeditLineSpacing = useNumberInput(10)

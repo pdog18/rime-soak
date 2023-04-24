@@ -2,25 +2,24 @@ import { Select } from "antd"
 import { useEffect, useState } from "react"
 import { parse } from "yaml"
 
-import { convertColor } from "../../utils/ColorUtils"
-import useCustomSkinState, { CustomSkinConfig, createCustomSkinState } from "../../store/CustomSkinStore"
-import IntegerStep from "../../components/IntegerStep"
-
-import useStyleState from "../../store/StyleStore"
-import useDefaultState from "../../store/DefaultStore"
-import { RadioChoice } from "../../components/RimeSettingItem"
-import NumericInput from "../../components/NumericInput"
-import CustomSkinPreview from "./CustomSkinPreview"
+import CustomSkinPreview from "./WeaselPreview"
 import ColorPickers from "./ColorPickers"
-import CustomSkinContext from "./CustomSkinContext"
+import CustomSkinContext from "./WeaselThemeContext"
+import useCustomWeaselState, { WeaselThemeConfig, createCustomWeaselState } from "../../../store/CustomThemeStore"
+import IntegerStep from "../../../components/IntegerStep"
+import NumericInput from "../../../components/NumericInput"
+import { RadioChoice } from "../../../components/RimeSettingItem"
+import useDefaultState from "../../../store/DefaultStore"
+import useStyleState from "../../../store/WeaselStyleStore"
+import { convertColor } from "../../../utils/ColorUtils"
 
 type ColorSchemeEntry = {
   label: string
   value: string
-  config: Partial<CustomSkinConfig>
+  config: Partial<WeaselThemeConfig>
 }
 
-const CustomSkin = () => {
+const WeaselCustomTheme = () => {
   const {
     changePageSize,
     defaultCustom: { patch: defaultPatch },
@@ -47,7 +46,7 @@ const CustomSkin = () => {
   const hilite_padding = stylePatch["style/layout/hilite_padding"]
   const round_corner = stylePatch["style/layout/round_corner"]
 
-  const { skin, colors, items, preeditContent, changeSelectedTheme } = useCustomSkinState()
+  const { skin, colors, items, preeditContent, changeSelectedTheme } = useCustomWeaselState()
   const [skins, setSkins] = useState<ColorSchemeEntry[]>([])
   const [loading, setLoading] = useState(true)
   const convertedColors = Object.fromEntries(colors.map(([key, value]) => [key, convertColor(value)]))
@@ -68,8 +67,8 @@ const CustomSkin = () => {
         return {
           label: entry[0],
           value: entry[0],
-          config: createCustomSkinState(
-            entry[1] as Partial<CustomSkinConfig> & {
+          config: createCustomWeaselState(
+            entry[1] as Partial<WeaselThemeConfig> & {
               text_color: number
               back_color: number
             }
@@ -110,7 +109,7 @@ const CustomSkin = () => {
               loading={loading}
               options={skins}
               onChange={(value, option) => {
-                const config = (option as ColorSchemeEntry).config as CustomSkinConfig
+                const config = (option as ColorSchemeEntry).config as WeaselThemeConfig
                 changeSelectedTheme(config)
                 changeColorScheme(value, config)
               }}
@@ -306,4 +305,4 @@ const CustomSkin = () => {
   )
 }
 
-export default CustomSkin
+export default WeaselCustomTheme

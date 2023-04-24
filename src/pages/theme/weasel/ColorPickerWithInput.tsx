@@ -1,8 +1,9 @@
 import { useContext, useState } from "react"
 import { HexColorInput } from "react-colorful"
-import PlumpColorPicker from "../../components/MyHexColorPicker"
-import RevealOnFocus from "../../components/RevealOnFocus"
-import CustomSkinContext from "./CustomSkinContext"
+
+import CustomSkinContext from "./WeaselThemeContext"
+import PlumpColorPicker from "../../../components/MyHexColorPicker"
+import RevealOnFocus from "../../../components/RevealOnFocus"
 
 interface PickerWithInputProps {
   name: string

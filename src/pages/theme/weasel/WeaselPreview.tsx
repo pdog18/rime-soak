@@ -1,7 +1,8 @@
 import { useContext } from "react"
-import { Candidate } from "../../store/CustomSkinStore"
-import CustomSkinContext from "./CustomSkinContext"
+
+import CustomSkinContext from "./WeaselThemeContext"
 import "./animation.css"
+import { Candidate } from "../../../store/CustomThemeStore"
 
 interface SkinProps {
   inlinePreedit: boolean

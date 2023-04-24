@@ -7,9 +7,10 @@ import Style from "./style/Style"
 import { useLocation, useNavigate } from "react-router-dom"
 import Other from "./other/Other"
 import CustomPhrase from "./customPhrase/CustomPhrase"
-import CustomSkin from "./skin/CustomSkin"
+import WeaselCustomTheme from "./theme/weasel/CustomWeaselTheme"
 import KeyBinder from "./keyBinder/KeyBinder"
-import SquirrelCustomTheme from "./skin/SquirrelCustomTheme"
+import SquirrelCustomTheme from "./theme/squirrel/SquirrelCustomTheme"
+
 const items = [
   {
     key: "/default",
@@ -24,7 +25,7 @@ const items = [
   {
     key: "/theme",
     label: "皮肤",
-    children: navigator.userAgent.indexOf("Win") !== -1 ? <CustomSkin /> : <SquirrelCustomTheme />,
+    children: navigator.userAgent.indexOf("Win") !== -1 ? <WeaselCustomTheme /> : <SquirrelCustomTheme />,
   },
   {
     key: "/punctuation",
