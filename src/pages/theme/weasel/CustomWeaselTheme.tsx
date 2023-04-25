@@ -1,6 +1,6 @@
 import { Select } from "antd"
 import { useEffect, useState } from "react"
-import { parse } from "yaml"
+import * as yaml from "js-yaml"
 
 import CustomSkinPreview from "./WeaselPreview"
 import ColorPickers from "./ColorPickers"
@@ -62,7 +62,7 @@ const WeaselCustomTheme = () => {
       const url = `https://raw.githubusercontent.com/rime/weasel/master/output/data/weasel.yaml`
       const dictData = await (await fetch(url)).text()
 
-      const schemes = parse(dictData).preset_color_schemes
+      const schemes = (yaml.load(dictData) as any).preset_color_schemes
       const schemesArray = Object.entries(schemes).map((entry) => {
         return {
           label: entry[0],
