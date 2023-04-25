@@ -2,6 +2,10 @@ import { create } from "zustand"
 import produce from "immer"
 import * as yaml from "js-yaml"
 
+type DeepPartial<T> = {
+  [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P]
+}
+
 type ThemeSelectType = "dark" | "light" | "both" | "none"
 interface SquirrelDetails {
   name: string
@@ -183,7 +187,9 @@ const useSquirrelStore = create<SquirrelStyleState>()((set, get) => ({
 
   generateYAML: () => {
     const state = get()
-    const patch: Partial<Patch> = { ...state.styleCustom.patch }
+
+    type ParialPatch = DeepPartial<Patch>
+    const patch: ParialPatch = JSON.parse(JSON.stringify(state.styleCustom.patch))
 
     if (state.selectTheme === "none") {
       return null
@@ -192,6 +198,9 @@ const useSquirrelStore = create<SquirrelStyleState>()((set, get) => ({
       delete patch["style/color_scheme_dark"]
       if (state.selectTheme === "dark") {
         patch["style/color_scheme"] = "solarized_dark"
+        delete patch.preset_color_schemes!.solarized_light
+      } else {
+        delete patch.preset_color_schemes!.solarized_dark
       }
     }
 
