@@ -2,7 +2,7 @@ import { Button, Switch, Tabs } from "antd"
 import React, { useEffect, useState } from "react"
 import useSchemaState from "../store/SchemaStore"
 import useDefaultState from "../store/DefaultStore"
-import useStyleState from "../store/WeaselStyleStore"
+import useWeaselStyleState from "../store/WeaselStyleStore"
 import useRimeLuaState from "../store/RimeLuaStore"
 import useCustomPhrase from "../store/CustomPhraseStore"
 import { useNavigate } from "react-router-dom"
@@ -11,6 +11,7 @@ import SyntaxHighlighter from "react-syntax-highlighter"
 import { monokaiSublime } from "react-syntax-highlighter/dist/esm/styles/hljs"
 
 import download from "../utils/DownloadUtils"
+import useSquirrelStore from "./theme/squirrel/SquirrelStore"
 
 const hlighter = (content: string, language: "yaml" | "lua" | "txt") => (
   <SyntaxHighlighter language={language} style={monokaiSublime}>
@@ -42,6 +43,18 @@ const SimpleDict: React.FC<SimpleDictProps> = ({ content = "" }) => {
   }
 }
 
+const rimeName = () => {
+  const userAgent = navigator.userAgent
+
+  if (userAgent.indexOf("Win") !== -1) {
+    return "weasel.custom.yaml"
+  } else if (userAgent.indexOf("Mac") !== -1) {
+    return "squirrel.custom.yaml"
+  }
+
+  return "?.custom.yaml"
+}
+
 const Result: React.FC = () => {
   const navigate = useNavigate()
 
@@ -49,8 +62,10 @@ const Result: React.FC = () => {
   const defaultCustom = defaultState.generateYAML()
   const { url, dictFileName, schemaFileName } = defaultState.needDownload()
 
-  const styleState = useStyleState()
-  const styleCustom = styleState.generateYAML()
+  const styleFileName = rimeName()
+  const weaselState = useWeaselStyleState()
+  const squirrelState = useSquirrelStore()
+  const styleCustom = styleFileName === "weasel.custom.yaml" ? weaselState.generateYAML() : squirrelState.generateYAML()
 
   const schemaState = useSchemaState()
   const schemaCustom = schemaState.generateYAML()
@@ -81,7 +96,7 @@ const Result: React.FC = () => {
 
   const candidates = [
     { condition: defaultCustom, filename: "default.custom.yaml", key: "defaultCustom", content: defaultCustom },
-    { condition: styleCustom, filename: styleState.fileName, key: "styleCustom", content: styleCustom },
+    { condition: styleCustom, filename: styleFileName, key: "styleCustom", content: styleCustom },
     { condition: schemaCustom, filename: schemaState.fileName, key: "schemaCustom", content: schemaCustom },
     { condition: schemaFileName, filename: schemaFileName, key: "schema", content: schema },
     { condition: dictFileName, filename: dictFileName, key: "dict", content: dict },

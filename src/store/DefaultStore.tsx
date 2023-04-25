@@ -1,6 +1,7 @@
 import { create } from "zustand"
 import produce from "immer"
-import { stringify } from "yaml"
+import * as yaml from "js-yaml"
+
 import KeyBinderJson from "./KeyBinder.json"
 
 interface BinderRuler {
@@ -123,7 +124,7 @@ const useDefaultState = create<DefaultState>()((set, get) => ({
       return null
     }
 
-    return stringify({ patch: patch })
+    return yaml.dump({ patch: patch })
   },
 
   needDownload: () => {

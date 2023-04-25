@@ -2,7 +2,7 @@ import React from "react"
 import { PicRightOutlined as InputTypeIcon, DragOutlined } from "@ant-design/icons"
 import RimeSettingItem, { RadioChoice } from "../../components/RimeSettingItem"
 import AppOptions from "../../components/AppOptions"
-import useStyleState from "../../store/WeaselStyleStore"
+import useWeaselStyleState from "../../store/WeaselStyleStore"
 
 const Style: React.FC = () => {
   const {
@@ -10,7 +10,7 @@ const Style: React.FC = () => {
     updateStyleCustom,
 
     styleCustom: { patch: stylePatch },
-  } = useStyleState((state) => state)
+  } = useWeaselStyleState((state) => state)
 
   return (
     <div

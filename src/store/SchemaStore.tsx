@@ -2,7 +2,7 @@ import { create } from "zustand"
 import produce from "immer"
 import punctuationJson from "./punctuation.json"
 import asciiPunctuationJson from "./asciiPunctuation.json"
-import { stringify } from "yaml"
+import * as yaml from "js-yaml"
 
 interface SchemaPatch {
   punctuator: any
@@ -106,7 +106,7 @@ const useSchemaState = create<SchemaState>()((set, get) => ({
       return null
     }
 
-    return stringify({ patch: patch })
+    return yaml.dump({ patch: patch })
   },
 
   enableCustomPhrase: (enable) =>

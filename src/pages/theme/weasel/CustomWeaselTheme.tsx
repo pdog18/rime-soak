@@ -10,7 +10,7 @@ import IntegerStep from "../../../components/IntegerStep"
 import NumericInput from "../../../components/NumericInput"
 import { RadioChoice } from "../../../components/RimeSettingItem"
 import useDefaultState from "../../../store/DefaultStore"
-import useStyleState from "../../../store/WeaselStyleStore"
+import useWeaselStyleState from "../../../store/WeaselStyleStore"
 import { convertColor } from "../../../utils/ColorUtils"
 
 type ColorSchemeEntry = {
@@ -29,7 +29,7 @@ const WeaselCustomTheme = () => {
     changeColorScheme,
     updateStyleCustom,
     styleCustom: { patch: stylePatch },
-  } = useStyleState((state) => state)
+  } = useWeaselStyleState((state) => state)
 
   const pageSize = defaultPatch["menu/page_size"]
   const inline_preedit = stylePatch["style/inline_preedit"]

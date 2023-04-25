@@ -1,54 +1,47 @@
-import { useState } from "react"
+import SquirrelPreview from "./SquirrelPreview"
 
-import SquirrelPreview, { Colors } from "./SquirrelPreview"
-import colors from "./squirrel.json"
-import { useTextInput } from "../../../hooks/useTextInput"
-import CustomSelect from "../../../components/CustomSelect"
-import { useCheckBox } from "../../../hooks/useCheckBox"
-import { useNumberInput } from "../../../hooks/useNumberInput"
-import { useSelectInput } from "../../../hooks/useSelectInput"
+import useSquirrelStore, { SquirrelStyleState } from "./SquirrelStore"
+import SquirrelOutline from "./SquirrelOutline"
+import { SquirrelCheckBox, SquirrelNumberInput, SquirrelSelect } from "./components/SquirrelNumberInput"
 
 const SquirrelCustomTheme = () => {
-  const themes = Object.entries(colors.preset_color_schemes)
-  const [selectTheme, changeSelectTheme] = useState(["solarized_light", "solarized_dark"])
+  const state = useSquirrelStore<SquirrelStyleState>((state) => state)
+  const preset_color_schemes = state.styleCustom.patch.preset_color_schemes
+  const updateStyleLayout = state.updateStyleLayout
+  const updateSelectTheme = state.updateSelectTheme
 
-  const name = useTextInput("")
+  const {
+    corner_radius,
+    border_width,
+    border_height,
+    spacing,
+    label_font_point,
+    font_point,
+    comment_font_point,
+    line_spacing,
+    hilited_corner_radius,
+    base_offset,
+    alpha,
+    inline_preedit,
 
-  const textOrientation = useSelectInput(["horizontal", "vertical"])
-  const candidate_list_layout = useSelectInput(["stacked", "linear"])
-  const colorSpace = useSelectInput(["display_p3", "srgb"])
+    candidate_list_layout,
+    text_orientation,
+    color_space,
+  } = preset_color_schemes.solarized_dark
 
-  const inlinePreedit = useCheckBox(true)
-  const cornerRadius = useNumberInput(10)
-  const hilited_corner_radius = useNumberInput(0)
-  const borderWidth = useNumberInput(0)
-  const borderHeight = useNumberInput(0)
-  const preeditLineSpacing = useNumberInput(10)
-  const comment_font_point = useNumberInput(18)
-  const font_point = useNumberInput(21)
-  const label_font_point = useNumberInput(18)
-  const lineSpacing = useNumberInput(5)
-  const baselineOffset = useNumberInput(0)
-  const windowAplha = useNumberInput(100)
+  const borderConfigs = [
+    { name: "corner_radius", value: corner_radius, min: 0 },
+    { name: "border_width", value: border_width, min: 0 },
+    { name: "borderHeight", value: border_height, min: 0, disable: true },
+  ]
 
-  const previewProps = {
-    candidate_list_layout: candidate_list_layout.value,
-    colorSpace: colorSpace.value,
-    cornerRadius: cornerRadius.value,
-    hilited_corner_radius: hilited_corner_radius.value,
-    borderWidth: borderWidth.value,
-    borderHeight: borderHeight.value,
-    inlinePreedit: inlinePreedit.checked,
-    preeditLineSpacing: preeditLineSpacing.value,
-    text_orientation: textOrientation.value,
-    comment_font_point: comment_font_point.value,
-    font_point: font_point.value,
-    label_font_point: label_font_point.value,
-    lineSpacing: lineSpacing.value,
-    baselineOffset: baselineOffset.value,
-    windowAplha: windowAplha.value / 100,
-    name: name.value,
-  }
+  const fontSizeConfigs = [
+    { name: "label_font_point", value: label_font_point, min: 1 },
+    { name: "font_point", value: font_point, min: 6 },
+    { name: "comment_font_point", value: comment_font_point, min: 2 },
+  ]
+
+  console.log("state.selectTheme", state.selectTheme)
 
   return (
     <div>
@@ -62,127 +55,90 @@ const SquirrelCustomTheme = () => {
           flexWrap: "wrap",
         }}
       >
-        <div style={{ display: "inline-flex", alignItems: "center" }}>
-          候选布局
-          <CustomSelect {...candidate_list_layout} />
-        </div>
-        <div style={{ display: "inline-flex", alignItems: "center" }}>
-          文字方向
-          <CustomSelect {...textOrientation} disable={true} />
-        </div>
-        <div style={{ display: "inline-flex", alignItems: "center" }}>
-          色彩空间
-          <CustomSelect {...colorSpace} />
-        </div>
+        <SquirrelSelect
+          name={"selectTheme"}
+          options={["none", "both", "light", "dark"]}
+          value={state.selectTheme}
+          onChange={updateSelectTheme}
+        />
 
-        <div style={{ display: "inline-flex", outline: "1px dashed black", outlineOffset: "6px" }}>
-          <div>
-            inline_preedit
-            <input {...inlinePreedit} />
-          </div>
-          <div>
-            spacing
-            <input {...preeditLineSpacing} style={{ width: "3em" }} min={0} disabled={inlinePreedit.checked} />
-          </div>
-        </div>
+        <SquirrelSelect
+          name={"candidate_list_layout"}
+          options={["stacked", "linear"]}
+          value={candidate_list_layout}
+          onChange={updateStyleLayout}
+        />
 
-        <div style={{ display: "inline-flex", outline: "1px dashed black", outlineOffset: "6px" }}>
-          <div>
-            border_radius
-            <input {...cornerRadius} style={{ width: "3em" }} min={0} />
-          </div>
+        <SquirrelSelect
+          name={"text_orientation"}
+          options={["horizontal", "vertical"]}
+          disable={true}
+          value={text_orientation}
+          onChange={updateStyleLayout}
+        />
 
-          <div>
-            border_width
-            <input {...borderWidth} style={{ width: "3em" }} min={0} />
-          </div>
+        <SquirrelSelect
+          name={"color_space"}
+          options={["display_p3", "srgb"]}
+          value={color_space}
+          onChange={updateStyleLayout}
+        />
 
-          <div>
-            border_height
-            <input {...borderWidth} style={{ width: "3em" }} disabled={true} />
-          </div>
-        </div>
+        <SquirrelOutline>
+          <SquirrelCheckBox name={"inline_preedit"} checked={inline_preedit} onChange={updateStyleLayout} />
+          <SquirrelNumberInput
+            name={"spacing"}
+            value={spacing}
+            min={0}
+            onChange={updateStyleLayout}
+            disable={inline_preedit}
+          />
+        </SquirrelOutline>
 
-        <div style={{ display: "inline-flex", outline: "1px dashed black", outlineOffset: "6px" }}>
-          <div>
-            label_font_point
-            <input {...label_font_point} style={{ width: "3em" }} min={1} />
-          </div>
-          <div>
-            font_point
-            <input {...font_point} style={{ width: "3em" }} min={6} />
-          </div>
+        <SquirrelOutline>
+          {borderConfigs.map(({ name, value, min, disable }) => (
+            <SquirrelNumberInput
+              key={name}
+              name={name}
+              value={value}
+              min={min}
+              onChange={updateStyleLayout}
+              disable={disable}
+            />
+          ))}
+        </SquirrelOutline>
 
-          <div>
-            comment_font_point
-            <input {...comment_font_point} style={{ width: "3em" }} min={1} />
-          </div>
-        </div>
+        <SquirrelOutline>
+          {fontSizeConfigs.map(({ name, value, min }) => (
+            <SquirrelNumberInput key={name} name={name} value={value} min={min} onChange={updateStyleLayout} />
+          ))}
+        </SquirrelOutline>
 
-        <div>
-          line_spacing
-          <input {...lineSpacing} style={{ width: "3em" }} min={0} />
-        </div>
+        <SquirrelNumberInput name={"line_spacing"} value={line_spacing} min={0} onChange={updateStyleLayout} />
 
-        <div>
-          hilited_corner_radius
-          <input {...hilited_corner_radius} style={{ width: "3em" }} min={0} />
-        </div>
+        <SquirrelNumberInput
+          name={"hilited_corner_radius"}
+          value={hilited_corner_radius}
+          min={0}
+          onChange={updateStyleLayout}
+        />
 
-        <div>
-          baseline_offset
-          <input {...baselineOffset} style={{ width: "3em" }} />
-        </div>
-        <div>
-          window_aplha
-          <input {...windowAplha} style={{ width: "3em" }} min={0} max={100} />
-        </div>
+        <SquirrelNumberInput name={"base_offset"} value={base_offset} onChange={updateStyleLayout} />
+        <SquirrelNumberInput name={"alpha"} value={alpha} min={0} max={1} step={0.01} onChange={updateStyleLayout} />
       </div>
 
       <div
         style={{
           display: "flex",
-          flexDirection: candidate_list_layout.value === "linear" ? "column" : "row",
+          flexDirection: candidate_list_layout === "linear" ? "column" : "row",
           alignItems: "center",
           justifyContent: "center",
           gap: "8vh",
           paddingTop: "4vh",
         }}
       >
-        <select
-          style={{
-            position: "absolute",
-            left: "12vw",
-          }}
-          multiple={true}
-          defaultValue={selectTheme}
-          size={themes.length}
-          onChange={(e) => {
-            const options = Array.from(e.target.selectedOptions)
-            if (options.length > 4) {
-              return
-            }
-            changeSelectTheme(options.map((op) => op.value))
-          }}
-        >
-          {themes.map(([key]) => (
-            <option key={key}>{key}</option>
-          ))}
-        </select>
-
-        {Object.entries(colors.preset_color_schemes)
-          // .reverse()
-          .filter(([scheme]) => selectTheme.includes(scheme))
-          .map(([key, value]) => (
-            <div key={key}>
-              <div> {key}</div>
-              <SquirrelPreview darkMode={key.endsWith("_dark")} colors={value as Colors} {...previewProps} />
-            </div>
-          ))}
-      </div>
-
-      <div style={{ width: "100%", textAlign: "center", marginTop: "4vh" }}>
-        <input {...name} placeholder="theme name" />
+        <SquirrelPreview name={"solarized_light"} {...state.styleCustom.patch.preset_color_schemes.solarized_light} />
+        <SquirrelPreview name={"solarized_dark"} {...state.styleCustom.patch.preset_color_schemes.solarized_dark} />
       </div>
     </div>
   )

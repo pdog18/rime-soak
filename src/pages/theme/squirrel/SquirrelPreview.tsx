@@ -1,3 +1,5 @@
+import { SquirrelColors, SquirrelLayouts } from "./SquirrelStore"
+
 // (Rime AGRB[0xFFBBGGRR]) <<===>> (Web rgba[rgba(r,g,b,a)])
 function convertColor(color: number): string {
   const a = ((color >> 24) & 0xff) / 0xff
@@ -7,47 +9,10 @@ function convertColor(color: number): string {
   return `rgba(${r},${g},${b},${a})`
 }
 
-type Colors = {
-  back_color: number
-  border_color: number
-  preedit_back_color: number
-  candidate_text_color: number
-  label_color: number
-  comment_text_color: number
-
-  text_color: number
-  hilited_text_color: number
-  hilited_back_color: number
-
-  hilited_candidate_back_color: number
-  hilited_candidate_text_color: number
-  hilited_candidate_label_color: number
-  hilited_comment_text_color: number
-}
-
 type PreviewProps = {
   name: string
-  darkMode: boolean
-  candidate_list_layout: "linear" | "stacked"
-  colorSpace: "display_p3" | "srgb"
-  inlinePreedit: boolean
-  preeditLineSpacing: number
-  hilited_corner_radius: number
-
-  text_orientation: "horizontal" | "vertical"
-  colors: Colors
-
-  borderWidth: number
-  borderHeight: number
-  cornerRadius: number
-  baselineOffset: number
-  windowAplha: number
-
-  comment_font_point: number
-  font_point: number
-  label_font_point: number
-  lineSpacing: number
-}
+} & SquirrelLayouts &
+  SquirrelColors
 
 // const words = ["rime", "鼠须管", "Rime", "小狼毫", "中州韵rime输入法框架"]
 const words = [
@@ -76,23 +41,29 @@ const words = [
 ]
 
 const SquirrelPreview = ({
-  inlinePreedit,
-  colors,
+  inline_preedit,
   candidate_list_layout,
-  borderWidth,
+  border_width,
   hilited_corner_radius,
   // borderHeight,
-  preeditLineSpacing,
-  cornerRadius,
-  lineSpacing: spacing,
-  baselineOffset,
-  windowAplha,
+  spacing,
+  corner_radius,
+  line_spacing,
+  base_offset,
+  alpha,
 
   comment_font_point,
   font_point,
   label_font_point,
+  ...colors
 }: PreviewProps) => {
-  const convertedColors = Object.fromEntries(Object.entries(colors).map(([key, value]) => [key, convertColor(value)]))
+  const convertedColors = Object.fromEntries(
+    Object.entries(colors)
+      .filter(([key, value]) => {
+        return key.endsWith("color") && typeof value === "number"
+      })
+      .map(([key, value]) => [key, convertColor(value as number)])
+  )
 
   const {
     back_color,
@@ -120,30 +91,27 @@ const SquirrelPreview = ({
     preeditCaret: "‸",
   }
 
-  // 表现错误的 `spacing` 属性, 可能是一个  bug  会被修复.
-  const bugPadding = !inlinePreedit ? preeditLineSpacing / 2 : 0
-
   return (
     <div
       style={{
         boxSizing: "border-box",
-        opacity: windowAplha,
-        borderRadius: `${cornerRadius}px`,
-        outline: `${borderWidth}px solid ${border_color}`,
+        opacity: alpha,
+        borderRadius: `${corner_radius}px`,
+        outline: `${border_width}px solid ${border_color}`,
 
-        boxShadow: `0 ${borderWidth}px ${borderWidth}px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)`,
+        boxShadow: `0 ${border_width}px ${border_width}px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)`,
 
         display: "flex",
         flexDirection: "column",
       }}
     >
-      <div style={{ borderRadius: `${cornerRadius}px`, overflow: "clip", backgroundColor: back_color }}>
-        {!inlinePreedit && (
+      <div style={{ borderRadius: `${corner_radius}px`, overflow: "clip", backgroundColor: back_color }}>
+        {!inline_preedit && (
           <div
             style={{
               display: "inline-flex",
               width: "100%",
-              padding: `${cornerRadius / 4}px ${cornerRadius}px ${bugPadding}px`,
+              padding: `${corner_radius}px ${corner_radius}px ${spacing / 2 + 6}px`,
               backgroundColor: preedit_back_color,
               fontSize: font_point,
             }}
@@ -160,10 +128,12 @@ const SquirrelPreview = ({
             flexDirection: horizontal ? "row" : "column",
             justifyContent: "start",
             alignItems: "stretch",
-            gap: spacing,
+            gap: line_spacing,
             maxWidth: "560px",
             flexWrap: "wrap",
-            borderRadius: `${inlinePreedit ? cornerRadius : 0}px`,
+            borderRadius: `${inline_preedit ? corner_radius : 0}px`,
+            paddingBottom: `${(horizontal ? 0 : 6) + corner_radius}px`,
+            paddingTop: `${!inline_preedit ? spacing / 2 : 0}px`,
             overflow: "clip",
           }}
         >
@@ -171,22 +141,16 @@ const SquirrelPreview = ({
             const first = index === 0
             const last = index === words.length - 1
 
-            const paddingLeft = first || !horizontal ? cornerRadius : 0
-            const paddingRight = last || !horizontal ? cornerRadius : 0
+            const paddingLeft = first || !horizontal ? corner_radius : 0
+            const paddingRight = last || !horizontal ? corner_radius : 0
 
-            // 一旦候选词有了圆角,那么就没有  paddingTop  了.
-            const paddingTop =
-              hilited_corner_radius !== 0
-                ? cornerRadius
-                : (first || horizontal) && !inlinePreedit
-                ? bugPadding
-                : cornerRadius
-            const paddingBootom = last || horizontal ? cornerRadius : 0
+            const topBaseOffset = Math.max(-base_offset, 0)
+            const bottomBaseOffset = Math.max(base_offset, 0)
 
-            const offsetPaddingTop = baselineOffset < 0 ? paddingTop + Math.abs(baselineOffset) : paddingTop
-            const offsetPaddingBottom = baselineOffset > 0 ? paddingBootom + Math.abs(baselineOffset) : paddingBootom
+            const shouldResetCornerRadius = !inline_preedit || (!horizontal && !first)
+            const paddingTop = (shouldResetCornerRadius ? 0 : corner_radius) + topBaseOffset
 
-            const extraVerticalPadding = horizontal ? 0 : 6
+            const paddingBootom = 0 + bottomBaseOffset
 
             return (
               <div
@@ -195,11 +159,10 @@ const SquirrelPreview = ({
                   display: "inline-flex",
                   paddingLeft: `${paddingLeft}px`,
                   paddingRight: `${paddingRight}px`,
-                  paddingTop: `${first ? offsetPaddingTop + extraVerticalPadding : offsetPaddingTop}px`,
-                  paddingBottom: `${last ? offsetPaddingBottom + extraVerticalPadding : offsetPaddingBottom}px`,
+                  paddingTop: `${paddingTop}px`,
+                  paddingBottom: `${paddingBootom}px`,
                   backgroundColor: first ? hilited_candidate_back_color : back_color,
                   alignItems: "baseline",
-
                   borderRadius: `${hilited_corner_radius}px`,
                 }}
               >
@@ -246,4 +209,3 @@ const SquirrelPreview = ({
 }
 
 export default SquirrelPreview
-export type { Colors }

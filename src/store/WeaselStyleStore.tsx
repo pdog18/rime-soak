@@ -1,19 +1,8 @@
 import { create } from "zustand"
 import produce from "immer"
-import { stringify } from "yaml"
+import * as yaml from "js-yaml"
+
 import { WeaselThemeConfig } from "./CustomThemeStore"
-
-const rimeName = () => {
-  const userAgent = navigator.userAgent
-
-  if (userAgent.indexOf("Win") !== -1) {
-    return "weasel.custom.yaml"
-  } else if (userAgent.indexOf("Mac") !== -1) {
-    return "squirrel.custom.yaml"
-  }
-
-  return "?.custom.yaml"
-}
 
 interface AppOptions {
   [appName: string]: {
@@ -60,8 +49,7 @@ type StyleCustomPath =
   | "style/layout/hilite_padding"
   | "style/layout/round_corner"
 
-interface StyleState {
-  fileName: string
+interface WeaselStyleState {
   styleCustom: {
     patch: StylePatch
   }
@@ -83,8 +71,7 @@ function appOtionsOK(app_options: AppOptions | undefined) {
   return app_options["cmd.exe"].ascii_mode && app_options["conhost.exe"].ascii_mode
 }
 
-const useStyleState = create<StyleState>()((set, get) => ({
-  fileName: `${rimeName()}`,
+const useWeaselStyleState = create<WeaselStyleState>()((set, get) => ({
   styleCustom: {
     patch: {
       "style/horizontal": false,
@@ -180,12 +167,12 @@ const useStyleState = create<StyleState>()((set, get) => ({
       return null
     }
 
-    return stringify({ patch: patch })
+    return yaml.dump({ patch: patch })
   },
 
   updateStyleCustom: (path, value) =>
     set(
-      produce((state: StyleState) => {
+      produce((state: WeaselStyleState) => {
         ;(state.styleCustom.patch as any)[path] = value
       })
     ),
@@ -210,5 +197,5 @@ const useStyleState = create<StyleState>()((set, get) => ({
     ),
 }))
 
-export type { StyleState }
-export default useStyleState
+export type { WeaselStyleState }
+export default useWeaselStyleState
