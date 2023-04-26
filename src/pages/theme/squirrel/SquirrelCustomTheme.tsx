@@ -2,7 +2,9 @@ import SquirrelPreview from "./SquirrelPreview"
 
 import useSquirrelStore, { SquirrelStyleState } from "./SquirrelStore"
 import SquirrelOutline from "./SquirrelOutline"
-import { SquirrelCheckBox, SquirrelNumberInput, SquirrelSelect } from "./components/SquirrelNumberInput"
+import SquirrelCheckBox from "./components/SquirrelCheckBox"
+import SquirrelNumberInput from "./components/SquirrelNumberInput"
+import SquirrelSelect from "./components/SquirrelSelect"
 
 const SquirrelCustomTheme = () => {
   const state = useSquirrelStore<SquirrelStyleState>((state) => state)
