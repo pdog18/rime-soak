@@ -47,19 +47,27 @@ interface SquirrelLayouts {
 }
 
 interface SquirrelColors {
+  // 输入(预览)码
+  text_color: number
+  hilited_text_color: number
+  hilited_back_color: number
+  preedit_back_color: number
+
+  // 面板背景&边框
   back_color: number
   border_color: number
-  preedit_back_color: number
-  candidate_text_color: number
+
+  // 选中候选词
+  hilited_candidate_label_color: number
+  hilited_candidate_text_color: number
+  hilited_comment_text_color: number
+  hilited_candidate_back_color: number
+
+  // 其他候选词
   label_color: number
   comment_text_color: number
-  text_color: number
-  hilited_back_color: number
-  hilited_candidate_back_color: number
-  hilited_candidate_text_color: number
-  hilited_candidate_label_color: number
-  hilited_comment_text_color: number
-  hilited_text_color: number
+  candidate_back_color: number
+  candidate_text_color: number
 }
 
 const initDetails: Partial<SquirrelDetails> = {
@@ -113,37 +121,45 @@ const useSquirrelStore = create<SquirrelStyleState>()((set, get) => ({
           ...initLayout,
           ...initDetails,
           name: "曬經・日／Solarized Light",
+          text_color: 4288782485,
+          hilited_text_color: 4281109422,
+          hilited_back_color: 4283187234,
+          preedit_back_color: 4282397974,
+
           back_color: 4041602811,
           border_color: 4293787647,
-          preedit_back_color: 4282397974,
-          candidate_text_color: 4284046848,
+
+          hilited_candidate_label_color: 4280641222,
+          hilited_candidate_text_color: 4281942731,
+          hilited_comment_text_color: 4286661826,
+          hilited_candidate_back_color: 4292339949,
+
           label_color: 4288898055,
           comment_text_color: 4278212935,
-          text_color: 4288782485,
-          hilited_back_color: 4283187234,
-          hilited_candidate_back_color: 4292339949,
-          hilited_candidate_text_color: 4281942731,
-          hilited_candidate_label_color: 4280641222,
-          hilited_comment_text_color: 4286661826,
-          hilited_text_color: 4281109422,
+          candidate_back_color: 4041602811,
+          candidate_text_color: 4284046848,
         },
         solarized_dark: {
           ...initLayout,
           ...initDetails,
           name: "曬經・月／Solarized Dark",
-          back_color: 4030016010,
-          border_color: 4280950528,
-          preedit_back_color: 4292339949,
-          candidate_text_color: 4285762047,
-          label_color: 4282879476,
-          comment_text_color: 4291005183,
+          hilited_text_color: 4290670701,
           text_color: 4285886045,
           hilited_back_color: 4291418847,
+          preedit_back_color: 4292339949,
+
+          back_color: 4030016010,
+          border_color: 4280950528,
+
+          candidate_back_color: 4030016010,
+          label_color: 4282879476,
+          candidate_text_color: 4285762047,
+          comment_text_color: 4291005183,
+
           hilited_candidate_back_color: 4282397974,
           hilited_candidate_text_color: 4288192338,
           hilited_candidate_label_color: 4291594567,
           hilited_comment_text_color: 4280850825,
-          hilited_text_color: 4290670701,
         },
       },
     },

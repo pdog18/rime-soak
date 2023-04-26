@@ -68,14 +68,16 @@ const SquirrelPreview = ({
   const {
     back_color,
     border_color,
-    preedit_back_color,
-    candidate_text_color,
-    label_color,
-    comment_text_color,
 
     text_color,
     hilited_text_color,
-    // hilited_back_color,
+    preedit_back_color,
+    hilited_back_color,
+
+    label_color,
+    comment_text_color,
+    candidate_back_color,
+    candidate_text_color,
 
     hilited_candidate_back_color,
     hilited_candidate_text_color,
@@ -98,9 +100,7 @@ const SquirrelPreview = ({
         opacity: alpha,
         borderRadius: `${corner_radius}px`,
         outline: `${border_width}px solid ${border_color}`,
-
         boxShadow: `0 ${border_width}px ${border_width}px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)`,
-
         display: "flex",
         flexDirection: "column",
       }}
@@ -117,7 +117,15 @@ const SquirrelPreview = ({
             }}
           >
             <div style={{ color: text_color }}> {preeditText}</div>
-            <div style={{ color: hilited_text_color }}>{preeditHilitedText}</div>
+            <div
+              style={{
+                color: hilited_text_color,
+                backgroundColor: hilited_back_color,
+                borderRadius: `${hilited_corner_radius}px`,
+              }}
+            >
+              {preeditHilitedText}
+            </div>
             <div style={{ color: text_color }}>{preeditCaret}</div>
           </div>
         )}
@@ -128,12 +136,11 @@ const SquirrelPreview = ({
             flexDirection: horizontal ? "row" : "column",
             justifyContent: "start",
             alignItems: "stretch",
-            gap: line_spacing,
             maxWidth: "560px",
             flexWrap: "wrap",
             borderRadius: `${inline_preedit ? corner_radius : 0}px`,
             paddingBottom: `${(horizontal ? 0 : 6) + corner_radius}px`,
-            paddingTop: `${!inline_preedit ? spacing / 2 : 0}px`,
+            paddingTop: `${!inline_preedit ? spacing / 2 : corner_radius}px`,
             overflow: "clip",
           }}
         >
@@ -141,16 +148,15 @@ const SquirrelPreview = ({
             const first = index === 0
             const last = index === words.length - 1
 
-            const paddingLeft = first || !horizontal ? corner_radius : 0
-            const paddingRight = last || !horizontal ? corner_radius : 0
+            const gap = line_spacing / 2
 
-            const topBaseOffset = Math.max(-base_offset, 0)
-            const bottomBaseOffset = Math.max(base_offset, 0)
+            // 不是首尾, 并且是水平排列的候选词, 增加上  corner_raidus 或  gap
+            const paddingLeft = first || !horizontal ? corner_radius : gap
+            const paddingRight = last || !horizontal ? corner_radius : gap
 
-            const shouldResetCornerRadius = !inline_preedit || (!horizontal && !first)
-            const paddingTop = (shouldResetCornerRadius ? 0 : corner_radius) + topBaseOffset
-
-            const paddingBootom = 0 + bottomBaseOffset
+            // 不是首尾, 并且是垂直排列的候选词, 增加上垂直方向的 gap
+            const paddingTop = Math.max(-base_offset, 0) + (first || horizontal ? 0 : gap)
+            const paddingBootom = Math.max(base_offset, 0) + (last || horizontal ? 0 : gap)
 
             return (
               <div
@@ -161,13 +167,40 @@ const SquirrelPreview = ({
                   paddingRight: `${paddingRight}px`,
                   paddingTop: `${paddingTop}px`,
                   paddingBottom: `${paddingBootom}px`,
-                  backgroundColor: first ? hilited_candidate_back_color : back_color,
                   alignItems: "baseline",
                   borderRadius: `${hilited_corner_radius}px`,
+                  position: "relative",
                 }}
               >
                 <div
                   style={{
+                    backgroundColor: first ? hilited_candidate_back_color : candidate_back_color,
+                    left: -line_spacing,
+                    right: 0,
+                    top: first ? (inline_preedit ? -corner_radius : -spacing) : horizontal ? -corner_radius : 0,
+                    bottom: -corner_radius * 2,
+                    position: "absolute",
+                    zIndex: 0,
+                    display: hilited_corner_radius === 0 ? "block" : "none",
+                  }}
+                />
+
+                <div
+                  style={{
+                    position: "absolute",
+                    backgroundColor: first ? hilited_candidate_back_color : candidate_back_color,
+                    borderRadius: hilited_corner_radius,
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                    zIndex: 0,
+                    display: hilited_corner_radius !== 0 ? "block" : "none",
+                  }}
+                />
+                <div
+                  style={{
+                    zIndex: 2,
                     display: "flex",
                     alignItems: "flex-end",
                     color: first ? hilited_candidate_label_color : label_color,
@@ -179,6 +212,7 @@ const SquirrelPreview = ({
                 </div>
                 <div
                   style={{
+                    zIndex: 2,
                     color: first ? hilited_candidate_text_color : candidate_text_color,
                     fontSize: font_point,
                     display: "flex",
@@ -190,6 +224,7 @@ const SquirrelPreview = ({
                 </div>
                 <div
                   style={{
+                    zIndex: 2,
                     color: first ? hilited_comment_text_color : comment_text_color,
                     fontSize: comment_font_point,
                     display: "flex",
