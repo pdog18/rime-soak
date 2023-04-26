@@ -5,6 +5,7 @@ import SquirrelOutline from "./SquirrelOutline"
 import SquirrelCheckBox from "./components/SquirrelCheckBox"
 import SquirrelNumberInput from "./components/SquirrelNumberInput"
 import SquirrelSelect from "./components/SquirrelSelect"
+import { useState } from "react"
 
 const SquirrelCustomTheme = () => {
   const state = useSquirrelStore<SquirrelStyleState>((state) => state)
@@ -31,10 +32,15 @@ const SquirrelCustomTheme = () => {
     color_space,
   } = preset_color_schemes.solarized_dark
 
+  const [heightDelta, changeHeightDelta] = useState(0)
+  const [widthDelta, changeWidthDelta] = useState(0)
+
   const borderConfigs = [
     { name: "corner_radius", value: corner_radius, min: 0 },
-    { name: "border_width", value: border_width, min: 0 },
-    { name: "borderHeight", value: border_height, min: 0, disable: true },
+    { name: "paddingWidth", value: corner_radius + widthDelta, min: 0 },
+    { name: "paddingHeight", value: corner_radius + heightDelta, min: 0 },
+    { name: "border_width", value: border_width - widthDelta, min: 0 },
+    { name: "border_height", value: border_height - heightDelta, min: 0, disable: true },
   ]
 
   const fontSizeConfigs = [
@@ -42,8 +48,6 @@ const SquirrelCustomTheme = () => {
     { name: "font_point", value: font_point, min: 6 },
     { name: "comment_font_point", value: comment_font_point, min: 2 },
   ]
-
-  console.log("state.selectTheme", state.selectTheme)
 
   return (
     <div>
@@ -104,7 +108,25 @@ const SquirrelCustomTheme = () => {
               name={name}
               value={value}
               min={min}
-              onChange={updateStyleLayout}
+              onChange={(name, value) => {
+                switch (name) {
+                  case "border_width":
+                    updateStyleLayout("border_width", value - (border_width - widthDelta) + border_width)
+                    updateStyleLayout("border_height", value - (border_width - widthDelta) + border_height)
+                    break
+                  case "paddingWidth":
+                    changeWidthDelta(value - corner_radius) // newWidthDelta
+                    updateStyleLayout("border_width", border_width + (value - widthDelta - corner_radius))
+                    break
+                  case "paddingHeight":
+                    changeHeightDelta(value - corner_radius) // newHeightDelta
+                    updateStyleLayout("border_height", border_height + (value - heightDelta - corner_radius))
+                    break
+                  default: // border_height & corner_radius
+                    updateStyleLayout(name, value)
+                    break
+                }
+              }}
               disable={disable}
             />
           ))}
@@ -139,8 +161,18 @@ const SquirrelCustomTheme = () => {
           paddingTop: "4vh",
         }}
       >
-        <SquirrelPreview name={"solarized_light"} {...state.styleCustom.patch.preset_color_schemes.solarized_light} />
-        <SquirrelPreview name={"solarized_dark"} {...state.styleCustom.patch.preset_color_schemes.solarized_dark} />
+        <SquirrelPreview
+          widthDelta={widthDelta}
+          heightDelta={heightDelta}
+          name={"solarized_light"}
+          {...state.styleCustom.patch.preset_color_schemes.solarized_light}
+        />
+        <SquirrelPreview
+          widthDelta={widthDelta}
+          heightDelta={heightDelta}
+          name={"solarized_dark"}
+          {...state.styleCustom.patch.preset_color_schemes.solarized_dark}
+        />
       </div>
     </div>
   )

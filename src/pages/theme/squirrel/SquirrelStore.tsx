@@ -176,7 +176,6 @@ const useSquirrelStore = create<SquirrelStyleState>()((set, get) => ({
   updateStyleLayout: (path, value) =>
     set(
       produce((state: SquirrelStyleState) => {
-        console.log("path :", path, "value: ", value)
         ;(state.styleCustom.patch.preset_color_schemes.solarized_light as any)[path] = value
         ;(state.styleCustom.patch.preset_color_schemes.solarized_dark as any)[path] = value
       })
@@ -195,8 +194,6 @@ const useSquirrelStore = create<SquirrelStyleState>()((set, get) => ({
   updateSelectTheme: (_, value) =>
     set(
       produce((state: SquirrelStyleState) => {
-        console.log("update select thme : ", value)
-
         state.selectTheme = value as ThemeSelectType
       })
     ),

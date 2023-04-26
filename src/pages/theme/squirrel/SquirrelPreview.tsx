@@ -11,6 +11,8 @@ function convertColor(color: number): string {
 
 type PreviewProps = {
   name: string
+  widthDelta: number
+  heightDelta: number
 } & SquirrelLayouts &
   SquirrelColors
 
@@ -45,7 +47,7 @@ const SquirrelPreview = ({
   candidate_list_layout,
   border_width,
   hilited_corner_radius,
-  // borderHeight,
+  border_height,
   spacing,
   corner_radius,
   line_spacing,
@@ -55,6 +57,8 @@ const SquirrelPreview = ({
   comment_font_point,
   font_point,
   label_font_point,
+  widthDelta,
+  heightDelta,
   ...colors
 }: PreviewProps) => {
   const convertedColors = Object.fromEntries(
@@ -93,13 +97,17 @@ const SquirrelPreview = ({
     preeditCaret: "‸",
   }
 
+  const outlineWidth = Math.min(border_height, border_width) - Math.min(widthDelta, heightDelta)
+  const justifyHeightPadding = corner_radius + heightDelta
+  const justifyWidthPadding = corner_radius + widthDelta
+
   return (
     <div
       style={{
         boxSizing: "border-box",
         opacity: alpha,
         borderRadius: `${corner_radius}px`,
-        outline: `${border_width}px solid ${border_color}`,
+        outline: `${outlineWidth}px solid ${border_color}`,
         boxShadow: `0 ${border_width}px ${border_width}px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)`,
         display: "flex",
         flexDirection: "column",
@@ -111,7 +119,7 @@ const SquirrelPreview = ({
             style={{
               display: "inline-flex",
               width: "100%",
-              padding: `${corner_radius}px ${corner_radius}px ${spacing / 2 + 6}px`,
+              padding: `${justifyHeightPadding}px ${corner_radius + widthDelta}px ${spacing / 2 + 6}px`,
               backgroundColor: preedit_back_color,
               fontSize: font_point,
             }}
@@ -139,8 +147,8 @@ const SquirrelPreview = ({
             maxWidth: "560px",
             flexWrap: "wrap",
             borderRadius: `${inline_preedit ? corner_radius : 0}px`,
-            paddingBottom: `${(horizontal ? 0 : 6) + corner_radius}px`,
-            paddingTop: `${!inline_preedit ? spacing / 2 : corner_radius}px`,
+            paddingBottom: `${(horizontal ? 0 : 6) + justifyHeightPadding}px`,
+            paddingTop: `${!inline_preedit ? spacing / 2 : justifyHeightPadding}px`,
             overflow: "clip",
           }}
         >
@@ -151,8 +159,8 @@ const SquirrelPreview = ({
             const gap = line_spacing / 2
 
             // 不是首尾, 并且是水平排列的候选词, 增加上  corner_raidus 或  gap
-            const paddingLeft = first || !horizontal ? corner_radius : gap
-            const paddingRight = last || !horizontal ? corner_radius : gap
+            const paddingLeft = first || !horizontal ? justifyWidthPadding : gap
+            const paddingRight = last || !horizontal ? justifyWidthPadding : gap
 
             // 不是首尾, 并且是垂直排列的候选词, 增加上垂直方向的 gap
             const paddingTop = Math.max(-base_offset, 0) + (first || horizontal ? 0 : gap)
@@ -177,8 +185,14 @@ const SquirrelPreview = ({
                     backgroundColor: first ? hilited_candidate_back_color : candidate_back_color,
                     left: -line_spacing,
                     right: 0,
-                    top: first ? (inline_preedit ? -corner_radius : -spacing) : horizontal ? -corner_radius : 0,
-                    bottom: -corner_radius * 2,
+                    top: first
+                      ? inline_preedit
+                        ? -justifyHeightPadding
+                        : -spacing
+                      : horizontal
+                      ? -justifyHeightPadding
+                      : 0,
+                    bottom: -justifyHeightPadding * 2,
                     position: "absolute",
                     zIndex: 0,
                     display: hilited_corner_radius === 0 ? "block" : "none",
