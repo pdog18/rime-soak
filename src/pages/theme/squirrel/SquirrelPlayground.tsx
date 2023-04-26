@@ -56,49 +56,48 @@ const SquirrelCustomTheme = () => {
           display: "inline-flex",
           alignItems: "center",
           justifyContent: "center",
-          gap: "16px",
-          margin: "0 12vw",
+          gap: "2vw",
+          margin: "0 20vw",
           flexWrap: "wrap",
         }}
       >
-        <SquirrelSelect
-          name={"selectTheme"}
-          options={["none", "both", "light", "dark"]}
-          value={state.selectTheme}
-          onChange={updateSelectTheme}
-        />
-
-        <SquirrelSelect
-          name={"candidate_list_layout"}
-          options={["stacked", "linear"]}
-          value={candidate_list_layout}
-          onChange={updateStyleLayout}
-        />
-
-        <SquirrelSelect
-          name={"text_orientation"}
-          options={["horizontal", "vertical"]}
-          disable={true}
-          value={text_orientation}
-          onChange={updateStyleLayout}
-        />
-
-        <SquirrelSelect
-          name={"color_space"}
-          options={["display_p3", "srgb"]}
-          value={color_space}
-          onChange={updateStyleLayout}
-        />
-
         <SquirrelOutline>
-          <SquirrelCheckBox name={"inline_preedit"} checked={inline_preedit} onChange={updateStyleLayout} />
-          <SquirrelNumberInput
-            name={"spacing"}
-            value={spacing}
-            min={0}
+          <SquirrelSelect
+            name={"candidate_list_layout"}
+            options={["stacked", "linear"]}
+            value={candidate_list_layout}
             onChange={updateStyleLayout}
-            disable={inline_preedit}
           />
+        </SquirrelOutline>
+        <SquirrelOutline>
+          <SquirrelSelect
+            name={"text_orientation"}
+            options={["horizontal", "vertical"]}
+            disable={true}
+            value={text_orientation}
+            onChange={updateStyleLayout}
+          />
+        </SquirrelOutline>
+        <SquirrelOutline>
+          <SquirrelSelect
+            name={"color_space"}
+            options={["display_p3", "srgb"]}
+            value={color_space}
+            onChange={updateStyleLayout}
+          />
+        </SquirrelOutline>
+        <SquirrelNumberInput name={"alpha"} value={alpha} min={0} max={1} step={0.01} onChange={updateStyleLayout} />
+        <SquirrelOutline>
+          <div>
+            <SquirrelCheckBox name={"inline_preedit"} checked={inline_preedit} onChange={updateStyleLayout} />
+            <SquirrelNumberInput
+              name={"spacing"}
+              value={spacing}
+              min={0}
+              onChange={updateStyleLayout}
+              disable={inline_preedit}
+            />
+          </div>
         </SquirrelOutline>
 
         <SquirrelOutline>
@@ -131,14 +130,13 @@ const SquirrelCustomTheme = () => {
             />
           ))}
         </SquirrelOutline>
+        <SquirrelNumberInput name={"line_spacing"} value={line_spacing} min={0} onChange={updateStyleLayout} />
 
         <SquirrelOutline>
           {fontSizeConfigs.map(({ name, value, min }) => (
             <SquirrelNumberInput key={name} name={name} value={value} min={min} onChange={updateStyleLayout} />
           ))}
         </SquirrelOutline>
-
-        <SquirrelNumberInput name={"line_spacing"} value={line_spacing} min={0} onChange={updateStyleLayout} />
 
         <SquirrelNumberInput
           name={"hilited_corner_radius"}
@@ -148,7 +146,6 @@ const SquirrelCustomTheme = () => {
         />
 
         <SquirrelNumberInput name={"base_offset"} value={base_offset} onChange={updateStyleLayout} />
-        <SquirrelNumberInput name={"alpha"} value={alpha} min={0} max={1} step={0.01} onChange={updateStyleLayout} />
       </div>
 
       <div
@@ -174,6 +171,14 @@ const SquirrelCustomTheme = () => {
           {...state.styleCustom.patch.preset_color_schemes.solarized_dark}
         />
       </div>
+      <SquirrelSelect
+        style={{ position: "fixed", bottom: "10vh", right: "1vw" }}
+        flexDirection="column"
+        name={"select:"}
+        options={["none", "both", "light", "dark"]}
+        value={state.selectTheme}
+        onChange={updateSelectTheme}
+      />
     </div>
   )
 }

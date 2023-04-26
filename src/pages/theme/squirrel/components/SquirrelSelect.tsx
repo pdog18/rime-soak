@@ -4,12 +4,22 @@ type SquirrelSelectProps = {
   value: string
   onChange: (name: string, value: string) => void
   disable?: boolean
+  flexDirection?: `row` | `row-reverse` | `column` | `column-reverse`
+  style?: React.CSSProperties
 }
 
-export default function SquirrelSelect({ name, options, value, onChange, disable }: SquirrelSelectProps) {
+export default function SquirrelSelect({
+  name,
+  options,
+  value,
+  onChange,
+  disable,
+  flexDirection = "column",
+  style,
+}: SquirrelSelectProps) {
   return (
-    <div style={{ display: "inline-flex", alignItems: "center" }}>
-      <label>{name}</label>
+    <div style={{ display: "inline-flex", alignItems: "center", flexDirection, ...style }}>
+      <label style={{ alignSelf: "start" }}>{name}</label>
 
       <select
         value={value}
