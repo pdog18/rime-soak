@@ -1,13 +1,5 @@
+import convertColor from "./ColorConverUtils"
 import { SquirrelColors, SquirrelLayouts } from "./SquirrelStore"
-
-// (Rime AGRB[0xFFBBGGRR]) <<===>> (Web rgba[rgba(r,g,b,a)])
-function convertColor(color: number): string {
-  const a = ((color >> 24) & 0xff) / 0xff
-  const b = (color >> 16) & 0xff
-  const g = (color >> 8) & 0xff
-  const r = color & 0xff
-  return `rgba(${r},${g},${b},${a})`
-}
 
 type PreviewProps = {
   name: string

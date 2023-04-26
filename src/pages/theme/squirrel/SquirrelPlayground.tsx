@@ -7,10 +7,13 @@ import SquirrelNumberInput from "./components/SquirrelNumberInput"
 import SquirrelSelect from "./components/SquirrelSelect"
 import { useState } from "react"
 
+import SquirrelColorPickers from "./components/SquirrelColorPickers"
+
 const SquirrelCustomTheme = () => {
   const state = useSquirrelStore<SquirrelStyleState>((state) => state)
   const preset_color_schemes = state.styleCustom.patch.preset_color_schemes
   const updateStyleLayout = state.updateStyleLayout
+  const updateSquirrelColor = state.updateSquirrelColor
   const updateSelectTheme = state.updateSelectTheme
 
   const {
@@ -49,6 +52,8 @@ const SquirrelCustomTheme = () => {
     { name: "comment_font_point", value: comment_font_point, min: 2 },
   ]
 
+  const [whichTheme, changeTheme] = useState("dark")
+
   return (
     <div>
       <div
@@ -61,6 +66,14 @@ const SquirrelCustomTheme = () => {
           flexWrap: "wrap",
         }}
       >
+        <SquirrelOutline>
+          <SquirrelSelect
+            name={"change_theme"}
+            options={["dark", "light"]}
+            value={whichTheme}
+            onChange={(_, value) => changeTheme(value)}
+          />
+        </SquirrelOutline>
         <SquirrelOutline>
           <SquirrelSelect
             name={"candidate_list_layout"}
@@ -154,8 +167,10 @@ const SquirrelCustomTheme = () => {
           flexDirection: candidate_list_layout === "linear" ? "column" : "row",
           alignItems: "center",
           justifyContent: "center",
-          gap: "8vh",
+          gap: "4vh",
           paddingTop: "4vh",
+          height: "30vh",
+          overflow: "clip",
         }}
       >
         <SquirrelPreview
@@ -169,6 +184,18 @@ const SquirrelCustomTheme = () => {
           heightDelta={heightDelta}
           name={"solarized_dark"}
           {...state.styleCustom.patch.preset_color_schemes.solarized_dark}
+        />
+      </div>
+
+      <div>
+        <SquirrelColorPickers
+          {...(whichTheme === "dark"
+            ? state.styleCustom.patch.preset_color_schemes.solarized_dark
+            : state.styleCustom.patch.preset_color_schemes.solarized_light)}
+          onChange={(name, color) => {
+            updateSquirrelColor(whichTheme === "dark", name, color)
+          }}
+          inline_preedit={inline_preedit}
         />
       </div>
       <SquirrelSelect
