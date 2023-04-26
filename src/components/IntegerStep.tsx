@@ -9,7 +9,7 @@ type IntegerSetopProps = {
 }
 
 const IntegerSetop = ({ size, onChange, slierWidth = "16vw", showSlider = true }: IntegerSetopProps) => {
-  const maxPageSize = navigator.userAgent.indexOf("Win") !== -1 ? 10 : 9
+  const maxPageSize = navigator.userAgent.indexOf("Win") !== -1 ? 10 : 20
   return (
     <Row>
       {showSlider && (
