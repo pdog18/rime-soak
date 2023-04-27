@@ -65,7 +65,7 @@ export default function SquirrelColorPickers(props: SquirrelColorPickersProps) {
         <div key={name}>
           <div style={{ marginBottom: "6px" }}>{convertColorName(name)}</div>
           <RgbaColorPicker
-            style={{ zoom: "0.7" }}
+            style={{ width: "180px", height: "180px" }}
             color={color}
             onChange={(color) => onChange(name, rgbaObjectToAbgr(color))}
           />
