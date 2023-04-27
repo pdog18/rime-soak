@@ -53,7 +53,6 @@ export default function SquirrelColorPickers(props: SquirrelColorPickersProps) {
   const { inline_preedit, onChange } = props
 
   const preeditColors = ["text_color", "hilited_text_color", "hilited_back_color", "preedit_back_color"]
-  console.log(inline_preedit)
 
   const convertedColors = Object.entries(props)
     .filter(([key, value]) => key.endsWith("_color") && typeof value === "number")
@@ -63,7 +62,7 @@ export default function SquirrelColorPickers(props: SquirrelColorPickersProps) {
   return (
     <div style={{ display: "flex", margin: "0 1vw", gap: "16px", flexWrap: "wrap" }}>
       {convertedColors.map(([name, color]) => (
-        <div>
+        <div key={name}>
           <div style={{ marginBottom: "6px" }}>{convertColorName(name)}</div>
           <RgbaColorPicker
             style={{ zoom: "0.7" }}

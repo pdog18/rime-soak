@@ -6,8 +6,8 @@ import SquirrelCheckBox from "./components/SquirrelCheckBox"
 import SquirrelNumberInput from "./components/SquirrelNumberInput"
 import SquirrelSelect from "./components/SquirrelSelect"
 import { useState } from "react"
-
 import SquirrelColorPickers from "./components/SquirrelColorPickers"
+import { Tooltip } from "antd"
 
 const SquirrelCustomTheme = () => {
   const state = useSquirrelStore<SquirrelStyleState>((state) => state)
@@ -15,6 +15,7 @@ const SquirrelCustomTheme = () => {
   const updateStyleLayout = state.updateStyleLayout
   const updateSquirrelColor = state.updateSquirrelColor
   const updateSelectTheme = state.updateSelectTheme
+  const hintSelectThme = state.hintSelectThme
 
   const {
     corner_radius,
@@ -68,13 +69,15 @@ const SquirrelCustomTheme = () => {
         }}
       >
         <SquirrelOutline title="使用主题">
-          <SquirrelSelect
-            flexDirection="column"
-            name={"select:"}
-            options={["none", "both", "light", "dark"]}
-            value={state.selectTheme}
-            onChange={updateSelectTheme}
-          />
+          <Tooltip open={hintSelectThme} placement={"right"} title="选中使用的主题" color={"purple"} key={"purple"}>
+            <SquirrelSelect
+              flexDirection="column"
+              name={"select:"}
+              options={["none", "both", "light", "dark"]}
+              value={state.selectTheme}
+              onChange={updateSelectTheme}
+            />
+          </Tooltip>
         </SquirrelOutline>
         <SquirrelOutline title="排列方向">
           <SquirrelSelect

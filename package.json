@@ -12,7 +12,7 @@
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
     "@types/wicg-file-system-access": "^2020.9.5",
-    "antd": "^5.2.1",
+    "antd": "^5.4.6",
     "file-saver": "^2.0.5",
     "immer": "^9.0.21",
     "install": "^0.13.0",

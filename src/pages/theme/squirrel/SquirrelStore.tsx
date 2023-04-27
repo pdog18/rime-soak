@@ -100,6 +100,7 @@ const initLayout: SquirrelLayouts = {
 interface SquirrelStyleConfig {}
 interface SquirrelStyleState {
   selectTheme: ThemeSelectType
+  hintSelectThme: boolean
   styleCustom: {
     patch: Patch
   }
@@ -107,11 +108,13 @@ interface SquirrelStyleState {
   updateStyleLayout: (path: string, value: string | number | boolean) => void
   updateSquirrelColor: (isDark: boolean, colorname: string, value: number) => void
   updateSelectTheme: (name: string, value: string) => void
+  showToolTip: (show: boolean) => void
   generateYAML: () => string | null
 }
 
 const useSquirrelStore = create<SquirrelStyleState>()((set, get) => ({
   selectTheme: "none",
+  hintSelectThme: false,
   styleCustom: {
     patch: {
       "style/color_scheme": "solarized_light",
@@ -195,6 +198,13 @@ const useSquirrelStore = create<SquirrelStyleState>()((set, get) => ({
     set(
       produce((state: SquirrelStyleState) => {
         state.selectTheme = value as ThemeSelectType
+      })
+    ),
+
+  showToolTip: (show) =>
+    set(
+      produce((state: SquirrelStyleState) => {
+        state.hintSelectThme = show
       })
     ),
 

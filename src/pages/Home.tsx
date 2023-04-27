@@ -10,10 +10,14 @@ import CustomPhrase from "./customPhrase/CustomPhrase"
 import WeaselCustomTheme from "./theme/weasel/CustomWeaselTheme"
 import KeyBinder from "./keyBinder/KeyBinder"
 import SquirrelPlayground from "./theme/squirrel/SquirrelPlayground"
+import { useEffect, useState } from "react"
+import useSquirrelStore from "./theme/squirrel/SquirrelStore"
+
+const weasel = navigator.userAgent.indexOf("Win") !== -1
 
 const items = [
   {
-    key: "/default",
+    key: "/",
     label: "基本",
     children: <Default />,
   },
@@ -25,7 +29,7 @@ const items = [
   {
     key: "/theme",
     label: "皮肤",
-    children: navigator.userAgent.indexOf("Win") !== -1 ? <WeaselCustomTheme /> : <SquirrelPlayground />,
+    children: weasel ? <WeaselCustomTheme /> : <SquirrelPlayground />,
   },
   {
     key: "/punctuation",
@@ -53,16 +57,23 @@ const Home = () => {
   const location = useLocation()
   const navigate = useNavigate()
 
-  const needChangeDefaultActive = items.filter((item) => item.key === location.pathname).length === 1
+  const [activeKey, changeActiveKey] = useState(() => sessionStorage.getItem("activeKey") ?? `${location.pathname}`)
 
-  const activeKey = needChangeDefaultActive ? location.pathname : "/default"
-  // todo 如果依旧处于 Home 界面，手动输入 pathName 时需要重新渲染，这是 Tabs#defaultActiveKey 的问题，可能需要替换该组件
+  useEffect(() => {
+    sessionStorage.setItem("activeKey", activeKey)
+  }, [activeKey])
+
+  const squirrelState = useSquirrelStore()
+
   return (
     <>
       <Tabs
         centered={true}
-        defaultActiveKey={activeKey}
+        activeKey={activeKey}
         style={{ height: "100%", minHeight: "100vh", backgroundColor: "#f3f3f3" }}
+        onChange={(activeKey) => {
+          changeActiveKey(activeKey)
+        }}
         items={items.map((item) => {
           return {
             ...item,
@@ -75,7 +86,14 @@ const Home = () => {
         type="primary"
         tooltip={<div>Save</div>}
         onClick={() => {
-          navigate("/result")
+          if (!weasel && activeKey === "/theme" && squirrelState.selectTheme === "none") {
+            squirrelState.showToolTip(true)
+            setTimeout(() => {
+              squirrelState.showToolTip(false)
+            }, 3000)
+          } else {
+            navigate("/result")
+          }
         }}
       />
     </>

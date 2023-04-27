@@ -201,7 +201,8 @@ const Result: React.FC = () => {
         style={{ alignSelf: "start", margin: "0 10vw" }}
         type="primary"
         onClick={() => {
-          navigate("/")
+          navigate(-1)
+          // navigate()
         }}
       >
         返回
