@@ -1,6 +1,7 @@
 import { RgbaColor, RgbaColorPicker } from "react-colorful"
 import { abgrToRgbaObject, rgbaObjectToAbgr } from "../ColorConverUtils"
 import { SquirrelColors } from "../SquirrelStore"
+import { useState } from "react"
 
 type SquirrelColorPickersProps = SquirrelColors & {
   inline_preedit: boolean
@@ -18,7 +19,6 @@ const convertColorName = (color: string) => {
       return "预览选中背景"
     case "preedit_back_color":
       return "预览整体背景"
-
     // 面板背景&边框
     case "back_color":
       return "背景"
@@ -33,17 +33,15 @@ const convertColorName = (color: string) => {
       return "选中候选词备注"
     case "hilited_candidate_back_color":
       return "选中候选词背景"
-
     // 其他候选词
     case "label_color":
       return "普通标签"
     case "comment_text_color":
       return "普通备注"
     case "candidate_back_color":
-      return "普遍背景"
+      return "普通背景"
     case "candidate_text_color":
       return "普通文字"
-
     default:
       throw new Error("颜色不匹配")
   }
@@ -59,15 +57,21 @@ export default function SquirrelColorPickers(props: SquirrelColorPickersProps) {
     .filter(([key, _]) => !(inline_preedit && preeditColors.includes(key)))
     .map(([key, value]) => [key, abgrToRgbaObject(value as number)] as [string, RgbaColor])
 
+  // 防止 RgbaColorPicker 的 color 受到 SquirrelState 的影响
+  // 从而导致颜色换算时因为透明度的问题导致的颜色错误
+  const [colorMap] = useState(convertedColors)
+
   return (
     <div style={{ display: "flex", margin: "0 1vw", gap: "16px", flexWrap: "wrap" }}>
-      {convertedColors.map(([name, color]) => (
+      {colorMap.map(([name, color]) => (
         <div key={name}>
           <div style={{ marginBottom: "6px" }}>{convertColorName(name)}</div>
           <RgbaColorPicker
             style={{ width: "180px", height: "180px" }}
             color={color}
-            onChange={(color) => onChange(name, rgbaObjectToAbgr(color))}
+            onChange={(color) => {
+              onChange(name, rgbaObjectToAbgr(color))
+            }}
           />
         </div>
       ))}

@@ -38,7 +38,6 @@ function rgbaObjectToAbgr(color: { r: number; g: number; b: number; a: number })
   const r = BigInt(color.r) & BigInt(0xff)
 
   const abgr = (a << BigInt(24)) | (b << BigInt(16)) | (g << BigInt(8)) | r
-
   return Number(abgr)
 }
 
