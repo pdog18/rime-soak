@@ -1,6 +1,15 @@
 import convertColor from "./ColorConverUtils"
 import { SquirrelColors, SquirrelLayouts } from "./SquirrelStore"
 
+const enableUtil_0_16_2 = (candidate_back_color: string) => {
+  console.info(
+    "candidate_back_color : ",
+    candidate_back_color,
+    "https://github.com/LEOYoon-Tsaw/Squirrel-Designer/issues/8#issuecomment-1525644979"
+  )
+  return `rgba(0,0,0,0)`
+}
+
 type PreviewProps = {
   name: string
   widthDelta: number
@@ -174,7 +183,7 @@ const SquirrelPreview = ({
               >
                 <div
                   style={{
-                    backgroundColor: first ? hilited_candidate_back_color : candidate_back_color,
+                    backgroundColor: first ? hilited_candidate_back_color : enableUtil_0_16_2(candidate_back_color),
                     left: -line_spacing,
                     right: 0,
                     top: first

@@ -54,6 +54,8 @@ export default function SquirrelColorPickers(props: SquirrelColorPickersProps) {
 
   const convertedColors = Object.entries(props)
     .filter(([key, value]) => key.endsWith("_color") && typeof value === "number")
+    // https://github.com/LEOYoon-Tsaw/Squirrel-Designer/issues/8#issuecomment-1525644979
+    .filter(([key, value]) => !(key === "candidate_back_color"))
     .filter(([key, _]) => !(inline_preedit && preeditColors.includes(key)))
     .map(([key, value]) => [key, abgrToRgbaObject(value as number)] as [string, RgbaColor])
 
