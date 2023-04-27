@@ -7,7 +7,9 @@ import SquirrelNumberInput from "./components/SquirrelNumberInput"
 import SquirrelSelect from "./components/SquirrelSelect"
 import { useState } from "react"
 import SquirrelColorPickers from "./components/SquirrelColorPickers"
-import { Tooltip } from "antd"
+import { Tooltip, Typography } from "antd"
+
+const { Link } = Typography
 
 const SquirrelCustomTheme = () => {
   const state = useSquirrelStore<SquirrelStyleState>((state) => state)
@@ -269,6 +271,31 @@ const SquirrelCustomTheme = () => {
           inline_preedit={inline_preedit}
         />
       </SquirrelOutline>
+
+      <div
+        style={{
+          position: "absolute",
+          bottom: 0,
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          display: "inline-flex",
+          fontSize: "20px",
+        }}
+      >
+        <div>部分效果(如文字方向)未实现。</div>
+        <div>
+          想要更准确的效果?
+          <Link
+            style={{
+              fontSize: "20px",
+            }}
+            href="https://github.com/LEOYoon-Tsaw/Squirrel-Designer"
+            target="_blank"
+          >
+            「LEOYoon-Tsaw/Squirrel-Designer」
+          </Link>
+        </div>
+      </div>
     </div>
   )
 }
