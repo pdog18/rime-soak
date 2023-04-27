@@ -1,4 +1,5 @@
 type SquirrelSelectProps = {
+  title?: string
   name: string
   options: string[]
   value: string
@@ -9,6 +10,7 @@ type SquirrelSelectProps = {
 }
 
 export default function SquirrelSelect({
+  title,
   name,
   options,
   value,
@@ -19,7 +21,7 @@ export default function SquirrelSelect({
 }: SquirrelSelectProps) {
   return (
     <div style={{ display: "inline-flex", alignItems: "center", flexDirection, ...style }}>
-      <label style={{ alignSelf: "start" }}>{name}</label>
+      {title && <label style={{ alignSelf: "start" }}>{title}</label>}
 
       <select
         value={value}

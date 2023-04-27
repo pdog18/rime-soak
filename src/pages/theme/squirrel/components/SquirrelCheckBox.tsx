@@ -1,13 +1,14 @@
 type SquirrelCheckBoxProps = {
+  title?: string
   name: string
   checked: boolean
   onChange: (name: string, checked: boolean) => void
 }
 
-export default function SquirrelCheckBox({ name, checked, onChange }: SquirrelCheckBoxProps) {
+export default function SquirrelCheckBox({ title, name, checked, onChange }: SquirrelCheckBoxProps) {
   return (
     <div>
-      <label>{name}</label>
+      <label>{title ?? name}</label>
 
       <input
         type="checkbox"

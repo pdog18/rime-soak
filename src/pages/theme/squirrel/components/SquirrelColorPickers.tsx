@@ -19,7 +19,7 @@ export default function SquirrelColorPickers(props: SquirrelColorPickersProps) {
     .map(([key, value]) => [key, abgrToRgbaObject(value as number)] as [string, RgbaColor])
 
   return (
-    <div style={{ display: "flex", margin: "0, 10vw", gap: "2vw", flexWrap: "wrap" }}>
+    <div style={{ display: "flex", margin: "0", gap: "16px", flexWrap: "wrap" }}>
       {convertedColors.map(([name, color]) => (
         <div>
           <div>{name.toString()}</div>

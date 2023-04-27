@@ -1,4 +1,5 @@
 type SquirrelNumberInputProps = {
+  title?: string
   name: string
   value: number
   onChange: (name: string, value: number) => void
@@ -9,6 +10,7 @@ type SquirrelNumberInputProps = {
 }
 
 export default function SquirrelNumberInput({
+  title,
   name,
   value,
   onChange,
@@ -18,8 +20,8 @@ export default function SquirrelNumberInput({
   step = 1,
 }: SquirrelNumberInputProps) {
   return (
-    <div>
-      <label>{name}</label>
+    <div style={{ display: "inline-flex", flexDirection: "column" }}>
+      <label>{title ?? name}</label>
 
       <input
         min={min}
