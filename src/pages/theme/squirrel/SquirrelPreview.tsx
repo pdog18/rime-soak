@@ -1,7 +1,7 @@
 import convertColor from "./ColorConverUtils"
 import { SquirrelColors, SquirrelLayouts } from "./SquirrelStore"
 
-const enableUtil_0_16_2 = (candidate_back_color: string) => {
+const targetVersion_0_16_2 = (candidate_back_color: string) => {
   console.info(
     "candidate_back_color : ",
     candidate_back_color,
@@ -183,7 +183,7 @@ const SquirrelPreview = ({
               >
                 <div
                   style={{
-                    backgroundColor: first ? hilited_candidate_back_color : enableUtil_0_16_2(candidate_back_color),
+                    backgroundColor: first ? hilited_candidate_back_color : targetVersion_0_16_2(candidate_back_color),
                     left: -line_spacing,
                     right: 0,
                     top: first
@@ -193,7 +193,7 @@ const SquirrelPreview = ({
                       : horizontal
                       ? -justifyHeightPadding
                       : 0,
-                    bottom: -justifyHeightPadding * 2,
+                    bottom: horizontal ? -justifyHeightPadding : 0,
                     position: "absolute",
                     zIndex: 0,
                     display: hilited_corner_radius === 0 ? "block" : "none",
@@ -203,9 +203,9 @@ const SquirrelPreview = ({
                 <div
                   style={{
                     position: "absolute",
-                    backgroundColor: first ? hilited_candidate_back_color : candidate_back_color,
+                    backgroundColor: first ? hilited_candidate_back_color : targetVersion_0_16_2(candidate_back_color),
                     borderRadius: hilited_corner_radius,
-                    left: 0,
+                    left: paddingLeft,
                     right: 0,
                     top: 0,
                     bottom: 0,
