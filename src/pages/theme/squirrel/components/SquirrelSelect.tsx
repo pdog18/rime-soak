@@ -29,7 +29,7 @@ export default function SquirrelSelect({
           onChange(name, e.target.value)
         }}
         size={options.length}
-        style={{ minWidth: "60px", overflowY: "auto" }}
+        style={{ minWidth: "40px", textAlign: "center", overflowY: "auto" }}
         disabled={disable}
       >
         {options.map((option) => (

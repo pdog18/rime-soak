@@ -1,9 +1,14 @@
-const SquirrelOutline: React.FC<{ children: React.ReactNode; title?: string }> = ({ children, title }) => {
+const SquirrelOutline: React.FC<{
+  children: React.ReactNode
+  title?: React.ReactNode
+  style?: React.CSSProperties
+}> = ({ children, title, style }) => {
   return (
     <div
       style={{
         display: "inline-flex",
         flexDirection: "column",
+        ...style,
       }}
     >
       <div

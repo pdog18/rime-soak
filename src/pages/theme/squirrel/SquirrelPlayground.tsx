@@ -67,12 +67,13 @@ const SquirrelCustomTheme = () => {
           flexWrap: "wrap",
         }}
       >
-        <SquirrelOutline title="修改主题">
+        <SquirrelOutline title="使用主题">
           <SquirrelSelect
-            name={"change_theme"}
-            options={["dark", "light"]}
-            value={whichTheme}
-            onChange={(_, value) => changeTheme(value)}
+            flexDirection="column"
+            name={"select:"}
+            options={["none", "both", "light", "dark"]}
+            value={state.selectTheme}
+            onChange={updateSelectTheme}
           />
         </SquirrelOutline>
         <SquirrelOutline title="排列方向">
@@ -208,12 +209,14 @@ const SquirrelCustomTheme = () => {
       <div
         style={{
           display: "flex",
+          flexGrow: "1",
           flexDirection: candidate_list_layout === "linear" ? "column" : "row",
           alignItems: "center",
           justifyContent: "center",
+          height: "80vh",
           rowGap: "6vw",
           columnGap: "6vh",
-          width: "30vw",
+          width: "40vw",
         }}
       >
         <SquirrelPreview
@@ -230,7 +233,29 @@ const SquirrelCustomTheme = () => {
         />
       </div>
 
-      <div style={{ width: "58vw" }}>
+      <SquirrelOutline
+        style={{ width: "44vw", marginRight: "16px" }}
+        title={
+          <div
+            style={{
+              margin: "6px 0",
+              display: "inline-flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "6px",
+            }}
+          >
+            修改
+            <SquirrelSelect
+              name={"change_theme"}
+              options={["dark", "light"]}
+              value={whichTheme}
+              onChange={(_, value) => changeTheme(value)}
+            />
+            配色
+          </div>
+        }
+      >
         <SquirrelColorPickers
           {...(whichTheme === "dark"
             ? state.styleCustom.patch.preset_color_schemes.solarized_dark
@@ -240,15 +265,7 @@ const SquirrelCustomTheme = () => {
           }}
           inline_preedit={inline_preedit}
         />
-      </div>
-      <SquirrelSelect
-        style={{ position: "fixed", bottom: "10vh", right: "1vw" }}
-        flexDirection="column"
-        name={"select:"}
-        options={["none", "both", "light", "dark"]}
-        value={state.selectTheme}
-        onChange={updateSelectTheme}
-      />
+      </SquirrelOutline>
     </div>
   )
 }
