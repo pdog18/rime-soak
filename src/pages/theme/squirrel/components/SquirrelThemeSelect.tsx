@@ -92,6 +92,8 @@ const SquirrelModelSelect: React.FC<{ onClose: () => void }> = ({ onClose }) => 
         Close
       </button>
       {themes.map((theme: SquirrelColors & { name: string }) => {
+        console.log(`theme.text_color === 4278190335`, theme.text_color === 4278190335)
+
         return (
           <div
             style={{
@@ -110,14 +112,7 @@ const SquirrelModelSelect: React.FC<{ onClose: () => void }> = ({ onClose }) => 
             <div
               style={{ display: "inline-flex", alignItems: "center", width: "100%", justifyContent: "space-between" }}
             >
-              <SquirrelPreview
-                widthDelta={0}
-                heightDelta={0}
-                {...defaultStyle}
-                {...theme}
-                name={theme.name}
-                text_color={0xff0000ff}
-              />
+              <SquirrelPreview widthDelta={0} heightDelta={0} {...defaultStyle} {...theme} name={theme.name} />
 
               <SquirrelUseThemeCheckbox
                 onChange={(dark, checked) => {
