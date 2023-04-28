@@ -46,8 +46,19 @@ export default function ConvertYamlToJson() {
     for (const key in fillColorTheme) {
       if (key.endsWith("_color")) {
         const value = fillColorTheme[key]
-        if (value && value !== 0 /* 0x00000000*/) {
+        if (value && value !== 0) {
           fillColorTheme[key] = addAlphaIfNeeded(value)
+        }
+
+        if (value !== undefined && value === 0) {
+          if (key === "hilited_candidate_back_color") {
+            /* 
+            azure & starcraft: 
+              hilited_candidate_back_color: 0x00000000*/
+            fillColorTheme[key] = 0
+          } else {
+            fillColorTheme[key] = 0xff000000
+          }
         }
       }
     }
