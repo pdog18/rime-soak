@@ -23,7 +23,7 @@ const colors = [
 
 function isSixDigitHexNumber(num: number) {
   const hexString = num.toString(16)
-  return hexString.length === 6
+  return hexString.length <= 6
 }
 
 function addAlphaIfNeeded(colorValue: number) {
