@@ -97,19 +97,19 @@ const initLayout: SquirrelLayouts = {
   alpha: 1.0,
 }
 
-interface SquirrelStyleConfig {}
 interface SquirrelStyleState {
   selectTheme: ThemeSelectType
   hintSelectThme: boolean
   styleCustom: {
     patch: Patch
   }
-  changeColorScheme: (color_scheme: string, config: SquirrelStyleConfig) => void
+
   updateStyleLayout: (path: string, value: string | number | boolean) => void
   updateSquirrelColor: (isDark: boolean, colorname: string, value: number) => void
   updateSelectTheme: (name: string, value: string) => void
   showToolTip: (show: boolean) => void
   generateYAML: () => string | null
+  updateSquirrelTheme: (drak: boolean, theme: SquirrelColors) => void
 }
 
 const useSquirrelStore = create<SquirrelStyleState>()((set, get) => ({
@@ -163,11 +163,21 @@ const useSquirrelStore = create<SquirrelStyleState>()((set, get) => ({
     },
   },
 
-  changeColorScheme: (color_scheme_name, color_scheme) =>
+  updateSquirrelTheme: (dark, theme) =>
     set(
-      produce((state) => {
-        state.styleCustom.patch["style/color_scheme"] = color_scheme_name
-        state.styleCustom.patch.preset_color_schemes[color_scheme_name] = color_scheme
+      produce((state: SquirrelStyleState) => {
+        const schemes = state.styleCustom.patch.preset_color_schemes
+        if (dark) {
+          schemes.solarized_dark = {
+            ...schemes.solarized_dark,
+            ...theme,
+          }
+        } else {
+          schemes.solarized_light = {
+            ...schemes.solarized_light,
+            ...theme,
+          }
+        }
       })
     ),
 

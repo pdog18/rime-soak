@@ -9,7 +9,7 @@ import { useState } from "react"
 import SquirrelColorPickers from "./components/SquirrelColorPickers"
 import { Tooltip, Typography } from "antd"
 import { createPortal } from "react-dom"
-import SquirrelModelSelect from "./components/SquirrelModelSelect"
+import SquirrelThemeSelect from "./components/SquirrelThemeSelect"
 
 const { Link } = Typography
 
@@ -75,7 +75,7 @@ const SquirrelCustomTheme = () => {
       >
         <SquirrelOutline title="默认主题库">
           <button onClick={() => setShowModal(true)}>查看</button>
-          {showModal && createPortal(<SquirrelModelSelect onClose={() => setShowModal(false)} />, document.body)}
+          {showModal && createPortal(<SquirrelThemeSelect onClose={() => setShowModal(false)} />, document.body)}
         </SquirrelOutline>
 
         <SquirrelOutline title="使用主题">
