@@ -13,7 +13,7 @@ type CheckProps = {
 
 const SquirrelUseThemeCheckbox = ({ onChange, themeName, checkedDarkName, checkedLightName }: CheckProps) => {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+    <div style={{ display: "flex", flexDirection: "column", margin: "16px 16px", gap: "16px" }}>
       <div
         style={{
           margin: "6px 0",
@@ -77,7 +77,7 @@ const SquirrelModelSelect: React.FC<{ onClose: () => void }> = ({ onClose }) => 
         justifyContent: "start",
         left: 0,
         top: 0,
-        width: "40vw",
+        width: "50vw",
         height: "100vh",
         display: "flex",
         flexDirection: "column",
@@ -114,6 +114,15 @@ const SquirrelModelSelect: React.FC<{ onClose: () => void }> = ({ onClose }) => 
             >
               <SquirrelPreview widthDelta={0} heightDelta={0} {...defaultStyle} {...theme} name={theme.name} />
 
+              <SquirrelPreview
+                widthDelta={0}
+                heightDelta={0}
+                {...defaultStyle}
+                {...theme}
+                name={theme.name}
+                candidate_list_layout="stacked"
+              />
+
               <SquirrelUseThemeCheckbox
                 onChange={(dark, checked) => {
                   if (checked) {
@@ -138,6 +147,17 @@ const SquirrelModelSelect: React.FC<{ onClose: () => void }> = ({ onClose }) => 
         配色方案:[Mac浅色],[Mac深色],[Mac绿色],[Mac橙色],[Mac浅蓝],[米兰],[纯洁],[北方浅色],[北方深色] 来自
         <a href="https://ssnhd.com/2022/01/11/rime-skin/">Rime Squirrel 鼠须管输入法皮肤效果</a>
       </div>
+
+      <div style={{ padding: "16px", marginBottom: "32px" }}>
+        配色方案:[MacOS 浅色／MacOS Light],[MacOS 深色／MacOS Dark],[微信浅色／Wechat Light ],[微信深色／Wechat Dark ]
+        来自
+        <a href="https://gist.github.com/lewangdev/f8ebbba24f464e915fb7d36857fcbbe5#file-squirrel-custom-yaml">
+          lewangdev/default.custom.yaml
+        </a>
+      </div>
+      <button onClick={onClose} style={{ width: "80px", height: "60px", margin: "16px 16px", alignSelf: "end" }}>
+        Close
+      </button>
     </div>
   )
 }
