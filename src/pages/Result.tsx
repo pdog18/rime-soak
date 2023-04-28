@@ -12,6 +12,7 @@ import { monokaiSublime } from "react-syntax-highlighter/dist/esm/styles/hljs"
 
 import download from "../utils/DownloadUtils"
 import useSquirrelStore from "./theme/squirrel/SquirrelStore"
+import GithubCorner from "../components/GithubCorner"
 
 const hlighter = (content: string, language: "yaml" | "lua" | "txt") => (
   <SyntaxHighlighter language={language} style={monokaiSublime}>
@@ -209,6 +210,7 @@ const Result: React.FC = () => {
       </Button>
 
       {content}
+      <GithubCorner repoUrl="https://github.com/pdog18/rime-soak" />
     </div>
   )
 }

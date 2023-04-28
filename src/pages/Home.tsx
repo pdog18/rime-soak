@@ -12,6 +12,7 @@ import KeyBinder from "./keyBinder/KeyBinder"
 import SquirrelPlayground from "./theme/squirrel/SquirrelPlayground"
 import { useEffect, useState } from "react"
 import useSquirrelStore from "./theme/squirrel/SquirrelStore"
+import GithubCorner from "../components/GithubCorner"
 
 const weasel = navigator.userAgent.indexOf("Win") !== -1
 
@@ -81,6 +82,8 @@ const Home = () => {
           }
         })}
       />
+
+      <GithubCorner repoUrl="https://github.com/pdog18/rime-soak" />
 
       <FloatButton
         type="primary"
