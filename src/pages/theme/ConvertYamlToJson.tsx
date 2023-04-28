@@ -21,6 +21,18 @@ const colors = [
   "hilited_candidate_label_color",
 ]
 
+function isSixDigitHexNumber(num: number) {
+  const hexString = num.toString(16)
+  return hexString.length === 6
+}
+
+function addAlphaIfNeeded(colorValue: number) {
+  if (isSixDigitHexNumber(colorValue)) {
+    return colorValue + 0xff000000
+  }
+  return colorValue
+}
+
 export default function ConvertYamlToJson() {
   const [content, setContent] = useState("")
 
@@ -31,6 +43,14 @@ export default function ConvertYamlToJson() {
     const theme = yaml.load(content) as any
 
     const fillColorTheme = fillMissingColorsToRequired(theme)
+    for (const key in fillColorTheme) {
+      if (key.endsWith("_color")) {
+        const value = fillColorTheme[key]
+        if (value && value !== 0 /* 0x00000000*/) {
+          fillColorTheme[key] = addAlphaIfNeeded(value)
+        }
+      }
+    }
 
     output = `${JSON.stringify(fillColorTheme, null, 2)}`
   } catch (e) {
