@@ -3,6 +3,8 @@ import React, { useState } from "react"
 import * as yaml from "js-yaml"
 import { blendColors } from "../../utils/ColorUtils"
 
+const TRANSPARENT = -1
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const colors = [
   "back_color",
@@ -50,6 +52,10 @@ export default function ConvertYamlToJson() {
           fillColorTheme[key] = addAlphaIfNeeded(value)
         }
 
+        if (value === -1) {
+          fillColorTheme[key] = 0
+        }
+
         if (value !== undefined && value === 0) {
           if (key === "hilited_candidate_back_color") {
             /* 
@@ -82,8 +88,6 @@ export default function ConvertYamlToJson() {
 }
 
 const fillMissingColorsToRequired = (theme: any) => {
-  const TRANSPARENT = 0x00ffffff
-
   let {
     back_color,
     border_color,
