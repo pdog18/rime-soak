@@ -133,6 +133,11 @@ const SquirrelModelSelect: React.FC<{ onClose: () => void }> = ({ onClose }) => 
           </div>
         )
       })}
+
+      <div style={{ padding: "16px", marginBottom: "32px" }}>
+        配色方案:[Mac浅色],[Mac深色],[Mac绿色],[Mac橙色],[Mac浅蓝],[米兰],[纯洁],[北方浅色],[北方深色] 来自
+        <a href="https://ssnhd.com/2022/01/11/rime-skin/">Rime Squirrel 鼠须管输入法皮肤效果</a>
+      </div>
     </div>
   )
 }

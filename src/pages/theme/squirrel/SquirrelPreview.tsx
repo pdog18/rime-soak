@@ -2,11 +2,11 @@ import convertColor from "./ColorConverUtils"
 import { SquirrelColors, SquirrelLayouts } from "./SquirrelStore"
 
 const targetVersion_0_16_2 = (candidate_back_color: string) => {
-  console.info(
-    "candidate_back_color : ",
-    candidate_back_color,
-    "https://github.com/LEOYoon-Tsaw/Squirrel-Designer/issues/8#issuecomment-1525644979"
-  )
+  // console.info(
+  //   "candidate_back_color : ",
+  //   candidate_back_color,
+  //   "https://github.com/LEOYoon-Tsaw/Squirrel-Designer/issues/8#issuecomment-1525644979"
+  // )
   return `rgba(0,0,0,0)`
 }
 
@@ -64,9 +64,7 @@ const SquirrelPreview = ({
 }: PreviewProps) => {
   const convertedColors = Object.fromEntries(
     Object.entries(colors)
-      .filter(([key, value]) => {
-        return key.endsWith("color") && typeof value === "number"
-      })
+      .filter(([key, value]) => key.endsWith("color") && typeof value === "number")
       .map(([key, value]) => [key, convertColor(value as number)])
   )
 
@@ -101,6 +99,8 @@ const SquirrelPreview = ({
   const outlineWidth = Math.min(border_height, border_width) - Math.min(widthDelta, heightDelta)
   const justifyHeightPadding = corner_radius + heightDelta
   const justifyWidthPadding = corner_radius + widthDelta
+
+  // console.log(" convert Color", text_color)
 
   return (
     <div
