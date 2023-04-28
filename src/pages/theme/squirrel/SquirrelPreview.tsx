@@ -205,10 +205,10 @@ const SquirrelPreview = ({
                     position: "absolute",
                     backgroundColor: first ? hilited_candidate_back_color : targetVersion_0_16_2(candidate_back_color),
                     borderRadius: hilited_corner_radius,
-                    left: paddingLeft,
+                    left: paddingLeft - 2,
                     right: 0,
-                    top: 0,
-                    bottom: 0,
+                    top: -2,
+                    bottom: -2,
                     zIndex: 0,
                     display: hilited_corner_radius !== 0 ? "block" : "none",
                   }}
