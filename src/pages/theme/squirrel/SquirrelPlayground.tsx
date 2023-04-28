@@ -8,6 +8,8 @@ import SquirrelSelect from "./components/SquirrelSelect"
 import { useState } from "react"
 import SquirrelColorPickers from "./components/SquirrelColorPickers"
 import { Tooltip, Typography } from "antd"
+import { createPortal } from "react-dom"
+import SquirrelModelSelect from "./components/SquirrelModelSelect"
 
 const { Link } = Typography
 
@@ -56,6 +58,7 @@ const SquirrelCustomTheme = () => {
   ]
 
   const [whichTheme, changeTheme] = useState("dark")
+  const [showModal, setShowModal] = useState(false)
 
   return (
     <div style={{ display: "flex", justifyContent: "start" }}>
@@ -70,6 +73,11 @@ const SquirrelCustomTheme = () => {
           flexWrap: "wrap",
         }}
       >
+        <SquirrelOutline title="默认主题库">
+          <button onClick={() => setShowModal(true)}>查看</button>
+          {showModal && createPortal(<SquirrelModelSelect onClose={() => setShowModal(false)} />, document.body)}
+        </SquirrelOutline>
+
         <SquirrelOutline title="使用主题">
           <Tooltip open={hintSelectThme} placement={"right"} title="选中使用的主题" color={"purple"} key={"purple"}>
             <SquirrelSelect
