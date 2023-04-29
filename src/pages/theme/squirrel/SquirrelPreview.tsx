@@ -105,6 +105,7 @@ const SquirrelPreview = ({
   return (
     <div
       style={{
+        zIndex: 1,
         boxSizing: "border-box",
         opacity: alpha,
         borderRadius: `${corner_radius}px`,

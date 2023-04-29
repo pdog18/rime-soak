@@ -59,6 +59,7 @@ const SquirrelCustomTheme = () => {
 
   const [whichTheme, changeTheme] = useState("dark")
   const [showModal, setShowModal] = useState(false)
+  const [showBackground, changeShowBackground] = useState(false)
 
   return (
     <div style={{ display: "flex", justifyContent: "start" }}>
@@ -142,15 +143,26 @@ const SquirrelCustomTheme = () => {
           </div>
         </SquirrelOutline>
 
-        <SquirrelNumberInput
-          title="透明度"
-          name={"alpha"}
-          value={alpha}
-          min={0}
-          max={1}
-          step={0.01}
-          onChange={updateStyleLayout}
-        />
+        <SquirrelOutline title="透明度">
+          <SquirrelNumberInput
+            title="0.00~1"
+            name={"alpha"}
+            value={alpha}
+            min={0}
+            max={1}
+            step={0.01}
+            onChange={updateStyleLayout}
+          />
+          {alpha !== 1 && (
+            <SquirrelCheckBox
+              name={"背景"}
+              checked={showBackground}
+              onChange={function (_: string, checked: boolean): void {
+                changeShowBackground(checked)
+              }}
+            />
+          )}
+        </SquirrelOutline>
       </div>
 
       <div
@@ -221,6 +233,7 @@ const SquirrelCustomTheme = () => {
 
       <div
         style={{
+          position: "relative",
           display: "flex",
           flexGrow: "1",
           flexDirection: candidate_list_layout === "linear" ? "column" : "row",
@@ -244,6 +257,24 @@ const SquirrelCustomTheme = () => {
           name={"solarized_dark"}
           {...state.styleCustom.patch.preset_color_schemes.solarized_dark}
         />
+
+        {alpha !== 1 && showBackground && (
+          <div
+            style={{
+              position: "absolute",
+              width: "80%",
+              height: "80%",
+              backgroundColor: "rgba(63,65,68,1)",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              zIndex: 0,
+            }}
+          >
+            <img src="https://rime.im/images/home-title.svg" alt="a" />
+            <img style={{ marginTop: "16px" }} src="https://rime.im/images/home-slogan.svg" alt="a" />
+          </div>
+        )}
       </div>
 
       <SquirrelOutline
