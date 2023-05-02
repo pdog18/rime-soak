@@ -20,10 +20,7 @@ const hlighter = (content: string, language: "yaml" | "lua" | "txt") => (
   </SyntaxHighlighter>
 )
 
-interface SimpleDictProps {
-  content: string
-}
-const SimpleDict: React.FC<SimpleDictProps> = ({ content = "" }) => {
+const SimpleDict: React.FC<{content: string}> = ({ content = "" }) => {
   const [displayAll, changeDisplay] = useState(false)
 
   if (displayAll) {
@@ -203,7 +200,6 @@ const Result: React.FC = () => {
         type="primary"
         onClick={() => {
           navigate(-1)
-          // navigate()
         }}
       >
         返回

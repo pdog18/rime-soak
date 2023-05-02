@@ -6,6 +6,9 @@ const download = async (files: File[], zipName: string = "soak.zip"): Promise<vo
 
   // 将文件添加到 .zip 文件中
   files.forEach((file) => {
+    if (file.content.length === 0) {
+      file.filename = `${file.filename} 文件压缩失败，重新加载页面或者联系 soak 作者`
+    }
     zip.file(file.filename, file.content)
   })
 
