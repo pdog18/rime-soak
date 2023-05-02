@@ -33,7 +33,7 @@ const mapForRime = (input: string[]): string[] => {
       }
     }
 
-    return code.toUpperCase()
+    return code.toLowerCase()
   })
 }
 
