@@ -145,7 +145,7 @@ const KeyBinder: React.FC = () => {
     }
   }
 
-  const [pressKey, changePressKey] = useState(false)
+  const [pressKey, changePressKey] = useState(true)
 
   return (
     <div
@@ -216,7 +216,7 @@ const KeyBinder: React.FC = () => {
           <div style={{ width: "200px", display: "inline-flex" }}>
             <div>输入按键</div>
             <select
-              style={{ visibility: "visible", marginLeft: "16px" }}
+              style={{ marginLeft: "16px" }}
               onChange={(e) => {
                 changePressKey(e.target.value === "true")
               }}
