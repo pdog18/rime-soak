@@ -19,13 +19,13 @@ interface BinderRulerItemProps {
   ruler: BinderRuler
   index: number
   onRulerChanged: (index: number, ruler: BinderRuler) => void
+  pressKey: boolean
 }
 
-const BinderRulerItem = ({ ruler, index, onRulerChanged }: BinderRulerItemProps) => {
+const BinderRulerItem = ({ ruler, index, onRulerChanged, pressKey }: BinderRulerItemProps) => {
   const { when, accept, send, toggle, select } = ruler
 
   const [locked, changeLock] = useState(true)
-  const [pressKey, changePressKey] = useState(true)
 
   const handleLocked = (checked: boolean) => {
     changeLock(checked)
@@ -94,16 +94,6 @@ const BinderRulerItem = ({ ruler, index, onRulerChanged }: BinderRulerItemProps)
         }}
       />
 
-      <input
-        title="按键/填写"
-        defaultChecked={pressKey}
-        style={{ visibility: locked ? "hidden" : "visible" }}
-        type="checkbox"
-        onChange={(e) => {
-          changePressKey(e.target.checked)
-        }}
-      />
-
       <Cascader
         options={options}
         disabled={locked}
@@ -154,6 +144,8 @@ const KeyBinder: React.FC = () => {
         return "屏蔽按键"
     }
   }
+
+  const [pressKey, changePressKey] = useState(false)
 
   return (
     <div
@@ -221,7 +213,19 @@ const KeyBinder: React.FC = () => {
           }}
         >
           <div style={{ width: "110px" }}>何时有效</div>
-          <div style={{ width: "250px" }}>输入按键</div>
+          <div style={{ width: "200px", display: "inline-flex" }}>
+            <div>输入按键</div>
+            <select
+              style={{ visibility: "visible", marginLeft: "16px" }}
+              onChange={(e) => {
+                changePressKey(e.target.value === "true")
+              }}
+            >
+              <option value="true">按键识别</option>
+              <option value="false">手动输入</option>
+            </select>
+          </div>
+
           <div style={{ width: "230px" }}>期望行为</div>
           <div>启用</div>
         </div>
@@ -231,6 +235,7 @@ const KeyBinder: React.FC = () => {
               key={index}
               ruler={item}
               index={index}
+              pressKey={pressKey}
               onRulerChanged={(changedIndex, newRuler) => {
                 changeKeyBinder(
                   bindings.map((v, index) => {
