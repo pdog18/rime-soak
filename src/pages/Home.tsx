@@ -10,7 +10,6 @@ import CustomPhrase from "./customPhrase/CustomPhrase"
 import WeaselCustomTheme from "./theme/weasel/CustomWeaselTheme"
 import KeyBinder from "./keyBinder/KeyBinder"
 import SquirrelPlayground from "./theme/squirrel/SquirrelPlayground"
-import { useEffect, useState } from "react"
 import useSquirrelStore from "./theme/squirrel/SquirrelStore"
 import GithubCorner from "../components/GithubCorner"
 
@@ -58,22 +57,18 @@ const Home = () => {
   const location = useLocation()
   const navigate = useNavigate()
 
-  const [activeKey, changeActiveKey] = useState(() => sessionStorage.getItem("activeKey") ?? `${location.pathname}`)
-
-  useEffect(() => {
-    sessionStorage.setItem("activeKey", activeKey)
-  }, [activeKey])
-
   const squirrelState = useSquirrelStore()
 
   return (
     <>
       <Tabs
         centered={true}
-        activeKey={activeKey}
+        activeKey={location.pathname}
         style={{ height: "100%", minHeight: "100vh", backgroundColor: "#f3f3f3" }}
-        onChange={(activeKey) => {
-          changeActiveKey(activeKey)
+        onChange={(key) => {
+          console.log("onchange, key :", key)
+
+          navigate(key)
         }}
         items={items.map((item) => {
           return {
@@ -89,7 +84,7 @@ const Home = () => {
         type="primary"
         tooltip={<div>Save</div>}
         onClick={() => {
-          if (!weasel && activeKey === "/theme" && squirrelState.selectTheme === "none") {
+          if (!weasel && location.pathname === "/theme" && squirrelState.selectTheme === "none") {
             squirrelState.showToolTip(true)
             setTimeout(() => {
               squirrelState.showToolTip(false)
