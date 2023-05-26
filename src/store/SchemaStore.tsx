@@ -21,6 +21,7 @@ interface SchemaState {
   fileName: string
   useAsciiPunctuation: boolean
   supportEnglishWord: boolean
+  supportCustomPhrase: boolean
   useAsciiStyle: (ascii: boolean) => void
   changeShape: (type: string, key: string, value: any) => void
   changeSchema: (name: string) => void
@@ -32,8 +33,6 @@ interface SchemaState {
 function objectsEqual(a: object, b: object): boolean {
   return JSON.stringify(a) === JSON.stringify(b)
 }
-
-const schemaIsLunaPinyin = (fileName: string) => fileName.startsWith("luna_pinyin")
 
 const updateTranslators = (translator: string, state: any, add: boolean) => {
   const key = "engine/translators/+"
@@ -49,24 +48,11 @@ const updateTranslators = (translator: string, state: any, add: boolean) => {
   }
 }
 
-const updateFilters = (filter: string, state: any, add: boolean) => {
-  const key = "engine/filters/+"
-  let filters: string[] = []
-  if (state.schemaCustom.patch[key]) {
-    filters = [...state.schemaCustom.patch[key]]
-  }
-
-  if (add) {
-    state.schemaCustom.patch[key] = [...filters, filter]
-  } else {
-    state.schemaCustom.patch[key] = filters.filter((t: string) => t !== filter)
-  }
-}
-
 const useSchemaState = create<SchemaState>()((set, get) => ({
   fileName: "luna_pinyin.custom.yaml",
   useAsciiPunctuation: false,
   supportEnglishWord: false,
+  supportCustomPhrase: false,
   schemaCustom: {
     patch: {
       punctuator: punctuationJson,
@@ -74,7 +60,7 @@ const useSchemaState = create<SchemaState>()((set, get) => ({
   },
 
   generateYAML: () => {
-    const { fileName, useAsciiPunctuation, schemaCustom, supportEnglishWord } = get()
+    const { useAsciiPunctuation, schemaCustom, supportEnglishWord, supportCustomPhrase } = get()
 
     const patch: Partial<SchemaPatch> = { ...schemaCustom.patch }
     if (objectsEqual(patch.punctuator!, punctuationJson)) {
@@ -98,22 +84,23 @@ const useSchemaState = create<SchemaState>()((set, get) => ({
       }
     }
 
-    const translatorsKey = "engine/translators/+"
-    const filterKey = "engine/filters/+"
+    if (supportCustomPhrase) {
+      const translator = "table_translator@custom_phrase"
+      const translatorKey = "engine/translators/+"
+      patch[translatorKey] = [...(patch[translatorKey] ?? []), translator]
 
-    if (patch[filterKey] && (patch[filterKey].length === 0 || schemaIsLunaPinyin(fileName))) {
-      delete patch[filterKey]
+      const filtersKey = "engine/filters/+"
 
-      patch[translatorsKey] = patch[translatorsKey]!.filter(
-        (translator) => translator !== "table_translator@custom_phrase"
-      )
-      if (patch.custom_phrase) {
-        delete patch.custom_phrase
+      patch[filtersKey] = [...(patch[filtersKey] ?? []), "uniquifier"]
+
+      patch.custom_phrase = {
+        dictionary: "",
+        user_dict: "custom_phrase",
+        db_class: "stabledb",
+        enable_completion: false,
+        enable_sentence: false,
+        initial_quality: 1,
       }
-    }
-
-    if (patch[translatorsKey] && patch[translatorsKey].length === 0) {
-      delete patch[translatorsKey]
     }
 
     const justCheckUseAscii = useAsciiPunctuation && patch.punctuator === asciiPunctuationJson
@@ -142,20 +129,7 @@ const useSchemaState = create<SchemaState>()((set, get) => ({
   enableCustomPhrase: (enable) =>
     set(
       produce((state) => {
-        const translator = `table_translator@custom_phrase`
-        updateTranslators(translator, state, enable)
-        const filter = "uniquifier"
-        updateFilters(filter, state, enable)
-        if (enable) {
-          state.schemaCustom.patch.custom_phrase = {
-            dictionary: "",
-            user_dict: "custom_phrase",
-            db_class: "stabledb",
-            enable_completion: false,
-            enable_sentence: false,
-            initial_quality: 1,
-          }
-        }
+        state.supportCustomPhrase = enable
       })
     ),
 
