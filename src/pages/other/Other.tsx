@@ -2,11 +2,11 @@ import React from "react"
 import { ClusterOutlined as InputTypeIcon } from "@ant-design/icons"
 import RimeSettingItem from "../../components/RimeSettingItem"
 import { Switch } from "antd"
-import useSchemaState from "../../store/SchemaStore"
+import useSchemaState, { SchemaState } from "../../store/SchemaStore"
 import useRimeLuaState from "../../store/RimeLuaStore"
 
 const Default: React.FC = () => {
-  const schemaState = useSchemaState()
+  const schemaState: SchemaState = useSchemaState()
   const rimeLuaState = useRimeLuaState()
 
   const iconStyle = { fontSize: "24px", margin: "0px 16px" }
@@ -21,6 +21,15 @@ const Default: React.FC = () => {
         gap: "16px",
       }}
     >
+      <RimeSettingItem icon={<InputTypeIcon style={iconStyle} />} title="英语单词">
+        <Switch
+          checked={schemaState.supportEnglishWord}
+          onChange={(checked) => {
+            schemaState.enableEnglishWord(checked)
+          }}
+        />
+      </RimeSettingItem>
+
       <RimeSettingItem icon={<InputTypeIcon style={iconStyle} />} title="快速输入时间">
         <Switch
           checked={rimeLuaState.time}

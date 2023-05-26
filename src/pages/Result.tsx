@@ -20,7 +20,7 @@ const hlighter = (content: string, language: "yaml" | "lua" | "txt") => (
   </SyntaxHighlighter>
 )
 
-const SimpleDict: React.FC<{content: string}> = ({ content = "" }) => {
+const SimpleDict: React.FC<{ content: string }> = ({ content = "" }) => {
   const [displayAll, changeDisplay] = useState(false)
 
   if (displayAll) {
@@ -66,6 +66,7 @@ const Result: React.FC = () => {
   const styleCustom = styleFileName === "weasel.custom.yaml" ? weaselState.generateYAML() : squirrelState.generateYAML()
 
   const schemaState = useSchemaState()
+  const supportEnglishWord = schemaState.supportEnglishWord
   const schemaCustom = schemaState.generateYAML()
 
   const rimeLuaState = useRimeLuaState()
@@ -76,6 +77,9 @@ const Result: React.FC = () => {
 
   const [schema, setSchema] = useState<string>()
   const [dict, setDict] = useState<string>()
+
+  const [wordSimpDict, setWordSimpDict] = useState<string>()
+  const [wordSimpSchema, setWordSimpSchema] = useState<string>()
 
   useEffect(() => {
     async function fetchSchema() {
@@ -88,9 +92,20 @@ const Result: React.FC = () => {
         const schemaData = await (await fetch(`${url}${schemaFileName}`)).text()
         setSchema(schemaData)
       }
+
+      if (supportEnglishWord) {
+        const word_simp_url = "https://raw.githubusercontent.com/pdog18/rime-word-simp/master/"
+        const word_simp_dict_file_name = "word_simp.dict.yaml"
+        const word_simp_schema_file_name = "word_simp.schema.yaml"
+
+        const word_simp_dict = await (await fetch(`${word_simp_url}${word_simp_dict_file_name}`)).text()
+        const word_simp_schema = await (await fetch(`${word_simp_url}${word_simp_schema_file_name}`)).text()
+        setWordSimpDict(word_simp_dict)
+        setWordSimpSchema(word_simp_schema)
+      }
     }
     fetchSchema()
-  }, [url, dictFileName, schemaFileName])
+  }, [url, dictFileName, schemaFileName, supportEnglishWord])
 
   const candidates = [
     { condition: defaultCustom, filename: "default.custom.yaml", key: "defaultCustom", content: defaultCustom },
@@ -100,6 +115,8 @@ const Result: React.FC = () => {
     { condition: dictFileName, filename: dictFileName, key: "dict", content: dict },
     { condition: luaContent, filename: "rime.lua", key: "rime.lua", content: luaContent },
     { condition: phraseContent, filename: "custom_phrase.txt", key: "custom_phrase.txt", content: phraseContent },
+    { condition: supportEnglishWord, filename: "word_simp.dict.yaml", key: "word_dict", content: wordSimpDict },
+    { condition: supportEnglishWord, filename: "word_simp.schema.yaml", key: "word_schema", content: wordSimpSchema },
   ]
 
   const items = candidates

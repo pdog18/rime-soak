@@ -8,15 +8,19 @@ interface SchemaPatch {
   punctuator: any
   "engine/translators/+"?: string[]
   "engine/filters/+"?: string[]
+  "schema/dependencies"?: string[]
+  word_simp?: object
   custom_phrase?: object
 }
 
 interface SchemaState {
+  enableEnglishWord(checked: boolean): void
   schemaCustom: {
     patch: SchemaPatch
   }
   fileName: string
   useAsciiPunctuation: boolean
+  supportEnglishWord: boolean
   useAsciiStyle: (ascii: boolean) => void
   changeShape: (type: string, key: string, value: any) => void
   changeSchema: (name: string) => void
@@ -62,6 +66,7 @@ const updateFilters = (filter: string, state: any, add: boolean) => {
 const useSchemaState = create<SchemaState>()((set, get) => ({
   fileName: "luna_pinyin.custom.yaml",
   useAsciiPunctuation: false,
+  supportEnglishWord: false,
   schemaCustom: {
     patch: {
       punctuator: punctuationJson,
@@ -69,12 +74,30 @@ const useSchemaState = create<SchemaState>()((set, get) => ({
   },
 
   generateYAML: () => {
-    const { fileName, useAsciiPunctuation, schemaCustom } = get()
+    const { fileName, useAsciiPunctuation, schemaCustom, supportEnglishWord } = get()
 
     const patch: Partial<SchemaPatch> = { ...schemaCustom.patch }
     if (objectsEqual(patch.punctuator!, punctuationJson)) {
       delete patch.punctuator
     }
+
+    if (supportEnglishWord) {
+      const translator = "table_translator@word_simp"
+      const key = "engine/translators/+"
+      patch[key] = [...(patch[key] ?? []), translator]
+
+      const dependencies = "schema/dependencies"
+      patch[dependencies] = ["word_simp"]
+
+      patch["word_simp"] = {
+        dictionary: "word_simp",
+        enable_sentence: false,
+        enable_user_dict: false,
+        initial_quality: 0.1,
+        comment_format: ["xform/.*//"],
+      }
+    }
+
     const translatorsKey = "engine/translators/+"
     const filterKey = "engine/filters/+"
 
@@ -108,6 +131,13 @@ const useSchemaState = create<SchemaState>()((set, get) => ({
 
     return yaml.dump({ patch: patch })
   },
+
+  enableEnglishWord: (enable) =>
+    set(
+      produce((state) => {
+        state.supportEnglishWord = enable
+      })
+    ),
 
   enableCustomPhrase: (enable) =>
     set(
