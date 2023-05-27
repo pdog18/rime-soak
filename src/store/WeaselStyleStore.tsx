@@ -54,7 +54,9 @@ interface WeaselStyleState {
     patch: StylePatch
   }
   changeColorScheme: (color_scheme: string, config: WeaselThemeConfig) => void
-
+  changeStyleHorizontal: (value: boolean) => void
+  changeDisplayTrayIcon: (value: boolean) => void
+  changeInlinePreedit: (value: boolean) => void
   updateStyleCustom: (path: StyleCustomPath, value: string | number | boolean) => void
 
   changeAsciiModeApps: (appOptions: string[]) => void
@@ -174,6 +176,27 @@ const useWeaselStyleState = create<WeaselStyleState>()((set, get) => ({
     set(
       produce((state: WeaselStyleState) => {
         ;(state.styleCustom.patch as any)[path] = value
+      })
+    ),
+
+  changeStyleHorizontal: (value: boolean) =>
+    set(
+      produce((state: WeaselStyleState) => {
+        state.styleCustom.patch["style/horizontal"] = value
+      })
+    ),
+
+  changeDisplayTrayIcon: (value: boolean) =>
+    set(
+      produce((state: WeaselStyleState) => {
+        state.styleCustom.patch["style/display_tray_icon"] = value
+      })
+    ),
+
+  changeInlinePreedit: (value: boolean) =>
+    set(
+      produce((state: WeaselStyleState) => {
+        state.styleCustom.patch["style/inline_preedit"] = value
       })
     ),
 

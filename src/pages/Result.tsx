@@ -65,6 +65,8 @@ const Result: React.FC = () => {
   const squirrelState = useSquirrelStore()
   const styleCustom = styleFileName === "weasel.custom.yaml" ? weaselState.generateYAML() : squirrelState.generateYAML()
 
+  console.log("styleCustom", styleCustom)
+
   const schemaState = useSchemaState()
   const supportEnglishWord = schemaState.supportEnglishWord
   const schemaCustom = schemaState.generateYAML()

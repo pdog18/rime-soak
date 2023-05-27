@@ -1,4 +1,4 @@
-import { Card, Radio, RadioChangeEvent, Row, Space } from "antd"
+import { Card, Radio, RadioChangeEvent } from "antd"
 import { ReactNode } from "react"
 
 type Props = {
@@ -33,14 +33,23 @@ export const RadioChoice = <T,>(props: RadioChoiceProps<T>) => (
 
 const RimeSettingItem = (props: Props) => (
   <Card>
-    <Row style={{ width: "60vw" }} justify="space-between">
-      <Space>
-        {props.icon}
-        {props.title}
-      </Space>
+    <div
+      style={{
+        width: "60vw",
+        display: "inline-flex",
+        justifyContent: "space-between",
+        gap: "4vw",
+        alignItems: "center",
+      }}
+    >
+      <div style={{ width: "140px", display: "inline-flex", whiteSpace: "nowrap" }}>
+        <div> {props.icon} </div>
 
-      {props.children}
-    </Row>
+        {props.title}
+      </div>
+
+      <div style={{ marginLeft: "auto" }}>{props.children}</div>
+    </div>
   </Card>
 )
 
