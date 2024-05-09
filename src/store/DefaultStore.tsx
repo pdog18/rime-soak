@@ -146,6 +146,15 @@ const useDefaultState = create<DefaultState>()((set, get) => ({
         schemaFileName: "pinyin_simp.schema.yaml",
       }
     }
+
+    if (schemaName === "wubi_pinyin") {
+      return{
+        url:`https://raw.githubusercontent.com/rime/rime-wubi/master/wubi_pinyin.schema.yaml`,
+        dictFileName: "wubi_pinyin.dict.yaml",
+        schemaFileName: "wubi_pinyin.schema.yaml",
+      }
+    }
+
     return {
       url: null,
       dictFileName: null,

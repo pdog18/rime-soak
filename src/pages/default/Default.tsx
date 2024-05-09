@@ -27,7 +27,7 @@ const Default: React.FC = () => {
     >
       <RimeSettingItem icon={<InputTypeIcon style={iconStyle} />} title="输入方案">
         <RadioChoice
-          values={["luna_pinyin", "pinyin_simp", "double_pinyin_flypy", "wubi"]}
+          values={["luna_pinyin", "pinyin_simp", "double_pinyin_flypy", "wubi","wubi_pinyin"]}
           defaultValue={defaultState.defaultCustom.patch.schema_list[0].schema}
           names={["朙月拼音", "袖珍拼音", "小鹤双拼", "五笔"]}
           onChange={(value: string) => {
